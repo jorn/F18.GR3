@@ -3,12 +3,39 @@
 \emph{Kapitel intro}
 
 \section{Formål}
+\begin{itemize}
+	\item Et projekt er semester krav som man går til eksamen.
+	\item Hvor faglighederne indgår.
+\end{itemize}
+
+Formålet med projektet er at undersøge hvordan lyd kan behandles og manipuleres ved at bruge digital signalbehandling i et embedded miljø.
+Hvordan samples signaler korrekt.
+Løsningen skal opbygges som en modulær løsning, således at nye "lydmoduler" kan efter udvikles.
+Styringen af modulerne skal kunne forgå igennem EMP boardet - her tænkes det at kunne anvende HID styringen dette board stiller til rådighed og som sammen LCDen skal udgøre en platform til UI'en. 
+
 
 \section{Problemformulering}
 
+
+\begin{itemize}
+	\item Realtids lydbehandling 
+	\item Digital filter design
+	\item Analog filter design
+	\item OS krav / design
+	\item Test krav og eftervisning af forventede
+\end{itemize}
+
 \section{Projektafgrænsning}
+\begin{itemize}
+	\item Produktet er ikke udviklet som et slutprodukt.
+\end{itemize}
 
 \section{Kravspecifikation} 
+\begin{itemize}
+	\item Der skal anvendes vores ARM Cortex-M4 TI launchpad 
+	\item Sampling Fs = 44,1 kHz Stereo (CD standard)
+	\item FreeRTOS anvendes som OS	 
+\end{itemize}
 
 \section{Løsningsmodel}
 
