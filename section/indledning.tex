@@ -1,29 +1,35 @@
 \chapter{Indledning}
 \vspace*{0.5 cm}
-\emph{Kapitel intro}
+%\emph{intro}
+I det følgende kapitel fastligges projektes formål og problemformulering der danner grundlag for rapporten.
+Rapporten afspejler og dokumentere det udførte projektarbejde på 4. semester diplomingeniør i Elektronik og Datateknik på Syddansk Universitet, Teknisk fakultet / Mærsk instituttet.
+Rapporten danner grundlag for eksiminationen for semester projektet hvor arbejdet er udført i perioden 1. februar til 25. maj 2018.
 
 \section{Formål}
-\begin{itemize}
-	\item Et projekt er semester krav som man går til eksamen.
-	\item Hvor faglighederne indgår.
-\end{itemize}
+Semesterets hovedemne omhandler \emph{Indlejrede systemer og signalbehandling}, hvor faglighederne \emph{Analoge filtre og signaler}, \emph{Digital signalbehandling}, \emph{Embedded programmering} og \emph{Operativsystemer} er inkluderet.
+Ud fra projektbeskrivelsen\footnote{ref. til  semesterprojekt beskrivelse her...} er formålet\textit{ "at skabe en applikation, der gør noget meningsfuldt, således at semesterets fire fagligheder er dækket ind"}.
 
+
+\section{Problemformulering}
 Formålet med projektet er at undersøge hvordan lyd kan behandles og manipuleres ved at bruge digital signalbehandling i et embedded miljø.
-Hvordan samples signaler korrekt.
 Løsningen skal opbygges som en modulær løsning, således at nye "lydmoduler" kan efter udvikles.
 Styringen af modulerne skal kunne forgå igennem EMP boardet - her tænkes det at kunne anvende HID styringen dette board stiller til rådighed og som sammen LCDen skal udgøre en platform til UI'en. 
 
 
-\section{Problemformulering}
-
-
 \begin{itemize}
-	\item Realtids lydbehandling 
-	\item Digital filter design
-	\item Analog filter design
-	\item OS krav / design
-	\item Test krav og eftervisning af forventede
+	\item Er det muligt at lave et modulært audio effekt system der kan leve op til de fastsatte krav ? 
+
+	\begin{itemize}
+		
+		\item Realtids lydbehandling 
+		\item Digital filter design
+		\item Analog filter design
+		\item OS krav / design
+		\item Test krav og eftervisning af forventede
+	\end{itemize}
 \end{itemize}
+\husk{JJ}{Formulering af hoved- og underspørgsmål tilrettes.}
+
 
 \section{Projektafgrænsning}
 \begin{itemize}
@@ -31,11 +37,16 @@ Styringen af modulerne skal kunne forgå igennem EMP boardet - her tænkes det a
 \end{itemize}
 
 \section{Kravspecifikation} 
-\begin{itemize}
-	\item Der skal anvendes vores ARM Cortex-M4 TI launchpad 
-	\item Sampling Fs = 44,1 kHz Stereo (CD standard)
-	\item FreeRTOS anvendes som OS	 
+Kravspecikationerne for projektet er fastsat, dels ud fra kravet til selve projektbeskrivelsen og dels for at efterligne projekter udenfor det akademiske miljø.
+
+\begin{itemize}[noitemsep]
+	\item Prototypen udvikles på Tiva™ C Series TM4C123G LaunchPad Evaluation Kit \cite{spmt281a}.
+	\item Tiva™ TM4C123G serie Microcontroller anvendes \cite{spmu296}.
+	\item FreeRTOS anvendes som embedded kernel.
+	\item Kildekoden er en del af produktet og skal overholde \textit{EMP C Code Standard}\cite{emp-c}.
+	\item Der anvendes en samplingsfrekvens på $F_s = 44.1 \si{\kilo\hertz}$ stereo.
 \end{itemize}
+
 
 \section{Løsningsmodel}
 
