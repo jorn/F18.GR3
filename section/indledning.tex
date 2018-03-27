@@ -1,25 +1,26 @@
 \chapter{Indledning}
 \vspace*{0.5 cm}
 %\emph{intro}
-I det følgende kapitel fastligges projektes formål og problemformulering der danner grundlag for rapporten.
-Rapporten afspejler og dokumentere det udførte projektarbejde på 4. semester diplomingeniør i Elektronik og Datateknik på Syddansk Universitet, Teknisk fakultet / Mærsk instituttet.
-Rapporten danner grundlag for eksiminationen for semester projektet hvor arbejdet er udført i perioden 1. februar til 25. maj 2018.
-
-\husk{JJ}{Skal måske uddybes lidt og perioden flyttes til Forord.}
+Projektets formål er at udvikle et modulært audio effektsystem, som kan modtage, behandle og manipulere lyd i det hørbare område. 
+Systemet ønskes opbygget i moduler, således at nye effektenheder altid kan tilføjes. \newline
+I det følgende kapitel fastlægges projektets formål og problemformulering, som danner grundlaget for rapporten.
+Rapporten afspejler og dokumenterer det udførte projektarbejde på 4. semester for diplomingeniøren i Elektronik og Datateknik på Syddansk Universitet, Teknisk fakultet / Mærsk Mc Kinney Møller instituttet.
 
 \section{Formål}
 Semesterets hovedemne omhandler \emph{Indlejrede systemer og signalbehandling}, hvor faglighederne \emph{Analoge filtre og signaler}, \emph{Digital signalbehandling}, \emph{Embedded programmering} og \emph{Operativsystemer} er inkluderet.
-Ud fra projektbeskrivelsen\footnote{ref. til  semesterprojekt beskrivelse her...} er formålet\textit{ "at skabe en applikation, der gør noget meningsfuldt, således at semesterets fire fagligheder er dækket ind"}.
+Ud fra projektbeskrivelsen\footnote{ref. til  semesterprojekt beskrivelse her...} er formålet\textit{ "at skabe en applikation, der gør noget meningsfuldt, således at semesterets fire fagligheder er dækket ind"}. \newline
+Problemformuleringen, som dækker over de fire fagligheder, er beskrevet i følgende afsnit. 
 
 \husk{JJ}{Find overgang mellem formål og problemformulering}
+\husk{JES}{Sådan som en meta-linje eller hvad? Det har jeg tilføjet.}
 
 \section{Problemformulering}
 Formålet med projektet er at undersøge hvordan lyd kan behandles og manipuleres ved at bruge digital signalbehandling i et embedded miljø.
-Løsningen skal opbygges som en modulær løsning, således at nye "lydmoduler" kan efter udvikles.
-Styringen af modulerne skal kunne forgå igennem EMP boardet - her tænkes det at kunne anvende HID styringen dette board stiller til rådighed og som sammen LCDen skal udgøre en platform til UI'en. 
+Løsningen skal opbygges som en modulær løsning, således at nye "lydmoduler" ville kunne udvikles senere og tilføjes.  
+Styringen af modulerne skal kunne foregå igennem EMP boardet - her tænkes det at kunne anvende HID styringen, som dette board stiller til rådighed og som sammen LCD'en skal udgøre en platform til UI'en. 
 
 \husk{JJ}{Husk at få indelt problemformulering i 3 grupper - Overodnet (motivation), Konkret og specifik (Udkast i listen).}
-
+\husk{JES}{Det forstår jeg ikke.}
 
 \begin{itemize}
 	\item Er det muligt at lave et modulært audio effekt system der kan leve op til de fastsatte krav ? 
@@ -36,16 +37,16 @@ Styringen af modulerne skal kunne forgå igennem EMP boardet - her tænkes det a
 \husk{JJ}{Formulering af hoved- og underspørgsmål tilrettes.}
 
 \section{Projektafgrænsning}
-\begin{itemize}
-	\item Produktet er ikke udviklet som et slutprodukt.
-\end{itemize}
+Produktet udvikles ikke til et slutprodukt. 
+I stedet udvikles et proof of concept, som kan modtage, behandle og afspille lyd. 
+UI'en begrænses desuden til de muligheder for kommunikation mellem hardware og bruger, som Tiva™ C Series TM4C123G LaunchPad Evaluation Kit'et giver. 
 
 \section{Kravspecifikation} 
 Kravspecikationerne for projektet er fastsat, dels ud fra kravet til selve projektbeskrivelsen og dels for at efterligne projekter udenfor det akademiske miljø.
 
 \begin{itemize}[noitemsep]
 	\item Prototypen udvikles på Tiva™ C Series TM4C123G LaunchPad Evaluation Kit \cite{spmt281a}.
-	\item Tiva™ TM4C123G serie Microcontroller anvendes \cite{spmu296}.
+	\item Tiva™ TM4C123GH6PM serie Microcontroller anvendes \cite{spmu296}.
 	\item FreeRTOS anvendes som embedded kernel.
 	\item Kildekoden er en del af produktet og skal overholde \textit{EMP C Code Standard}\cite{emp-c}.
 	\item Der anvendes en samplingsfrekvens på $F_s = 44.1 \si{\kilo\hertz}$ stereo.
