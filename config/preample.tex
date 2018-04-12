@@ -1,4 +1,5 @@
-\documentclass[a4paper,11pt]{memoir} 
+%\documentclass[a4paper,11pt]{memoir} 
+\documentclass[oneside, a4paper,11pt]{memoir} 
 
 \usepackage[utf8]{inputenc}
 \usepackage[danish]{babel}
@@ -42,6 +43,7 @@ format=hang}
 % TODONotes http://ctan.org/pkg/todonotes
 \usepackage{todonotes}
 \usepackage{placeins}
+\usepackage{lastpage}
 
 \usepackage[hidelinks]{hyperref}  
 \hypersetup{bookmarks=false}
@@ -85,7 +87,8 @@ format=hang}
 \SingleSpacing
 \definecolor{chaptercolor}{gray}{0.8}
 % helper macros
-\newcommand\numlifter[1]{\raisebox{-2cm}[0pt][0pt]{\smash{#1}}}
+%\newcommand\numlifter[1]{\raisebox{-2cm}[0pt][0pt]{\smash{#1}}}
+\newcommand\numlifter[1]{\raisebox{-.8cm}[0pt][0pt]{\smash{#1}}}
 \newcommand\numindent{\kern37pt}
 \newlength\chaptertitleboxheight
 \makechapterstyle{hansen}{
@@ -111,7 +114,8 @@ format=hang}
   \setlength\beforechapskip{0.5\baselineskip}
   \setlength{\afterchapskip}{1\baselineskip}
   \renewcommand\chapnumfont{%
-    \fontsize{3cm}{0cm}%
+    %\fontsize{3cm}{0cm}%
+    \fontsize{2cm}{0cm}
     \bfseries%
     \sffamily%
     \color{chaptercolor}%

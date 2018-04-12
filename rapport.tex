@@ -14,38 +14,25 @@
 \end{abstract} 
 
 % --------- Thanks ---------------------
-\newpage
-\thispagestyle{empty}
-\null
-\vfill
-\begin{center}
-\emph{Thanks note goes here}
-\end{center}
+%\newpage\thispagestyle{empty}\null\vfill\begin{center}\emph{Thanks note goes here}\end{center}
 
 %---------- Underskrift
-\newpage
-\thispagestyle{empty}
-\null
-\input{section/underskrift}	
-
-\newpage
-\thispagestyle{empty}
-\null
-\vfill
+%\newpage\thispagestyle{empty}\null\input{section/underskrift}\newpage\thispagestyle{empty}\null\vfill
 
 %---------- Forord
 \newpage
 \thispagestyle{empty}
 \input{section/forord}
-\newpage
-\thispagestyle{empty}
-\null
-\vfill
+
+% Removed for single page
+%\newpage\thispagestyle{empty}\null\vfill
 
 %---------- Indholdsfortegnelse  ---
 \newpage
-\tableofcontents*												
-\newpage
+\tableofcontents*		
+
+% Removed for single page										
+%\newpage
 
 %\DoubleSpacing	
 %---------- Kalibrerings side --------
@@ -80,7 +67,7 @@
 
 %--------- Bilag -------------------
 \appendix
-%\chapter{Bilag}
+\chapter{Bilag}
 %\input{section/ord}
 %\input{section/symbol}
 %\input{section/pinmap}
