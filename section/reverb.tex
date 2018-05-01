@@ -35,7 +35,6 @@ Rumklangen skabes så af samples fra delay bufferen, som fungerer som opbygninge
 
 
 \section{Implementering af reverb}
-%Der blev valgt en algoritmisk reverb, da det blev vurderet at den var 
 \subsection{Kode}
 \lstset{frame=tb,
 	language=c,
@@ -82,15 +81,9 @@ void mod_reverb_effekt( fp_sample_t *in, fp_sample_t *out)
 }
 \end{lstlisting}
 
-%Koden er implementeringen af allpass filteret.\newline
-Koden er implementeringen af et all-pass filter.
-Først hentes en sample ind fra sample bufferen.
-Input samplet bliver ganget med feedback gainet og input gainet og lægges DELAY pladser frem i sample bufferen.\newline
-Der opbygges en masse ekkoer, da funktionen bliver kaldt hver gang der kommer et sample ind.\newline
-Disse ekkoer der ligger på i sample bufferen bliver lagt sammen med 
-%Efter hvert SAMPLE_BUFFER_PUT_OUT kald inkrementeres HEAD pointeren i bufferen, således
+%Koden er implementeringen af et all-pass filter.
+%Først hentes en sample ind fra sample bufferen.
+%Input samplet bliver ganget med feedback gainet og input gainet og lægges DELAY pladser frem i sample bufferen.\newline
+%Der opbygges en masse ekkoer, da funktionen bliver kaldt hver gang der kommer et sample ind.\newline
+%Disse ekkoer der ligger på i sample bufferen bliver lagt sammen med 
 
-%Input samplet sættes så på output, således at 
-%Det virker ved at funktionen tager et input sample, og tilfører de specificerede gains til det.
-%Dernæst skriver den det resulterende sample ud i en samplebuffer på den plads, der svarer til det specificerede delay.
-%Reverbet forekommer så som 
