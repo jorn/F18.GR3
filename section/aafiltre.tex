@@ -1,0 +1,56 @@
+\chapter{Anti aliasing filtre}\label{kap:aafiltre}
+\vspace*{.5cm}
+
+\section{Modtager af indgangssignal}
+\husk{JES}{Hvad hedder denne del egentligt?}
+Systemet skal kunne modtage et signal fra en lydkilde, som afspiller lyd i det menneskeligt hørbare område. 
+Før signalet kan videreføres til anti aliasing filtrene, skal der være en mulighed for eventuelt at forstærke signalet med en operationsforstærker. 
+På den måde kan en fuld opløsning opnås ved den senere AD konvertering. 
+\newline
+Et almindeligt analogt lydsignal har generelt frekvenser mellem 20Hz og 20kHz, som svarer til det menneskeligt hørbare område. 
+Signalets spænding varierer for forskellige kilder. 
+Der findes ingen officiel standard, men en del forbruger-elektronik har typisk en maksimal amplitude på 0,447V.\cite{wikiLine} 
+\newline
+Til forstærkningen benyttes en aktiv forstærker med 3,3V single-supply. 
+Men indgangssignalet fra lydkilden vil svinge omkring 0V. 
+Derfor skal signalet have et offset, da signalet ellers vil blive klippet hver gang det går under 0V, da operationsforstærkeren ved single-supply ikke har mulighed for at have negative udgangssignaler. 
+Det ønskes at indgangssignalet har mulighed for at svinge både så højt og lavt som muligt, så offsettet designes til at være symmetrisk, med respekt til  forsyningsspændingen. 
+\begin{equation}
+	{V_{offset}} = \frac{V_{supply}}{2} = \frac{3,3\text{V}}{2} = 1,65\text{V}
+\end{equation}
+Ved et offset på 1,65V kan signalet ideelt have en maksimal amplitude på 1,65V. 
+%Herfra skal den valgte operationsforstærkers output swing i forhold til dens forsyningsspænding trækkes fra. (vender tilbage til det her når op-amp skal vælges)
+Ved at opbygge en spændingsdeler, kan offsettet skabes. Kredsløbet ses på figur \ref{fig:modtagerKreds}.
+
+\subsubsection{Valg af operationsforstærker til forstærkning af indgangssignalet}
+Operationsforstærkeren som skal forstærke signalet vælges ud fra en række krav. 
+
+\begin{itemize}
+	\item Forstærkeren skal kunne forsynes med  single-supply 3,3V
+	\item Båndbredden skal være minimum 44,1 kHz.
+	\item Rail to rail voltage swing skal være så stort som muligt. 
+	\item Slew rate skal være hurtig nok til at signalet ikke forvrænges. 
+	\item Komponenten skal være tilgængelig som SMD komponent. 
+\end{itemize}
+Den nødvendige slew rate kan beregnes ved formel \ref{eq:slewrate}.\cite{slewrate}
+\begin{equation}
+\label{eq:slewrate}
+\text{Slew rate} = 2 \pi \cdot f_{maks} \cdot V_{maks} = 2\pi \cdot 44,1\text{kHz} \cdot 1,65\text{V} = 0,46\text{V/\micro S}
+\end{equation}
+\husk{JES}{Er det egentligt kun 20kHz her?}
+Ud fra kravene vælges forstærkeren AD8031 som SMD komponent. 
+Forstærkeren kan operere ved en single-supply forsyning ned til 2,7V, har 80MHz -3dB båndbredde ved en forstærkning på 1 og en slew rate på 30V/\micro S. 
+Forstærkerens output swing ligger inden for 20mV af rail-spændingen. Ved 3,3V ligger spændingsvidden således fra 0,02V til 3,28V. 
+Forstærkerens specifikationer overgår kravene med en stor margen. 
+Det var ikke muligt at finde en anden forstærker som var tilgængelig som SMD, der både havde en fornuftig slew rate, samt muligheden for en single-supply forsyningsspænding på 3,3V. 
+Havde der været mere tid, kunne det have været bestilt hjem. 
+\husk{JES}{Der er muligvis én der lever op til krav... Tjekker op på det. }
+
+Afkobling
+
+\subsubsection{Højpas filter design}
+
+\subsubsection{Beregning af forstærkning}
+
+
+\section{Anti aliasing filtre}
