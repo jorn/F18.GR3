@@ -1,0 +1,89 @@
+\chapter{Reverb effektmodul}\label{chap:reverb}
+Reverb, rumklang, er resultatet af lydbølger som bliver reflekteret tilbage af samtlige overflader med forskellige vinkler.\newline
+Rumklang er resultatet af lydbølger som bliver reflekteret af samtlige overflader i et rum, derved bygges der en masse reflektioner op hvis amplitude falder mod $0$ som de bliver absorberet af overfladerne i rummet.\newline
+Der er to primære metoder for implementeringen af en digital reverb effekt.
+Der er convolution (foldnings) reverben og den algoritmiske reverb.
+\subsection{Convolution reverb}
+Reverberation, rumklang, er en tidsinvariant effekt, hvilket betyder at det ikke har nogen betydning, hvornår en tone bliver spillet, det vil ultimativt resultere i præcis den samme reverberation. \newline
+Med tidsinvariante systemer kan de karakteriseres ved deres impulsrespons.
+Convolution reverbs virker ved at lave en foldning af rummets impulsrespons og det lydsignal der sættes på indgange n til reverben.\newline
+Dette skaber en realistisk rumklangseffekt, fordi impulsen i dette tilfælde vil være en lyd som holder samme energiniveau ved alle frekvenser.
+Efter impulsen bliver spillet vil den blive reflekteret rundt i rummet.
+Nogle af reflektionerne møder mikrofonen med det samme mens andre bliver ført rundt i rummet og amplituden af signalerne går mod $0$ pga. overfladerne af objekterne i rummet absorbere energien fra dem.\newline
+Multiplikering af hver punkt af impulsresponset med amplituden af samplet giver så rummets respons til den sample.
+Dette gøres for hver sample af inputtet og giver overlappende responser som så adderes og resulterer i rumklang.
+En ulempe ved convolution reverbs er, at der skal mange beregninger til for at få resultatet.
+Hvert sample skal individuelt multipliceres med hvert sample af impulsresponset og adderes.
+Hvis der haves $N$ samples og impulsresponset er $M$ samples lang skal der udføres $N+M$ multiplikationer og additioner.
+F.eks. hvis der haves et impulsrespons på 1 sekund og der samples med $44.1\si{kHz}$, skal der udføres næsten 2 milliarder multiplikationer og additioner i sekundet.
+Antallet af multiplikationer og additioner kan dog reduceres drastisk ved at arbejde i frekvensdomænet i stedet for, da foldning i frekvensdomænet er multiplikation.
+
+Fordelen ved convolution reverbs er at ethvert rum i verden kan imiteres, hvis impulsresponset for det valgte rum haves.\newline
+Derudover kan man opfinde rum ved at syntetisere et impulsrespons.
+
+\subsection{Algoritmisk reverb}
+En algoritmisk reverb virker ved at bruge flere forskellige delays og feedback loops til at opbygge en serie af ekkoer, som dør ud over tid.
+Det er sammensætningen af de basale byggeblokke som giver karakteristikken på rummet der emuleres.\newline
+Et eksempel på en simpel algoritmist reverb effekt er all-pass filteret.
+%insert billede af all-pass filter
+Her bliver samplet feeded forward til outputtet så lyden bliver spillet med det samme.
+Derudover smides samplet ind i en delay buffer.
+Rumklangen skabes så af samples fra delay bufferen, som fungerer som opbygningen af ekkoer og feedback loopet som agerer som absorptionen for at skabe aftagende ekkoer.
+
+
+
+
+
+\section{Implementering af reverb}
+\subsection{Kode}
+\lstset{frame=tb,
+	language=c,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	numbers=none,
+	numberstyle=\tiny\color{gray},
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3,
+	texcl=true
+}
+\begin{lstlisting}
+void mod_reverb_effekt( fp_sample_t *in, fp_sample_t *out)
+{
+	if(is_sw1_pressed)
+	{
+		const float in_gain = -0.25;
+		const float fb_gain = -0.05;
+		const uint16_t delay = 2000;
+
+	fp_sample_t fp_sample;
+	sample_buffer_get(&fp_sample);
+
+	fp_sample.left_fp32 = ((in->left_fp32 * in_gain) + ((in->left_fp32 + fp_sample.left_fp32) * fb_gain));
+	fp_sample.right_fp32 = ((in->right_fp32 * in_gain) + ((in->left_fp32 + fp_sample.right_fp32) * fb_gain));
+
+	sample_buffer_put_z(&fp_sample, delay);
+
+	out->left_fp32 = in->left_fp32;
+	out->right_fp32 = in->right_fp32;
+	}
+	else
+	{
+	out->left_fp32 = in->left_fp32;
+	out->right_fp32 = in->right_fp32;
+	}
+}
+\end{lstlisting}
+
+%Koden er implementeringen af et all-pass filter.
+%Først hentes en sample ind fra sample bufferen.
+%Input samplet bliver ganget med feedback gainet og input gainet og lægges DELAY pladser frem i sample bufferen.\newline
+%Der opbygges en masse ekkoer, da funktionen bliver kaldt hver gang der kommer et sample ind.\newline
+%Disse ekkoer der ligger på i sample bufferen bliver lagt sammen med 
+
