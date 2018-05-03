@@ -65,14 +65,22 @@ A_{maks.} = 1 + \frac{R_{feedback} + R_{variabel}}{R_2} = 1 + \frac{5\text{k} \O
 A_{min.} = 1 + \frac{R_{feedback}}{R_2} = 1 + \frac{5\text{k} \Omega}{47\text{k} \Omega} = 1,11
 \end{equation}
 
-\subsubsection{Højpas filter design}
+\subsubsection{Højpas filter-design}
 Mellem inputtet og operationsforstærkeren sidder en kapacitor, som blokerer for al DC fra indgangssignalet. 
 Som det ses på figur \ref{fig:modtagerKreds}, vil kapacitoren og modstandene fra offsettet udgøre et højpas filter. 
 Filterets knækfrekvens sættes så lavt, at alle frekvenser i det hørbare område ikke påvirkes. 
-Ved AC-analyse kortsluttet forsyningen. Derfor sidder modstandene parallet.
-\husk{Jes}{Husk modstandsnavne i tekst, når figur af kredsløb er lagt ind.} 
+Ved AC-analyse kortsluttet forsyningen. Derfor sidder modstandene $R1$ og $R2$ parallelt.
+Det endelige kredsløb er kopieret, således der er to udgange for at opnå stereo. 
 \begin{equation}
 f_c = \frac{1}{2\pi R C} = \frac{1}{2 \pi \frac{1}{\frac{1}{47k \Omega}+\frac{1}{47k \Omega}}  470\text{nF}} = 14,1\text{Hz}
 \end{equation}
+
+\begin{figure}[h]
+\caption{Kredsløbet for modtageren af indgangssignalet.}
+\includegraphics[width=0.8\linewidth]{./billeder/Modtager.png}
+\label{fig:modtagerKreds}
+\end{figure}
+
+\husk{Jes}{Hvis der er problemer med antal sider, kan der henvises til et bilag med det samlede print i stedet.}
 
 \section{Anti aliasing filtre}
