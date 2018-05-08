@@ -33,3 +33,5 @@ rapport.synctex.gz(busy)
 *.bib.save
 *.tex.swp
 *.bib.swp
+
+*.m~
