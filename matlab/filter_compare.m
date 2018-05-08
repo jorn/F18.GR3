@@ -37,7 +37,7 @@ H_cheb2 = tf(Hn_cheb2, Hd_cheb2);
 H_bes = tf(Hn_bes, Hd_bes);
 
 
-figure;
+fig1 = figure;
 subplot(2,1,1);
 semilogx(w_but,20*log10(abs(h_but)))
 hold on
@@ -58,3 +58,5 @@ groupDelaytf(H_cheb2);
 groupDelaytf(H_bes);
 
 grid on
+
+print( fig1, '-dpng', '-r200', 'filter_compare.png')
