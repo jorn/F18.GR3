@@ -40,55 +40,25 @@ Rumklangen skabes så af samples fra delay bufferen, som fungerer som opbygninge
 
 \husk{Emil}{koden skulle ikke være her alligevel}
 \section{Implementering af reverb}
-\subsection{Kode}
-\lstset{frame=tb,
-	language=c,
-	aboveskip=3mm,
-	belowskip=3mm,
-	showstringspaces=false,
-	columns=flexible,
-	basicstyle={\small\ttfamily},
-	numbers=none,
-	numberstyle=\tiny\color{gray},
-	keywordstyle=\color{blue},
-	commentstyle=\color{dkgreen},
-	stringstyle=\color{mauve},
-	breaklines=true,
-	breakatwhitespace=true,
-	tabsize=3,
-	texcl=true
-}
-\begin{lstlisting}
-void mod_reverb_effekt( fp_sample_t *in, fp_sample_t *out)
-{
-if(is_sw1_pressed)
-{
-const float in_gain = -0.25;
-const float fb_gain = -0.05;
-const uint16_t delay = 2000;
 
-fp_sample_t fp_sample;
-sample_buffer_get(&fp_sample);
-
-fp_sample.left_fp32 = ((in->left_fp32 * in_gain) + ((in->left_fp32 + fp_sample.left_fp32) * fb_gain));
-fp_sample.right_fp32 = ((in->right_fp32 * in_gain) + ((in->left_fp32 + fp_sample.right_fp32) * fb_gain));
-
-sample_buffer_put_z(&fp_sample, delay);
-
-out->left_fp32 = in->left_fp32;
-out->right_fp32 = in->right_fp32;
-}
-else
-{
-out->left_fp32 = in->left_fp32;
-out->right_fp32 = in->right_fp32;
-}
-}
-\end{lstlisting}
-
-%Koden er implementeringen af et all-pass filter.
-%Først hentes en sample ind fra sample bufferen.
-%Input samplet bliver ganget med feedback gainet og input gainet og lægges DELAY pladser frem i sample bufferen.\newline
-%Der opbygges en masse ekkoer, da funktionen bliver kaldt hver gang der kommer et sample ind.\newline
-%Disse ekkoer der ligger på i sample bufferen bliver lagt sammen med 
-
+\section{FIR filter}
+Som et effektmodul blev der udviklet et FIR (finite impulse response) filter, hvilket vil sige at impulsresponset af filteret falder til nul efter et vist stykke tid.\newline
+Et FIR filters overføringsfunktion er givet ved
+\begin{equation}
+H(z) = b_0 + b_1z^{-1} + \cdots + b_Kz^{-K}
+\end{equation}
+Hvori $b_i$ er filterets koefficienter.\cite[p.218]{Tan2013}\newline
+Filteret og dets koefficienter bliver ved run-time beregnet efter brugeren inputter cutoff frekvensen. Filteret designes og det koefficienter bliver beregnet via frequency sampling metoden.
+\section{Frequency Sampling}
+Frequency sampling metoden virker ved at man lader $h(n)$ for $n = 0, 1, \cdots, N - 1$ approksimere filterets impulsrespons, hvilet for FIR filtre er deres koefficienter, og $H(k)$ for $k = 0, 1, \cdots, N - 1$ er de diskrete Fourier transformationskoefficienter.
+\begin{figure}[!ht]
+	\includegraphics[width=\textwidth]{billeder/frequencysampling.png}
+	\caption{Frekvenssampling af amplitudekarakteristik}
+	\label{fig:frequencysampling}
+\end{figure}
+H(k) findes ved at sample den ønskede amplitudekarakteristik i frekvensdomænet ved lige adskilte frekvenser som vist i figur \ref{fig:frequencysampling}.
+FIR koefficienterne findes så ved
+\begin{equation}
+b_n = h(n) = \frac{1}{2M + 1} \left\{H_0 + 2\displaystyle\sum_{k = 1}^{M}\, H_k\cos\left(\frac{2\pi k (n - M)}{2M + 1} \right) \right\} \quad \mathrm{for} \quad n = 0, 1, \cdots, M
+\end{equation}
+Resten af koefficienterne findes ved $h(n) = h(2M - n) \quad \mathrm{for} n = M + 1, \cdots, 2M$ ved brug af symmetri, når filteret antages at have lineær fase.

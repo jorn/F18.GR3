@@ -35,3 +35,4 @@ rapport.synctex.gz(busy)
 *.bib.swp
 
 *.m~
+**/.DS_Store
