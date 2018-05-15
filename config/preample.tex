@@ -6,7 +6,9 @@
 \usepackage[T1]{fontenc}
 \usepackage[left=4.0cm, right=2.0cm, top=3.0cm, bottom=3.0cm]{geometry} 
 \usepackage{amsmath,amssymb}																						
+\DeclareMathOperator{\arccosh}{arccosh}
 \usepackage{listings}
+%\usepackage{physics}
 
 % SIUnitX  http://ctan.org/pkg/siunitx
 \usepackage{siunitx,booktabs}		
@@ -18,6 +20,7 @@
 \DeclareSIUnit{\LSb}{LSb}
 \DeclareSIUnit{\cycles}{cycles}
 \DeclareSIUnit{\div}{Div}
+
 
 \usepackage{graphicx}
 \newsubfloat{figure}% Allow subfloats in figure environment
@@ -70,7 +73,7 @@ format=hang}
 \newcommand{\dcite}[1]{\quotedblbase{#1}\textquotedblright}
 \newcommand{\husk}[2]{\todo[inline,color=green!40]{#1: #2}}
 \newcommand{\jj}[1]{\todo[inline,color=green!40]{JJ: #1}}
-\newcommand{\note}[1]{\todo[inline]{#1}}
+\newcommand{\note}[1]{\todo[inline,color=yellow!40]{NOTE : #1}}
 \DeclareMathOperator{\lapl}{\mathcal{L}}
 
 % Remove paragraph indentation for document

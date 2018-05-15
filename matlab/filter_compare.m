@@ -4,8 +4,9 @@ clear
 
 % graph diff between 6 and 8 order butterworth, bessel, chebychev type 1 and 2
 
-fs = 44.1E3
+fs = 44.1E3\arccosh
 fpass = 18E3
+fstop = 22.05E3
 Rp = .1
 Rs = 40
 n = 6

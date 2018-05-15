@@ -1,0 +1,67 @@
+%	\item Begrundelse baseret på antal op-amp / orden (6/8)
+%	\item Kort teoretisk gennemgang af den valgte topologi
+%	\item Beregninger og dimensionering af 6. ordens chebycheb filtre
+%	\item Implementeringsvalg og design af hardware/schematics
+%\end{itemize}
+
+
+\section{Analoge filtres rolle ved digital signalbehandling}\label{sec:filter_intro}
+\note{Kort teoretisk intro til hvorfor filtre skal anvendes til sampling}
+\note{Båndbrede begrænsning}
+\note{Shannons sampling theorem}
+\note{Generel intro til audio signaler}
+
+\section{Analyse af filter typer}\label{sec:filter_topologier}
+\note{Gennem gang af de filter topologier der har været i betragtning som en mulig løsning.}
+For at kunne finde frem til et passende lavpasfilter som antialiasing filter, bliver 4 tilter typer sammenlignet - Butterworth, Chebyshev type I og II samt Bessel (Thomson).
+Hver af disse filtre har en tilhørende amplitudekarakteristik  der beskrives med følgende overføringsfunktion.
+\jj{kilde henvisning til afs note}
+
+\begin{align} 
+H_{butterworth}(j\omega_n) &= \frac{1}{\sqrt{1 + \omega_n^{2n}}}  \\
+H_{chebychevI}(j\omega_n) &= \frac{1}{\sqrt{1 + \epsilon^2 C_n^2(\omega_n)}} \quad, C_n(\omega_n)\quad = \quad 
+\begin{matrix}
+\cos(n\arccos(\omega_n)) & 0 \le \omega_n \le 1 \\  \cosh(n \arccosh(\omega_n)) & 1 \le \omega_n 
+\end{matrix}\\
+H_{chebychevII}(j\omega_n) &= \frac{1}{\sqrt{1 + \frac{1}{\epsilon^2 C_n^2(\omega_n)}}} \quad\\
+H_{bessel} (j\omega_n) &= \frac{H}{a_0 + \omega^2 + ja_1\omega_n}
+\end{align}
+
+\jj{renskriv Cn param til type I og II så det ser lidt pænere ud}
+
+I fig. xx ses en samlet plot af $H(j\omega)$ 
+\jj{indsæt graf af normeret sammenligning}
+
+Det ønskede filter skal have en rimelig flad karakteristisk i pasbåndet og en stejl overgang til stopbåndet.
+Således kan lydsignalet holdes konstant i hele det ønskede frekvensområde da uønsket dæmpning/forstærkning af lydsignalet kan medfører hørbare ændringer af lydbilledet. 
+Ligeledes ønskes en rimelig konstant gruppeløbetid der er defineret som \cite{anfilter} 
+\begin{align}
+D(\omega) \stackrel{def}{=} - \dfrac{d(arg(N(\omega)))}{d\omega}\label{eq:groupdelay_def}
+\end{align}
+Gruppeløbetiden er et udtryk for hvor stor tidsforsinkelsen er på lydsignalet ved en given frekvens.
+
+\note{Gennemgang af fordele/ulæmper ved filter typerne}
+\note{endelig valg og begrundelse}
+\note{Beregninger og argumentation for SNR}
+
+\section{Specifikation og dimensionering}\label{key}
+\note{sprecifikation som bi-quad systemer}
+\note{hvor tæt ligger de beregnede komponent værdier i hold til de anvendte tabelværdier ?}
+\note{Sallen Kay - metode 4 i afs matr.}
+\note{Hvordan kommer aliasing til at have indflydelse på det endelige signal ved valg af 6. ordens filter} 
+
+
+\section{Design og implementering}
+\note{Fremstilling i bi-quad print}
+\note{Argumenteret valg er OpAmp -> den bedste der var som SMD}
+\note{Kort begrundelse for enkelt R i metoden og brug af op til 4 stk. C som proto type -> hvordan ville det se ud hvis kun brugte den nærmeste C i serien og hvor stor indflydelse vil det have. Måske Sensitivitesmetoden eller H(jw) -> var det er klogt valg og måske lidt overdrevet.}
+
+\section{Rekonstruktions filter}
+\note{Hvorfor anvendes et tilsvarende AA filter på udgangen - lidt teori her}
+
+\section{Input stage med pre-amp og DC-offset}
+\note{Flyt indhold fra anden fil hertil}
+
+
+\section{Output stage}
+\note{Flyt indhold fra anden fil hertil}
