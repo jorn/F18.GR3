@@ -1,4 +1,9 @@
-\section{Reverb effektmodul}\label{chap:reverb}
+\chapter{DSP}\label{chap:DSP}
+
+\husk{Emil}{ved ikk eom den skulle have et bedre navn}
+
+\section{Reverb effektmodul}\label{sec:reverb}
+\husk{Emil}{jeg er ikke helt sikker på opbygningen af denne sektion..}
 Reverb, rumklang, er resultatet af lydbølger som bliver reflekteret tilbage af samtlige overflader med forskellige vinkler.\newline
 Rumklang er resultatet af lydbølger som bliver reflekteret af samtlige overflader i et rum, derved bygges der en masse reflektioner op hvis amplitude falder mod $0$ som de bliver absorberet af overfladerne i rummet.\newline
 Der er to primære metoder for implementeringen af en digital reverb effekt.
@@ -33,7 +38,7 @@ Rumklangen skabes så af samples fra delay bufferen, som fungerer som opbygninge
 
 
 
-
+\husk{Emil}{koden skulle ikke være her alligevel}
 \section{Implementering af reverb}
 \subsection{Kode}
 \lstset{frame=tb,
@@ -56,28 +61,28 @@ Rumklangen skabes så af samples fra delay bufferen, som fungerer som opbygninge
 \begin{lstlisting}
 void mod_reverb_effekt( fp_sample_t *in, fp_sample_t *out)
 {
-	if(is_sw1_pressed)
-	{
-		const float in_gain = -0.25;
-		const float fb_gain = -0.05;
-		const uint16_t delay = 2000;
+if(is_sw1_pressed)
+{
+const float in_gain = -0.25;
+const float fb_gain = -0.05;
+const uint16_t delay = 2000;
 
-	fp_sample_t fp_sample;
-	sample_buffer_get(&fp_sample);
+fp_sample_t fp_sample;
+sample_buffer_get(&fp_sample);
 
-	fp_sample.left_fp32 = ((in->left_fp32 * in_gain) + ((in->left_fp32 + fp_sample.left_fp32) * fb_gain));
-	fp_sample.right_fp32 = ((in->right_fp32 * in_gain) + ((in->left_fp32 + fp_sample.right_fp32) * fb_gain));
+fp_sample.left_fp32 = ((in->left_fp32 * in_gain) + ((in->left_fp32 + fp_sample.left_fp32) * fb_gain));
+fp_sample.right_fp32 = ((in->right_fp32 * in_gain) + ((in->left_fp32 + fp_sample.right_fp32) * fb_gain));
 
-	sample_buffer_put_z(&fp_sample, delay);
+sample_buffer_put_z(&fp_sample, delay);
 
-	out->left_fp32 = in->left_fp32;
-	out->right_fp32 = in->right_fp32;
-	}
-	else
-	{
-	out->left_fp32 = in->left_fp32;
-	out->right_fp32 = in->right_fp32;
-	}
+out->left_fp32 = in->left_fp32;
+out->right_fp32 = in->right_fp32;
+}
+else
+{
+out->left_fp32 = in->left_fp32;
+out->right_fp32 = in->right_fp32;
+}
 }
 \end{lstlisting}
 
