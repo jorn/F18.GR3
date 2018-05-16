@@ -1,4 +1,4 @@
-\chapter{DSP}\label{chap:DSP}
+\chapter{Effektmoduler}\label{chap:DSP}
 
 \husk{Emil}{ved ikk eom den skulle have et bedre navn}
 
@@ -40,8 +40,10 @@ Rumklangen skabes så af samples fra delay bufferen, som fungerer som opbygninge
 
 \husk{Emil}{koden skulle ikke være her alligevel}
 \section{Implementering af reverb}
-
-\section{FIR filter}
+\section{Ekko effektmodul}
+	\subsection{Implementering af ekko effekt}
+	
+\section{Lowpass filter modul}
 Som et effektmodul blev der udviklet et FIR (finite impulse response) filter, hvilket vil sige at impulsresponset af filteret falder til nul efter et vist stykke tid.\newline
 Et FIR filters overføringsfunktion er givet ved
 \begin{equation}
@@ -49,6 +51,7 @@ H(z) = b_0 + b_1z^{-1} + \cdots + b_Kz^{-K}
 \end{equation}
 Hvori $b_i$ er filterets koefficienter.\cite[p.218]{Tan2013}\newline
 Filteret og dets koefficienter bliver ved run-time beregnet efter brugeren inputter cutoff frekvensen. Filteret designes og det koefficienter bliver beregnet via frequency sampling metoden.
+\pagebreak
 \section{Frequency Sampling}
 Frequency sampling metoden virker ved at man lader $h(n)$ for $n = 0, 1, \cdots, N - 1$ approksimere filterets impulsrespons, hvilet for FIR filtre er deres koefficienter, og $H(k)$ for $k = 0, 1, \cdots, N - 1$ er de diskrete Fourier transformationskoefficienter.
 \begin{figure}[!ht]
@@ -58,7 +61,24 @@ Frequency sampling metoden virker ved at man lader $h(n)$ for $n = 0, 1, \cdots,
 \end{figure}
 H(k) findes ved at sample den ønskede amplitudekarakteristik i frekvensdomænet ved lige adskilte frekvenser som vist i figur \ref{fig:frequencysampling}.
 FIR koefficienterne findes så ved
-\begin{equation}
+\begin{equation} \label{eq:fir_koefficienter}
 b_n = h(n) = \frac{1}{2M + 1} \left\{H_0 + 2\displaystyle\sum_{k = 1}^{M}\, H_k\cos\left(\frac{2\pi k (n - M)}{2M + 1} \right) \right\} \quad \mathrm{for} \quad n = 0, 1, \cdots, M
 \end{equation}
 Resten af koefficienterne findes ved $h(n) = h(2M - n) \quad \mathrm{for} n = M + 1, \cdots, 2M$ ved brug af symmetri, når filteret antages at have lineær fase.
+
+
+\subsection{Implementering af FIR filter}
+Det digitale filter blev valgt at blive implementeret som et FIR filter, fordi FIR filtre giver mulighed for at have lineær negativ fase hvilket medfører konstant gruppeløbetid.\newline
+Negativ lineær fase medfører konstant gruppeløbetid da gruppeløbetid er givet ved
+\[
+\tau = \frac{\mathrm{d}\varphi}{\mathrm{d}\omega}
+\]
+Konstant gruppeløbetid er en fordel at have i audio applikationer da en varierende gruppeløbetid kan komme til at lyde forkert.\newline
+Modulet virker ved at det tager en cutoff frekvens som brugerinput og dernæst beregner normerede cutoff frekvens ved
+\[ \Omega_c = 2\pi\frac{f_c}{f_s} \]
+Hvor $f_c$ er cutoff frekvensen og $f_s$ er samplingsfrekvensen.
+Dernæst beregnes en array af amplitudekarakteristikken $H_k$ for de normerede frekvenser fra $0$ til $\pi$ ved 
+\[ \Omega_k = \frac{2\pi k}{(2M + 1)} \quad \mathrm{for} \quad k = 0, 1, \cdots, M \]
+Når $H_k$ haves beregnes $M$ filterkoefficienter via. \ref{eq:fir_koefficienter} og resten findes ved symmetri.\newline
+Filteret virker ved at en buffer fyldes med $x$ samples og dernæst bliver der foretaget en foldning for hver sampel i bufferen med hver filterkoefficient.
+
