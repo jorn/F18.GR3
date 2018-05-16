@@ -1,6 +1,8 @@
-\chapter{Test af det samlede system}
+\chapter{Tests af system}
 \label{bilag:test}
-Testens formål er at udføre en vector network analyse af det samlede system for at finde systemets amplitude-karakteristik. 
+\section{Test af samlet system}
+\label{sec:test_samlet}
+Testens formål er at udføre en vector network analyse af det samlede system for at finde systemets amplitude-karakteristik og gruppeløbetid. 
 Det samlede system består af modtageren af indgangssignalet, anti-aliasing filtrene for den ene kanal, Tiva-kittet med EMP board og microcontroller, DAC, rekonstruktionsfilteret for den ene kanal og udgangskredsløbet. 
 
 \subsection{Udstyr}
@@ -26,7 +28,7 @@ Analysen sættes op med følgende indstillinger:
 	\item External reference på CH1 \& CH2
 \end{itemize}
 \end{multicols}
-Vælg Trace 1 til Magnitude (dB). \newline
+Vælg Trace 1 til Magnitude (dB) og Trace 2 til Tg. \newline
 Med Bode Analyzer suite laves en kalibrering af Bode 100, når udgangen og indgangene på Bode 100 er koblet sammen. 
 Skillekondensatoren skal være på udgangen. \newline
 Opsæt det samlede system som vist på figur \ref{fig:lol}. 
@@ -35,15 +37,37 @@ CH2 kobles til udgangen af det samlede system for den tilsvarende kanal.
 Analysen kan nu udføres. 
 
 \subsection{Resultat af test}
-Datasættet for resultatet af testen kan ses i den vedhæftede fil \textit{'habibi.csv'}. 
+Datasættet for resultatet af testen kan ses i den vedhæftede fil \textit{'habibi.csv'}. På figur \ref{fig:tf_samletsystem} kan amplitude-karakteristikken for det samlede system ses, og på figur \ref{fig:tg_samletsystem} ses gruppeløbetiden. 
 \husk{Jes}{Filnavn skal rettes her!}
 \begin{figure}[h]
-	\caption{Overføringsfunktionen af det samlede system.}
+	\caption{Amplitude-karakteristikken for det samlede system.}
 	\includegraphics[width=1\linewidth]{./billeder/tf_samletsystem.eps}
 	\label{fig:tf_samletsystem}
 \end{figure}
+\begin{figure}[h]
+	\caption{Gruppeløbetiden for det samlede system.}
+	\includegraphics[width=1\linewidth]{./billeder/tg_samletsystem.eps}
+	\label{fig:tg_samletsystem}
+\end{figure}
 
-\section{Test af anti-aliasing filtre}
-%Formål her.
-Testen følger samme fremgangsmåde, som ved testen af det samlede system. 
-Dog testes udelukkende anti-aliasing filtrene. 
+\section{Test af anti-aliasing filter}
+Testens formål er at finde amplitude-karakteristikken for ét af anti-aliasing filtrene. 
+
+\subsection{Udstyr}
+Der skal benyttes det samme udstyr, som til testen af det samlede system i afsnit \ref{sec:test_samlet}.
+
+\subsection{Fremgangsmåde og forsøgsopstilling}
+Frem til og med kalibreringen af Bode 100 følger testen samme fremgangsmåde som ved testen af det samlede system i afsnit \ref{sec:test_samlet}. \newline
+Opsæt biquads-filtrene i kaskade som vist på figur \ref{fig:lol}. 
+Bode 100's udgang med skillekondensator og CH1 kobles til indgangen på det første biquad filter. 
+CH2 kobles til udgangen af det sidste biquad filter. \newline
+Analysen kan nu udføres. 
+
+\subsection{Resultat af test}
+Datasættet for resultatet af testen kan ses i den vedhæftede fil \textit{pølse.csv}. Amplitude-karakteristikken for anti-aliasing filtret er vist på \ref{fig:tf_filter}. 
+\husk{Jes}{Filnavn skal rettes her!}
+\begin{figure}[h]
+	\caption{Amplitude-karakteristikken for ét anti-aliasing filter.}
+	\includegraphics[width=1\linewidth]{./billeder/tf_filter.eps}
+	\label{fig:tf_filter}
+\end{figure}
