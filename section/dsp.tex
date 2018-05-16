@@ -41,19 +41,33 @@ Fordelen ved convolution reverbs er at ethvert rum i verden kan imiteres, hvis i
 Derudover kan man opfinde rum ved at syntetisere et impulsrespons.
 
 \subsection{Algoritmisk reverb}
-En algoritmisk reverb virker ved at bruge flere forskellige delays og feedback loops til at opbygge en serie af ekkoer, som dør ud over tid.
+En algoritmisk reverb virker ved at bruge flere forskellige delays med tilhørende gains der sænker signalets styrke og feedback loops til at opbygge en serie af ekkoer, som dør ud over tid.
 Det er sammensætningen af de basale byggeblokke som giver karakteristikken på rummet der emuleres.\newline
-Et eksempel på en simpel algoritmist reverb effekt er all-pass filteret.
+Et eksempel på en simpel algoritmisk reverb effekt er all-pass filteret.
 %insert billede af all-pass filter
-Her bliver samplet feeded forward til outputtet så lyden bliver spillet med det samme.
-Derudover smides samplet ind i en delay buffer.
-Rumklangen skabes så af samples fra delay bufferen, som fungerer som opbygningen af ekkoer og feedback loopet som agerer som absorptionen for at skabe aftagende ekkoer.
-
+\begin{figure}[h]
+\includegraphics[width=0.8\linewidth]{./billeder/reverb-testopsaetning.png}
+\caption{All-pass reverb filter i matlab.}
+\label{fig:allPassMatLab}
+\end{figure}
+Her bliver en sample feeded forward til outputtet så lyden bliver spillet med det samme.
+Derudover gemmes den i en reduceret og inverteret udgave. %smides samplet ind i en delay buffer.
+%Rumklangen skabes så af samples fra delay bufferen, som fungerer som opbygningen af ekkoer og feedback loopet som agerer som absorptionen for at skabe aftagende ekkoer.
+Rumklangen der skal tilføres til tiden fastsat af en delay tid kan så fremstilles af de gemte samples samt en brøkdel af outputtet.
+Resultatet gemmes og bliver tillagt outputet til delay tiden og dermed opnås en række aftagende ekkoer.
+Ulempen ved denne metode er at den skal serie kobles flere gange med forskellige delay tider for at opnå realistiske resultater.
 
 
 
 \husk{Emil}{koden skulle ikke være her alligevel}
+\husk{Emil}{Er ikke helt sikker på hvad for en type forklaring vi skal have her men prøver}
 \section{Implementering af reverb}
+Gruppen valgte at implementere en algoritmisk reverb funktion da mikrochippen tilrådighed kun havde en meget begrænset mængde hukommelse.
+Dette blev opnået ved at anvende en buffer til konstant at gemme reducerede samples af input og output som så kunne tilføjes outputtet til delay tiden.
+
+Bufferen der blev valgt at implementere til dette er af en cyklisk natur hvor der til hver samlingstid udlæses en værdi som så nulstilles og pointeren incrementeres. 
+
+
 
 \section{FIR filter}
 Som et effektmodul blev der udviklet et FIR (finite impulse response) filter, hvilket vil sige at impulsresponset af filteret falder til nul efter et vist stykke tid.\newline
