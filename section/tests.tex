@@ -1,24 +1,49 @@
-\section{Test af reverb og echo impulsrespons}\label{sec:test_af_effekt}
-Da echo og reverb begge er tidsinvariante effekter betyder det, at de kan karakteriseres af deres impulsrespons.
-For at sammenligne med teorien opsattes der simulink modeller med anti-aliasing- og rekonstruktionsfiltrenes overføringsfunktion på hhv. signalinput og output.
+\chapter{Test af reverb og echo impulsrespons}\label{sec:test_af_effekt}
+Da echo og reverb begge er tidsinvariante effekter betyder det, at de kan karakteriseres af deres impulsrespons.\newline
+Testens formål er at finde impulsresponset for echo- og reverbeffekten.
+Systemet består af modtager af indgangssignal, anti-aliasing filtre, TIVA-kit med EMP board, DAC, rekonstruktionsfilter og udgangskredsløbet.
+\section{Forsøgsopstilling og fremgangsmetode}
+\begin{itemize}
+	\item Funktionsgenerator sat på pulse med en peak-to-peak spænding sat til $750\si{mV}$ og et DC-offset sat til $500\si{mV}$ og pulsen sættes til at være $22,68\si{\mu S}$ lang svarende til en sample
+	\item Oscilloskop sat til singe sweep med en trigger sat til $750\si{mV}$
+	\item Load modstand koblet på udgangen på $10\si{k\Omega}$
+	\item Reverb delay sat til $2000$ samples og input- og feedbackgain sat til $-0.45$
+	\item Echo delay sat til $2000$ samples og gain sat til $0.5$
+\end{itemize}
+Funktionsgeneratoren kobles på signalindgangen af systemet, og oscilloskopets prober placeres hhv. på indgangen til mikrocontrolleren og på udgangen af rekonstruktionsfilteret.\newline
+Effektmodulerne aktiveres hver for sig og der tages et single sweep.
+\subsection{Resultat}
+Inputtet til testene var for hhv. reverb og echotestene disse:
+\begin{figure}[!ht]
+		\centering
+	\begin{minipage}{0.50\textwidth}
+		\centering
+		\includegraphics[width=0.9\textwidth, height=5cm]{billeder/reverb_input.png}
+		\caption{Input på reverbtesten.}
+	\end{minipage}\hfill
+	\begin{minipage}{0.50\textwidth}
+		\centering
+		\includegraphics[width=0.9\textwidth, height=5 cm]{billeder/echo_input.png}
+		\caption{Input på echotesten.}
+	\end{minipage}
+\end{figure}
+Støjen på indgangen skyldes de tre anti-aliasing filtre, som var forbundet via \husk{hvad kalder man de ting} hvilket giver en dårlig forbindelse.\newline
 \begin{figure}[!ht]
 	\centering
 	\begin{minipage}{0.50\textwidth}
 		\centering
-		\includegraphics[width=0.9\textwidth, height=5cm]{billeder/reverb-testopsaetning.png}
-		\caption{Simulink reverb model}
-		\end{minipage}\hfill
+	\includegraphics[width=0.9\textwidth]{billeder/reverb_res.png}
+	\caption{Impulsrespons af reverb}
+	\label{fig:impulsresponsreverb}
+	\end{minipage}\hfill
 	\begin{minipage}{0.50\textwidth}
-		\centering
-		\includegraphics[width=0.9\textwidth, height=5 cm]{billeder/echo-testopsaetning.png}
-		\caption{Simulink echo model}
+		\includegraphics[width=0.9\textwidth]{billeder/echo_res.png}
+		\caption{Impulsrespons af echo}
+		\label{fig:impulsresponsecho}
 		\end{minipage}
 \end{figure}
+Her \ref{fig:impulsresponsreverb} ses impulsresponset af reverbeffekten.
+Som det fremgår af figuren bliver samplen gengivet med en dæmpning hver $2000$. sample.
+Gains samt delay var sat højt for at overdrive og tydeliggøre feedbacket.\newline
+Som det ses på figuren bliver impulsen feedbacket èn gang som svarende til et ekko efter $2000$ svarende til $45,35\si{mS}$.
 
-\section{Fremgangsmetode}
-Der blev koblet en funktionsgenerator på signalindgangen, og funktionen ''pulse`` valgtes som funktion med en amplitude på $750\si{mV}$ og et DC-offset på $500\si{mV}$ for at matche biaset på opampsne på udgangen. %noget om biaset evt.
-På signaloutputtet blev der tilsluttet en load på $XXX\si{k\Omega}$. \husk{Indsæt rigtig værdi på load modstanden}
-Oscilloskopet sattes til ''single sweep`` med en trigger på $750\si{mV}$.
-Reverbeffekten blev sat til at have et delay på $z^{-2000}$ og input- og feedbackgainet blev begge sat til $-0.45$.\newline
-På echoeffekten blev delayet sat til $z^{-2000}$ og feedbackgainet blev sat til $0.5$.
-\subsection{Resultat}
