@@ -3,7 +3,16 @@
 
 
 \section{Preemptive schedulering}
-
+FreeRTOS er bygget på en prioritetsbaseret preemptive scheduleringsalgoritme.\newline
+Når et operativ system opererer med en preemptive scheduleringsalgoritme kan kørende processer preemptes - blive stoppet - og skiftet ud med en anden proces.\newline
+Det kan f.eks. være at en proces der har ventet på en I/O device får tilgang til denne.
+Scheduleren vil så skifte den nuværende kørende proces ud og skifte den hidtil ventende proces ind så den kan køres.
+Dette gør scheduleren via et context switch.\newline
+Når et context switch sker gemmes ''konteksten`` af den nuværende task i en process control block (PCB), og ydermere sker der et state restore, hvor informationen i PCBen af den task, der skal skiftes til hentes.
+Det som bliver gemt i PCBen er værdierne i CPU registrene (Program counter, etc.) og anden vigtig operativ systemsinformation.\newline
+Prioritetsbaseret skeduleringsalgoritmer tildeler alle tasks en prioritet som er baseret på taskens vigtighed.\newline
+FreeRTOS er et real-time operativ system og et primært formål ved real-time operativ systemer er at give et respons på begivenheder indenfor en vis deadline.
+FreeRTOS skeduleringsalgoritme sørger så for at den task med højest prioritet bliver givet processortid.
 
 \section{Interrupt håndtering}
 

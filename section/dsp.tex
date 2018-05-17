@@ -77,19 +77,20 @@ H(z) = b_0 + b_1z^{-1} + \cdots + b_Kz^{-K}
 \end{equation}
 Hvori $b_i$ er filterets koefficienter.\cite[p.218]{Tan2013}\newline
 Filteret og dets koefficienter bliver ved run-time beregnet efter brugeren inputter cutoff frekvensen. Filteret designes og det koefficienter bliver beregnet via frequency sampling metoden.
-\pagebreak
+
 \section{Frequency Sampling}
-Frequency sampling metoden virker ved at man lader $h(n)$ for $n = 0, 1, \cdots, N - 1$ approksimere filterets impulsrespons, hvilet for FIR filtre er deres koefficienter, og $H(k)$ for $k = 0, 1, \cdots, N - 1$ er de diskrete Fourier transformationskoefficienter.
+Frequency sampling metoden virker ved at man lader $h(n)$ for $n = 0, 1, \cdots, N - 1$ approksimere filterets impulsrespons, hvor $N$ er antal koefficienter, hvilket for FIR filtre er deres koefficienter, og $H(k)$ for $k = 0, 1, \cdots, N - 1$ er de diskrete Fourier transformationskoefficienter.
 \begin{figure}[!ht]
 	\includegraphics[width=\textwidth]{billeder/frequencysampling.png}
 	\caption{Frekvenssampling af amplitudekarakteristik}
 	\label{fig:frequencysampling}
 \end{figure}
-H(k) findes ved at sample den ønskede amplitudekarakteristik i frekvensdomænet ved lige adskilte frekvenser som vist i figur \ref{fig:frequencysampling}.
+$H(k)$ findes ved at sample den ønskede amplitudekarakteristik i frekvensdomænet ved lige adskilte frekvenser som vist i figur \ref{fig:frequencysampling}.
 FIR koefficienterne findes så ved
 \begin{equation} \label{eq:fir_koefficienter}
 b_n = h(n) = \frac{1}{2M + 1} \left\{H_0 + 2\displaystyle\sum_{k = 1}^{M}\, H_k\cos\left(\frac{2\pi k (n - M)}{2M + 1} \right) \right\} \quad \mathrm{for} \quad n = 0, 1, \cdots, M
 \end{equation}
+hvor $M = \frac{N - 1}{2}$
 Resten af koefficienterne findes ved $h(n) = h(2M - n) \quad \mathrm{for} n = M + 1, \cdots, 2M$ ved brug af symmetri, når filteret antages at have lineær fase.
 
 
