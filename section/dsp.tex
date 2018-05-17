@@ -31,11 +31,11 @@ Ved at multiplicere hvert punkt af impulsresponset med amplituden af en sample f
 %En ulempe ved convolution reverbs er, at der skal mange beregninger til for at få resultatet.
 De primære ulemper ved convolution reverb metoden er at der skal mange beregninger til for at få resultatet og at der skal anvendes en del hukommelse til at gemme impulsresponset fra rummet med en ønskede klang.
 \husk{Sonny}{Frekvens/FFT?}
-Hver sample skal individuelt multipliceres med hvert sample af impulsresponset og adderes.
-\husk{Sonny}{2 milliarder???}
-Hvis der haves $N$ samples og impulsresponset er $M$ samples lang skal der udføres $N+M$ multiplikationer og additioner.
-F.eks. hvis der haves et impulsrespons på 1 sekund og der samples med $44.1\si{kHz}$, skal der udføres næsten 2 milliarder multiplikationer og additioner i sekundet.
-Antallet af multiplikationer og additioner kan dog reduceres drastisk ved at arbejde i frekvensdomænet i stedet for, da foldning i frekvensdomænet er multiplikation.
+Da hver sample individuelt skal multipliceres med hver sample af impulsresponset og adderes til outputtet med den passende forsinkelse i tid, kan antallet af beregninger findes ved $N \cdot M$, hvor $N$ er antallet af samples impulsresponset fylder, altså samplings frekvensen multipliceret med længden af impulsresponset, og $M$ er samplings frekvensen.
+Har man eksempelvis bruger et impulsrespons på $1$ sekund optaget ved $44.1\si{kHz}$ til at tilføje en rumklang til et stykke lyd der også bliver samplet ved $44.1\si{kHz}$, får man at det er nødvendigt med $1944810000$ multiplikations og additions  operationer i sekundet, altså lige knap $2$ milliarder operationer i sekundet. 
+%Hvis der haves $N$ samples og impulsresponset er $M$ samples lang skal der udføres $N+M$ multiplikationer og additioner.
+%F.eks. hvis der haves et impulsrespons på 1 sekund og der samples med $44.1\si{kHz}$, skal der udføres næsten 2 milliarder multiplikationer og additioner i sekundet.
+%Antallet af multiplikationer og additioner kan dog reduceres drastisk ved at arbejde i frekvensdomænet i stedet for, da foldning i frekvensdomænet er multiplikation.
 
 Fordelen ved convolution reverbs er at ethvert rum i verden kan imiteres, hvis impulsresponset for det valgte rum haves.\newline
 Derudover kan man opfinde rum ved at syntetisere et impulsrespons.
@@ -65,7 +65,7 @@ Ulempen ved denne metode er at den skal serie kobles flere gange med forskellige
 Gruppen valgte at implementere en algoritmisk reverb funktion da mikrochippen tilrådighed kun havde en meget begrænset mængde hukommelse.
 Dette blev opnået ved at anvende en buffer til konstant at gemme reducerede samples af input og output som så kunne tilføjes outputtet til delay tiden.
 
-Bufferen der blev valgt at implementere til dette er af en cyklisk natur hvor der til hver samlingstid udlæses en værdi som så nulstilles og pointeren incrementeres. 
+Bufferen der blev valgt at implementere til dette er af en cyklisk natur, hvor der til hver samplingstid udlæses en værdi fra den af pointeren indikerede plads, pladsen nulstilles så og pointeren incrementeres så der til næste sample udlæses fra den næste plads i bufferen, herved opnås en buffer hvor der kan indsættes værdier der skal tilføres outputtet med en given forsinkelse angivet i antal samplingstider senere. 
 
 
 
