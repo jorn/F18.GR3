@@ -19,8 +19,6 @@ Dette gøres ved at gemme en dæmpet kopi af outputsignalet i en buffer og efter
 \end{figure}
 
 \section{Reverb effektmodul}\label{sec:reverb}
-
-\husk{Sonny}{Har udkommenteret og forsøgt at uddybe afsnittet, kan stadig godt bruge feedback}
 Reverb, rumklang, er resultatet af lydbølger som bliver reflekteret tilbage af %samtlige overflader med forskellige vinkler.\newline
 %Rumklang er resultatet af lydbølger som bliver reflekteret af samtlige overflader i et rum, derved bygges der en masse reflektioner op hvis amplitude falder mod $0$ som de bliver absorberet af overfladerne i rummet.\newline
 overfladerne i et givent lokale, dette påvirker lyden ud fra tre kriterier.\newline 
@@ -42,11 +40,9 @@ Dette gøres ved at producere en lyd impuls, et kort brag, eksempelvis ved at sp
 %Nogle af reflektionerne møder mikrofonen med det samme mens andre bliver ført rundt i rummet og amplituden af signalerne går mod $0$ pga. overfladerne af objekterne i rummet absorbere energien fra dem.\newline
 %Multiplikering af hver punkt af impulsresponset med amplituden af samplet giver så rummets respons til den sample.
 Ved at multiplicere hvert punkt af impulsresponset med amplituden af en sample fås så rummets respons til den sample.
-\husk{Sonny}{Nedenstående udkommenterede linje kunne godt tåle noget præcision}
 %Dette gøres for hver sample af inputtet og giver overlappende responser som så adderes og resulterer i rumklang.
 %En ulempe ved convolution reverbs er, at der skal mange beregninger til for at få resultatet.
 De primære ulemper ved convolution reverb metoden er at der skal mange beregninger til for at få resultatet og at der skal anvendes en del hukommelse til at gemme impulsresponset fra rummet med en ønskede klang.
-\husk{Sonny}{Frekvens/FFT?}
 Da hver sample individuelt skal multipliceres med hver sample af impulsresponset og adderes til outputtet med den passende forsinkelse i tid, kan antallet af beregninger findes ved $N \cdot M$, hvor $N$ er antallet af samples impulsresponset fylder, altså samplings frekvensen multipliceret med længden af impulsresponset, og $M$ er samplings frekvensen.
 Har man eksempelvis bruger et impulsrespons på $1$ sekund optaget ved $44.1\si{kHz}$ til at tilføje en rumklang til et stykke lyd der også bliver samplet ved $44.1\si{kHz}$, får man at det er nødvendigt med $1944810000$ multiplikations og additions  operationer i sekundet, altså lige knap $2$ milliarder operationer i sekundet. 
 %Hvis der haves $N$ samples og impulsresponset er $M$ samples lang skal der udføres $N+M$ multiplikationer og additioner.
