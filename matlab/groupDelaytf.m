@@ -20,6 +20,6 @@ w = linspace(w(1),w(end),length(w)*1000)/(sk);
 P = P(:)';
 groupDelay = -gradient(P,w)/360;
 grid on
-semilogx(w*sk,groupDelay)
+semilogx(w*sk,groupDelay,'Linewidth',2)
   
 return

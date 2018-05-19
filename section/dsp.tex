@@ -1,10 +1,24 @@
 \chapter{Effektmoduler}\label{chap:DSP}
 
-\husk{Emil}{ved ikk eom den skulle have et bedre navn}
+\section{Echo effektmodul}\label{sec:echo}
+\note{ved ikke om det skal ligge her}
+Et echo opstår når en lydbølge reflekteres tilbage på en overflade, sålede at den kan høres igen blot forsinket den tid, det tager for lyden at bevæge sig gennem luften.
+Det vil sige at jo længere væk overfladen, som lyden reflekteres på, er fra udgangspunktet for lydkilden og hvor lyden høres, jo længere går der imellem den oprindelige lyd og echoet.
+Et echo opstår som regel i et stort åbent område hvor der så er en eller flere store relativt ubrudte flader, såsom facaden på en stor bygning eller en bjergside.
+Også i nogle tunneler der har den rigtige udformning kan der opnås en god echo effekt.
+Ved et echo reflekteres lydbølgen oftest tilbage til kilden relativt få gange og gerne med en lidt stor forsinkelse.
+
+\section{Implementering af echo effektmodul}
+Vi ønsker at implementere en echo effekt der virker real time på microcontrolleren , således at der kan føres et lydsignal ind, og der med det samme kommer et modificeret lydsignal ud.
+Dette gøres ved at gemme en dæmpet kopi af outputsignalet i en buffer og efter en valgt forsinkelse, i form af et bestemt antal samples, bliver dette gemte signal lagt til udgangsignalet og igen bliver en kopi af dette gemt,således at der dannes et feedbackloop som det ses på figur \ref{fig:echo_matlab}.
+
+\begin{figure}[h]
+	\includegraphics[width=0.8\linewidth]{./billeder/Echo_simulink.png}
+	\caption{Imulink model af echo effekt.}
+	\label{fig:echo_simulink}
+\end{figure}
 
 \section{Reverb effektmodul}\label{sec:reverb}
-\husk{Emil}{jeg er ikke helt sikker på opbygningen af denne sektion..}
-\husk{Sonny}{Har udkommenteret og forsøgt at uddybe afsnittet, kan stadig godt bruge feedback}
 Reverb, rumklang, er resultatet af lydbølger som bliver reflekteret tilbage af %samtlige overflader med forskellige vinkler.\newline
 %Rumklang er resultatet af lydbølger som bliver reflekteret af samtlige overflader i et rum, derved bygges der en masse reflektioner op hvis amplitude falder mod $0$ som de bliver absorberet af overfladerne i rummet.\newline
 overfladerne i et givent lokale, dette påvirker lyden ud fra tre kriterier.\newline 
@@ -26,16 +40,14 @@ Dette gøres ved at producere en lyd impuls, et kort brag, eksempelvis ved at sp
 %Nogle af reflektionerne møder mikrofonen med det samme mens andre bliver ført rundt i rummet og amplituden af signalerne går mod $0$ pga. overfladerne af objekterne i rummet absorbere energien fra dem.\newline
 %Multiplikering af hver punkt af impulsresponset med amplituden af samplet giver så rummets respons til den sample.
 Ved at multiplicere hvert punkt af impulsresponset med amplituden af en sample fås så rummets respons til den sample.
-\husk{Sonny}{Nedenstående udkommenterede linje kunne godt tåle noget præcision}
 %Dette gøres for hver sample af inputtet og giver overlappende responser som så adderes og resulterer i rumklang.
 %En ulempe ved convolution reverbs er, at der skal mange beregninger til for at få resultatet.
 De primære ulemper ved convolution reverb metoden er at der skal mange beregninger til for at få resultatet og at der skal anvendes en del hukommelse til at gemme impulsresponset fra rummet med en ønskede klang.
-\husk{Sonny}{Frekvens/FFT?}
-Hver sample skal individuelt multipliceres med hvert sample af impulsresponset og adderes.
-\husk{Sonny}{2 milliarder???}
-Hvis der haves $N$ samples og impulsresponset er $M$ samples lang skal der udføres $N+M$ multiplikationer og additioner.
-F.eks. hvis der haves et impulsrespons på 1 sekund og der samples med $44.1\si{kHz}$, skal der udføres næsten 2 milliarder multiplikationer og additioner i sekundet.
-Antallet af multiplikationer og additioner kan dog reduceres drastisk ved at arbejde i frekvensdomænet i stedet for, da foldning i frekvensdomænet er multiplikation.
+Da hver sample individuelt skal multipliceres med hver sample af impulsresponset og adderes til outputtet med den passende forsinkelse i tid, kan antallet af beregninger findes ved $N \cdot M$, hvor $N$ er antallet af samples impulsresponset fylder, altså samplings frekvensen multipliceret med længden af impulsresponset, og $M$ er samplings frekvensen.
+Har man eksempelvis bruger et impulsrespons på $1$ sekund optaget ved $44.1\si{kHz}$ til at tilføje en rumklang til et stykke lyd der også bliver samplet ved $44.1\si{kHz}$, får man at det er nødvendigt med $1944810000$ multiplikations og additions  operationer i sekundet, altså lige knap $2$ milliarder operationer i sekundet. 
+%Hvis der haves $N$ samples og impulsresponset er $M$ samples lang skal der udføres $N+M$ multiplikationer og additioner.
+%F.eks. hvis der haves et impulsrespons på 1 sekund og der samples med $44.1\si{kHz}$, skal der udføres næsten 2 milliarder multiplikationer og additioner i sekundet.
+%Antallet af multiplikationer og additioner kan dog reduceres drastisk ved at arbejde i frekvensdomænet i stedet for, da foldning i frekvensdomænet er multiplikation.
 
 Fordelen ved convolution reverbs er at ethvert rum i verden kan imiteres, hvis impulsresponset for det valgte rum haves.\newline
 Derudover kan man opfinde rum ved at syntetisere et impulsrespons.
@@ -59,13 +71,12 @@ Ulempen ved denne metode er at den skal serie kobles flere gange med forskellige
 
 
 
-\husk{Emil}{koden skulle ikke være her alligevel}
-\husk{Emil}{Er ikke helt sikker på hvad for en type forklaring vi skal have her men prøver}
+
 \section{Implementering af reverb}
 Gruppen valgte at implementere en algoritmisk reverb funktion da mikrochippen tilrådighed kun havde en meget begrænset mængde hukommelse.
 Dette blev opnået ved at anvende en buffer til konstant at gemme reducerede samples af input og output som så kunne tilføjes outputtet til delay tiden.
 
-Bufferen der blev valgt at implementere til dette er af en cyklisk natur hvor der til hver samlingstid udlæses en værdi som så nulstilles og pointeren incrementeres. 
+Bufferen der blev valgt at implementere til dette er af en cyklisk natur, hvor der til hver samplingstid udlæses en værdi fra den af pointeren indikerede plads, pladsen nulstilles så og pointeren incrementeres så der til næste sample udlæses fra den næste plads i bufferen, herved opnås en buffer hvor der kan indsættes værdier der skal tilføres outputtet med en given forsinkelse angivet i antal samplingstider senere. 
 
 
 
@@ -77,19 +88,20 @@ H(z) = b_0 + b_1z^{-1} + \cdots + b_Kz^{-K}
 \end{equation}
 Hvori $b_i$ er filterets koefficienter.\cite[p.218]{Tan2013}\newline
 Filteret og dets koefficienter bliver ved run-time beregnet efter brugeren inputter cutoff frekvensen. Filteret designes og det koefficienter bliver beregnet via frequency sampling metoden.
-\pagebreak
+
 \section{Frequency Sampling}
-Frequency sampling metoden virker ved at man lader $h(n)$ for $n = 0, 1, \cdots, N - 1$ approksimere filterets impulsrespons, hvilet for FIR filtre er deres koefficienter, og $H(k)$ for $k = 0, 1, \cdots, N - 1$ er de diskrete Fourier transformationskoefficienter.
+Frequency sampling metoden virker ved at man lader $h(n)$ for $n = 0, 1, \cdots, N - 1$ approksimere filterets impulsrespons, hvor $N$ er antal koefficienter, hvilket for FIR filtre er deres koefficienter, og $H(k)$ for $k = 0, 1, \cdots, N - 1$ er de diskrete Fourier transformationskoefficienter.
 \begin{figure}[!ht]
 	\includegraphics[width=\textwidth]{billeder/frequencysampling.png}
 	\caption{Frekvenssampling af amplitudekarakteristik}
 	\label{fig:frequencysampling}
 \end{figure}
-H(k) findes ved at sample den ønskede amplitudekarakteristik i frekvensdomænet ved lige adskilte frekvenser som vist i figur \ref{fig:frequencysampling}.
+$H(k)$ findes ved at sample den ønskede amplitudekarakteristik i frekvensdomænet ved lige adskilte frekvenser som vist i figur \ref{fig:frequencysampling}.
 FIR koefficienterne findes så ved
 \begin{equation} \label{eq:fir_koefficienter}
 b_n = h(n) = \frac{1}{2M + 1} \left\{H_0 + 2\displaystyle\sum_{k = 1}^{M}\, H_k\cos\left(\frac{2\pi k (n - M)}{2M + 1} \right) \right\} \quad \mathrm{for} \quad n = 0, 1, \cdots, M
 \end{equation}
+hvor $M = \frac{N - 1}{2}$
 Resten af koefficienterne findes ved $h(n) = h(2M - n) \quad \mathrm{for} n = M + 1, \cdots, 2M$ ved brug af symmetri, når filteret antages at have lineær fase.
 
 

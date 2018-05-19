@@ -4,7 +4,7 @@ clear
 
 % graph diff between 6 and 8 order butterworth, bessel, chebychev type 1 and 2
 
-fs = 44.1E3\arccosh
+fs = 44.1E3
 fpass = 18E3
 fstop = 22.05E3
 Rp = .1
@@ -40,14 +40,16 @@ H_bes = tf(Hn_bes, Hd_bes);
 
 fig1 = figure;
 subplot(2,1,1);
-semilogx(w_but,20*log10(abs(h_but)))
+semilogx(w_but,20*log10(abs(h_but)),'Linewidth',2)
 hold on
-semilogx(w_cheb1,20*log10(abs(h_cheb1)))
-semilogx(w_cheb2,20*log10(abs(h_cheb2)))
-semilogx(w_cheb2,20*log10(abs(h_bes)))
-axis([1E-1 10 -70 0])
+semilogx(w_cheb1,20*log10(abs(h_cheb1)),'Linewidth',2)
+semilogx(w_cheb2,20*log10(abs(h_cheb2)),'Linewidth',2)
+semilogx(w_cheb2,20*log10(abs(h_bes)),'Linewidth',2)
+axis([1E-1 10 -60 0])
 grid on
-legend('Butterworth', 'Chebychev 1', 'Chebychev 2');
+xlabel({'\omega_n [rad/s]'});
+ylabel({'|H(j\omega_n)| [dB]'});
+legend('Butterworth', 'Chebychev I', 'Chebychev II', 'Bessel','Location','southwest');
 
 subplot(2,1,2);
 
@@ -59,5 +61,9 @@ groupDelaytf(H_cheb2);
 groupDelaytf(H_bes);
 
 grid on
+xlabel({'\omega_n [rad/s]'});
+ylabel({'D(\omega_n) [s]'});
+legend('Butterworth', 'Chebychev I', 'Chebychev II', 'Bessel');
 
-print( fig1, '-dpng', '-r200', 'filter_compare.png')
+
+print( fig1, '-dpng', '-r300', 'filter_compare.png')
