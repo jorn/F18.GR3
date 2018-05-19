@@ -40,7 +40,6 @@ Forstærkerens output swing ligger inden for 20mV af rail-spændingen. Ved 3,3V 
 Forstærkerens specifikationer overgår kravene med en stor margen. 
 Det var ikke muligt at finde en anden operationsforstærker som var tilgængelig som SMD, der både havde en acceptabel slew rate, samt muligheden for en single-supply forsyningsspænding på 3,3V. 
 Havde der været mere tid, kunne det have været bestilt hjem. 
-\husk{JES}{Der er muligvis én der lever op til krav... Tjekker op på det. }
 
 \subsubsection{Beregning af forstærkning}
 For at forstærke signalet, opsættes operationsforstærkeren som en ikke-inverterende forstærker. 
@@ -49,7 +48,7 @@ Derfor sættes en variabel modstand i serie med feedback-modstanden.
 Det ses på figur \ref{fig:modtagerKreds}. 
 Den variable modstand kan gå fra at være tæt på kortsluttet og op til 100k$\Omega$.
 For at undgå en kortslutning fra operationsforstærkerens output og til den inverterende indgang, er den variable modstand sat i serie med en feedback-modstand på 5k$\Omega$. 
-$R_2$ er valgt til 47k$\Omega$, så modstanden matcher modstanden fra højpasfilteret. \husk{Jes}{Vender tilbage til de 47k.}
+$R_2$ er valgt til 47k$\Omega$, så modstanden matcher modstanden fra højpasfilteret. 
 I formel \ref{eq:Aminfors} og \ref{eq:Aminfors} ses den mulige maksimum- og minimumsforstærkning.
 
 \begin{equation}
@@ -77,6 +76,6 @@ f_c = \frac{1}{2\pi R C} = \frac{1}{2 \pi \frac{1}{\frac{1}{47k \Omega}+\frac{1}
 \label{fig:modtagerKreds}
 \end{figure}
 
-\husk{Jes}{Hvis der er problemer med antal sider, kan der henvises til et bilag med det samlede print i stedet.}
+\husk{Jes}{Hvis der er problemer med antal sider, kan der henvises til et bilag med det samlede print i stedet. Opdatering: Bilag med samlet print er ved at blive lavet. }
 
 \section{Output stage}
