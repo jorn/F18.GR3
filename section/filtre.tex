@@ -6,6 +6,33 @@
 
 
 \section{Analoge filtres rolle ved digital signalbehandling}\label{sec:filter_intro}
+\begin{wrapfigure}[30]{r}{3.5cm}
+	\vspace{-.5cm}
+	\centering
+	\includegraphics[width=2.5cm]{billeder/dsp_model.png}
+	\caption{DSP model.}
+	\label{fig:dsp_model}
+\end{wrapfigure}
+
+For at kunne udfører digital signalbehandling af et analogt signal, bliver man nød til at overfører signalet fra den analoge verden til den digitale og tilbage igen - dette sker ved sampling og rekonstruktion.
+Denne signalbehandling følger nogle faste deltrin, som kan ses i et generelt signal-blok diagram i figur \ref{fig:dsp_model}.
+I dette kapitel vil fokus ligge på de analoge signaler og filtre, således vil vigtigheden de analoge filtre blive kortlagt og den efterfølgende analyse og dimensionering  \\
+
+Når et 
+\jj{hvad var jeg ved at skrive her ???}
+
+Som udgangspunkt blev opløsningen af den Analog-Digital Converter (ADC) til at vurdere hvor meget dæmpning er analogt filter skulle have for at kunne sikre en komplet og tabsfri gengivelse af signalet.
+
+Ud fra de fremsatte krav til projektet, benyttes der en   microcontroller fra Texas Instruments \cite{spmu296} der er udstyret med en 12bit ADC på de analoge indgange.
+For at bestemme opløsning på ADC'en, kan den unipolære\footnote{Unipolær kvanteficering skyldes ADC'ens spændingsområde på $0 \longmapsto \num{3.3}\si{\volt}$.} kvanteficering $\Delta_{ADC}$ bestemmes samt Signal to Noise Ratio $SNR_Q$.
+   
+\begin{align}
+	\Delta_{ADC} &= \frac{V_{max}}{2^N} = \frac{\num{3.3}\si{\volt}}{2^{12}} \approx \num{80.6}\si{\milli\volt}\\
+	SNR_Q &= 6,02 N + 2 [\si{\decibel}] = 6,02\cdot 12+2 = 74,24 \si{\decibel} 
+\end{align}
+ 
+
+
 \note{Kort teoretisk intro til hvorfor filtre skal anvendes til sampling}
 \note{Båndbrede begrænsning}
 \note{Shannons sampling theorem}
@@ -13,7 +40,7 @@
 \note{begrundelse for orden af filter i intro}
 
 \section{Analyse af filter typer}\label{sec:filter_analyse}
-\note{Gennem gang af de filter topologier der har været i betragtning som en mulig løsning.}
+%\note{Gennem gang af de filter topologier der har været i betragtning som en mulig løsning.}
 For at kunne finde frem til et passende lavpasfilter som antialiasing filter, bliver 4 tilter typer sammenlignet - Butterworth, Chebyshev type I og II samt Bessel (Thomson).
 Hver af disse filtre har en tilhørende amplitudekarakteristik der beskrives med følgende overføringsfunktion\cite{anfilter}.
 
@@ -57,32 +84,63 @@ Ud fra en lettere gennemgang inden for området, er antages en acceptabel relati
 Hvis man som udgangspunkt kun fokusere på filtrenes gruppeløbstid, ville man skulle vælge et Bessel filter.
 Bessel filteret, det er designet som et filter med maksimal fald fase, har dog langt fra den ønskede dæmpning i overgangsbåndet.
 Det vælges at anvende et Chebychev type I filter, der viser sig at have den bedste dæmpning i overgangsbåndet.
-Det høje udsving på gruppeløbetiden for denne filtertype, som det fremgår i figur \ref{fig:filter_typer}, vil på det denomaliserede filter ligger indenfor, de i projektet, acceptable værdier. 
+Det høje udsving på gruppeløbetiden for denne filtertype, som det fremgår nederst i figur \ref{fig:filter_typer}, vil på det denomaliserede filter ligger indenfor, de i projektet, acceptable værdier. 
 \\
 I figur \ref{fig:filter_cheb1_denorm} ses den denormaliserede filterkarakteristik for det valgte filter med en pasbåndsrippel på $0,1 \si{\decibel}$ og en knækfrekvens på $f_c = 18 \si{\kilo\hertz}$. 
-
-\begin{align}
-	|H(f)| = xxx = xxx \si{\decibel}
-\end{align}
 
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=1\textwidth]{matlab/filter_cheb1_denorm.png}
-	\caption{Denormeret 6.ordens filter karakteristik og guppeløbstid af Chebychev Type I ($0,1 \si{\decibel}$}
+	\caption{Denormeret 6.ordens filter karakteristik og guppeløbstid af Chebyshev Type I ($0,1 \si{\decibel}$}
 	\label{fig:filter_cheb1_denorm}
 \end{figure}
 \jj{ret matlab fil med denormineret grpdelay}
 
-Det valgte filter vil således have en dæmpning ved foldningsfrekvensen $f_s/2 = 22,05 \si{\kilo\hertz}$ på
-\jj{Beregning for filter dæmpning her.}	 
+For at kunne bestemme dæmpningen af de demormaliserede filter, findes udtrykket for $|H(f)|$.
+Med udgangspunkt i ligning \ref{eq:H_cheb1}, bestemmes $\epsilon$, som er bestemt ved ud fra rippelfaktoren i et Chebyshev filter\footnote{Figur 1.11.1 og ligning 1.11.3 i kilde \cite{anfilter}}
+\begin{align}
+	K_p = 20 \log \frac{1}{\sqrt{1+\epsilon^2}} \Leftrightarrow \epsilon = \sqrt{10^{K_p/10}-1}
+\end{align}
+Med en maksimal rippel på $K_p = 0,1 \si{\decibel}$ fås en $\epsilon$ på 
+\begin{align}
+	\epsilon = \sqrt{10^{0,1/10}-1} = \num{0.1526}
+\end{align}
 
-%\note{Gennemgang af fordele/ulæmper ved filter typerne}
-%\note{endelig valg og begrundelse}
+Da det ønskes at beregne $|H(f)|$ i området $f > f_c$ anvendes $C_n$ fra ligning \ref{eq:chev_cn_funk} hvor $w_n > 1$
+Dæmpningen ved nyquistfrekvensen på $f_s/2 = \num{22.05}\si{\kilo\hertz}$ kan nu bestemmes som
+
+\begin{align}
+|H(f)|_{\si{\decibel}} &= 20 \log \frac{1}{\sqrt{1+ \epsilon^2  \left[\cosh(n \arccosh k )\right]^2 }} \quad, \quad k = \frac{f}{f_c} \\
+|H(22,05\si{\kilo\hertz})|_{\si{\decibel}} &= 20 \log \frac{1}{\sqrt{1+ 0,1526^2  \left[\cosh(n \arccosh \frac{22,05\si{\kilo\hertz}}{18\si{\kilo\hertz}} )\right]^2 }} = \num{-12.2568} \si{\decibel}
+\end{align}
 
 \subsection{Forventet aliasing ved valgte filter type}
+\jj{lidt mere intro til aliasing}
+I figur \ref{fig:filter_f_fs} ses amplitude karakteristikken $|H(f)|$ af det valgte filter med blåt og den første periodiske gentagelse af frekvens spektrum $|H(f-f_s)|$ med rødt.
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=.8\textwidth]{matlab/filter_f_fs.png}
+	\caption{}
+	\label{fig:filter_f_fs}
+\end{figure}
 
+En dæmpning på kun $\num{12.3} \si{\decibel}$ ved Nyquistfrekvensen er ikke ret stor og der må derfor ventes aliasing i signalet.
+Størrelsen af aliasing i signalet $SA$, kan beregnes som procentvis del ved
+\begin{align}
+	\%SA = \frac{|H(f)|_{f=f_s-f_x}}{|H(f)|_{f=f_x}} \cdot 100 \% \label{eq:signal_alias}
+\end{align} 
+I ligning \ref{eq:signal_alias} angiver $f_x$ den frekvens, hvor den procentvise aliasing effekt ønskes beregnet.
+Effekten kan evalueres ved at plotte $SA(f)$ fra ligning \ref{eq:signal_alias} som ses i figur \ref{fig:filter_sa}, både angivet som procentvis forhold og absolut i decibel.
+Her er det således muligt at se, at der ved fx $f_c=\num{18}\si{\kilo\hertz}$ er en aliasing effekt på $5,4\%$.
 
-\note{Beregninger og argumentation for SNR}
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=.8\textwidth]{matlab/filter_sa.png}
+	\caption{}
+	\label{fig:filter_sa}
+\end{figure}
+
+%\note{Beregninger og argumentation for SNR}
 
 \section{Specifikation og dimensionering}\label{sec:filter_spec}
 
