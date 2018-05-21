@@ -151,6 +151,76 @@ Her er det således muligt at se, at der ved fx $f_c=\num{18}\si{\kilo\hertz}$ e
 \note{Sallen Kay - metode 4 i afs matr.}
 \note{Hvordan kommer aliasing til at have indflydelse på det endelige signal ved valg af 6. ordens filter} 
 
+Til anti aliasing filtrene anvendes aktive filtre, dette er valgt da det så ikke er
+nødvendigt at skulle anvende spoler, da disse ofte fylder meget og heller ikke er
+tilgængelige i et lige så bredt omfang, som kondensatorer og modstander, på SDU.
+Samtidigt er det nemt at implementere da systemet i forvejen har strømforsyning til
+mikroprocessoren, som kan anvendes til filtrenes operationsforstærker.
+
+Aktive filtre opbygges generelt af 2. ordens filtre som seriekobles til den ønskede orden,
+i dette tilfælde anvendes et 6. ordens filter så derfor seriekobles 3 filtre. Disse led
+eller filtre kaldes bi-quads.
+
+\subsection{Sallen-Key}
+
+Her er det valgt at anvende Sallen-Key lav pas biquads,
+da disse kan realiseres ved hjælp af flere forskellige designmetoder, præsenteret 
+i læreborgen 'Analog filters, second edition'\cite{KendallSu}.
+En generisk Sallen-Key lavpas biquad ser ud som i figur(\ref{fig:sklpbq}).
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{billeder/sklpbq}
+	\caption{Sallen-Key lowpass biquad \cite{KendallSu}}
+	\label{fig:sklpbq}
+\end{figure}
+
+Det blev valgt at anvende design metode 4 fra litteraturen, minimum sensitivitet.
+Denne designmetode gør filteret mindre sensitiv over for variationer i komponenter ved bl.a.
+at anvende enheds forstærkning for derfor at undvære $R_a$ og $R_b$.
+Det vælges at $R_1 = R_2$, herefter findes $C_1$ og $C_2$ ved hjælp af ligning \ref{eq:dm4c1} og \ref{eq:dm4c2}.
+
+\vspace{15pt}
+
+\begin{minipage}{0.5\linewidth}
+	\begin{equation}
+	\label{eq:dm4c1}
+	C_1 = \frac{2Q}{\omega_0}
+	\end{equation}
+\end{minipage}
+\begin{minipage}{0.5\linewidth}
+	\begin{equation}
+	\label{eq:dm4c2}
+	C_2 = \frac{1}{2Q\omega_0}
+	\end{equation}
+\end{minipage}
+
+\vspace{15pt}
+
+Det kan så ses at denne designmetode dog kommer på bekostningen af en stor spredning i
+kondensator værdierne, som stiger afhængigt af filterets Q-værdi, som ses i ligning
+\ref{eq:kondspred}.
+
+\begin{equation}
+\label{eq:kondspred}
+\frac{C_1}{C_2} = 4Q^2
+\end{equation}
+
+\subsection{Specifikation}
+
+Specifikationen og dimensioneringen af filteret blev udført ved hjælp af matlab, det samlede script kan ses i bilage \ref{sec:aafilterspec}.
+
+Ud fra standard notifikationen for en lav pas 2. ordens overføringsfunktion, ligning
+\ref{eq:stdnothlp}, kan Q-værdien og $\omega_0$ findes
+
+\begin{equation}
+\label{eq:stdnothlp}
+	H_{LP}(s) = \frac{G\omega_0^2}{s^2 + (\frac{\omega_0}{Q})s + \omega_0^2}
+\end{equation}
+
+
+
+
 
 \section{Design og implementering}\label{sec:filter_design}
 \note{Fremstilling i bi-quad print}
