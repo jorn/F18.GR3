@@ -20,9 +20,33 @@ FreeRTOS skeduleringsalgoritme sørger så for at den task med højest prioritet
 
 \section{Interrupt håndtering}
 \note{Interrupt execution diagram og opsætning} 
+\subsection{Intterrupt eksekvering og task skedulering}
+Figur \ref{fig:int_task} viser hvordan tasks og interrupts håndteres i FreeRTOS. 
+Til tiden t1 kører en lavt prioriteret task. 
+Ved t2 bliver en interrupt service rutine, fremover kaldet en ISR, kaldt. 
+Den prioriteres højest, og den lavt prioriteret task pauses indtil ISR'en er færdig.
+ISR'eren er færdig til tiden t3, hvor den lavt prioriteret task kan genoptages.
+Ved t4 sker et context switch til en højere prioriteret task.
+Skeduleringen mellem tasks er styret af FreeRTOS scheduler med respekt til den prioritet, som hver task er givet. 
+Interrupts prioriteres højere end alle tasks, uanset prioriteten af den pågældende task. 
+Interrupts har også prioriteter i mellem sig, såfremt flere skulle blive kaldt. 
+Modsat tasks, vil en interrupt dog altid afsluttes, før den næste kan begynde. 
+ARM Cortex-M4 tilbyder otte interrupt prioriteter. 
+\husk{Jes}{Forstået rigtigt?} 
+\begin{figure}[h]
+	\caption{Det tidslige forløb for to tasks og en interrupt service rutine. }
+	\centering
+	\includegraphics[width=0.7\linewidth]{billeder/interruptandtaskprocessing.jpg}
+	\label{fig:int_task}
+\end{figure}
+
 Når det indgående lydsignal skal samples gennem ADC'en, skal samplingen foregå periodisk på nøjagtigt det samme tidspunkt i hver periode.
-For at sikre, at mikrocontrolleren sætter alle andre opgaver på pause, og begynder at sample på det korrekte tidspunkt, implementeres samplingen i en interrupt service routine, også kaldet ISR.
-Rutinen indstilles med den højest mulige interrupt prioritet. 
+Det faste tidspunkt for sampling giver minimal jitter med en minimal forsinkelse i samplingen af signalet. 
+\husk{Jes}{Dansk ord for jitter? Det er et teknisk engelsk ord, så det kan vel gå.. } 
+For at sikre, at mikrocontrolleren sætter alle andre opgaver på pause, og begynder at sample på det korrekte tidspunkt, implementeres samplingen i en ISR.
+
+\subsection{Implementering af interrupt-styring med timer}
+ISR'en indstilles med den højest mulige interrupt prioritet. 
 Timingen af ISR'en er styret af Timer 3. 
 Timeren er implementeret som en 16-bit timer i periodic timer mode, edge-count mode og inverted PWM mode.
 Ved start hentes timerens start value ind i et tælleregister. 
@@ -33,12 +57,16 @@ Sample-frekvensen og CPU frekvensen styrer værdien.
 I periodic timer mode vil timeren dekrementere fra tælleregisteret, som automatisk henter timer start værdien igen, og begynder forfra når værdien når nul. 
 Når værdien når nul, kaldes den ISR som sikrer at lydsignalet bliver samplet. \newline
 
-Timeren benyttes til at generere et PWM-signal, hvis duty cycle er styret af indgangssignalet. 
-% match value loades ind
+\subsection{Generering af PWM-signal til DAC}
+\husk{Jes}{Hører det til 'Genskabelse af signal via DAC igennem SPI-afsnit'?}
+Timeren benyttes desuden til at generere et PWM-signal, hvis duty cycle er styret af timeren og resultatet af A/D konverteringen af indgangssignalet. 
+Figur \ref{fig:PWMfromtimer} viser hvordan PWM-signalets duty cycle bliver bestemt af den værdi, som bliver gemt på Timer A's match register. 
+Den værdi kommer fra den periodiske sampling af lydsignalet gennem ADC'en, hvor resultatet af hver sampling netop gemmes i match registeret. 
+Således genskabes signalet som et digitalt PWM signal. 
+
+% Figur kommer!
 % Hvor kommer PWM ud?
 % Skal det efter ADC afsnit?
-
-\note{Meget fast samlings tidspunkt -> minimal Jitter}
 
 \section{Sampling af lydsignal igennem ADC}
 
