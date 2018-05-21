@@ -11,7 +11,7 @@ Ved et echo reflekteres lydbølgen oftest tilbage til kilden relativt få gange 
 \section{Implementering af echo effektmodul}
 Vi ønsker at implementere en echo effekt der virker real time på microcontrolleren , således at der kan føres et lydsignal ind, og der med det samme kommer et modificeret lydsignal ud.
 Dette gøres ved at gemme en dæmpet kopi af outputsignalet i en buffer og efter en valgt forsinkelse, i form af et bestemt antal samples, bliver dette gemte signal lagt til udgangsignalet og igen bliver en kopi af dette gemt,således at der dannes et feedbackloop som det ses på figur \ref{fig:echo_simulink}.
-
+\note{Her beskrives ikke rigtigt hvordan bufferen virker, dette beskrives dog nede i reverb delen derfor tænker hjeg måske at echo skal flyttes?}
 \begin{figure}[h]
 	\includegraphics[width=0.8\linewidth]{./billeder/Echo_simulink.png}
 	\caption{Simulink model af echo effekt.}
