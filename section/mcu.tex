@@ -36,7 +36,7 @@ ARM Cortex-M4 tilbyder otte interrupt prioriteter.
 \begin{figure}[h]
 	\caption{Det tidslige forløb for to tasks og en interrupt service rutine. }
 	\centering
-	\includegraphics[width=0.7\linewidth]{billeder/interruptandtaskprocessing.jpg}
+	\includegraphics[width=0.6\linewidth]{billeder/interruptandtaskprocessing.jpg}
 	\label{fig:int_task}
 \end{figure}
 
@@ -64,7 +64,13 @@ Figur \ref{fig:PWMfromtimer} viser hvordan PWM-signalets duty cycle bliver beste
 Den værdi kommer fra den periodiske sampling af lydsignalet gennem ADC'en, hvor resultatet af hver sampling netop gemmes i match registeret. 
 Således genskabes signalet som et digitalt PWM signal. 
 
-% Figur kommer!
+\begin{figure}[h]
+	\caption{Generering af PWM-signal ud fra timer. }
+	\centering
+	\includegraphics[width=0.5\linewidth]{billeder/timer3PWM.png}
+	\label{fig:PWMfromtimer}
+\end{figure}
+
 % Hvor kommer PWM ud?
 % Skal det efter ADC afsnit?
 
