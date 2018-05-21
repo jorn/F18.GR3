@@ -37,3 +37,9 @@ ylabel({'D(f) [s]'});
 %legend('Butterworth', 'Chebychev I', 'Chebychev II', 'Bessel');
 
 print( fig1, '-dpng', '-r300', 'filter_cheb1_denorm.png')
+
+% pkt ved 22.05 kHz
+epsi = sqrt( 10^(Rp/10)-1 )
+C = cosh(n * acosh( 22.05E3/fpass ))
+H_stop = 1/(sqrt(1+epsi^2*C^2))
+mag2db(H_stop)
