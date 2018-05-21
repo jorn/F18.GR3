@@ -10,11 +10,11 @@ Ved et echo reflekteres lydbølgen oftest tilbage til kilden relativt få gange 
 
 \section{Implementering af echo effektmodul}
 Vi ønsker at implementere en echo effekt der virker real time på microcontrolleren , således at der kan føres et lydsignal ind, og der med det samme kommer et modificeret lydsignal ud.
-Dette gøres ved at gemme en dæmpet kopi af outputsignalet i en buffer og efter en valgt forsinkelse, i form af et bestemt antal samples, bliver dette gemte signal lagt til udgangsignalet og igen bliver en kopi af dette gemt,således at der dannes et feedbackloop som det ses på figur \ref{fig:echo_matlab}.
+Dette gøres ved at gemme en dæmpet kopi af outputsignalet i en buffer og efter en valgt forsinkelse, i form af et bestemt antal samples, bliver dette gemte signal lagt til udgangsignalet og igen bliver en kopi af dette gemt,således at der dannes et feedbackloop som det ses på figur \ref{fig:echo_simulink}.
 
 \begin{figure}[h]
 	\includegraphics[width=0.8\linewidth]{./billeder/Echo_simulink.png}
-	\caption{Imulink model af echo effekt.}
+	\caption{Simulink model af echo effekt.}
 	\label{fig:echo_simulink}
 \end{figure}
 
@@ -92,7 +92,7 @@ H(z) = b_0 + b_1z^{-1} + \cdots + b_Kz^{-K}
 \end{equation}
 Hvori $b_i$ er filterets koefficienter.\cite[p.218]{Tan2013}\newline
 Filteret og dets koefficienter bliver ved run-time beregnet efter brugeren inputter cutoff frekvensen. Filteret designes og det koefficienter bliver beregnet via frequency sampling metoden.
-
+Grunden til frequency sampling valgtes som designmetode er, fordi algoritmen er baseret på invers diskret frekvens/tid fourier transformation (IDFT), hvilket kan beregnes effektivt via FFT.\newline
 \section{Frequency Sampling}
 Frequency sampling metoden virker ved at man lader $h(n)$ for $n = 0, 1, \cdots, N - 1$ approksimere filterets impulsrespons, hvor $N$ er antal koefficienter, hvilket for FIR filtre er deres koefficienter, og $H(k)$ for $k = 0, 1, \cdots, N - 1$ er de diskrete Fourier transformationskoefficienter.
 \begin{figure}[!ht]
@@ -124,3 +124,8 @@ Dernæst beregnes en array af amplitudekarakteristikken $H_k$ for de normerede f
 Når $H_k$ haves beregnes $M$ filterkoefficienter via. \ref{eq:fir_koefficienter} og resten findes ved symmetri.\newline
 Filteret virker ved at en buffer fyldes med $x$ samples og dernæst bliver der foretaget en foldning for hver sampel i bufferen med hver filterkoefficient.
 
+\section{Delkonklusion}
+Echoeffekten blev implementeret via en delay buffer og et feedback loop således at inputtet bliver ført tilbage med en dæmpning på.\newline
+Reverbeffekten blev implementeret som et all-pass filter, hvorved samples bliver ført ind i et dæmpningsled samt en delaybuffer samt at blive outputtet med det samme.
+Filtereffekten blev implementeret som et FIR filter da disse giver mulighed for negativ lineær fase som medfører konstant gruppetid.
+Der blev valgt frequency sampling som design metode, da den giver fine resultater og fordi algoritmen kræver relativt få beregninger, hvilket gør den godt egnet til real-time filter design.
