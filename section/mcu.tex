@@ -18,6 +18,8 @@ Prioritetsbaseret skeduleringsalgoritmer tildeler alle tasks en prioritet som er
 FreeRTOS er et real-time operativ system og et primært formål ved real-time operativ systemer er at give et respons på begivenheder indenfor en vis deadline.
 FreeRTOS skeduleringsalgoritme sørger så for at den task med højest prioritet bliver givet processortid.
 
+\note{afsnit om task, task model, hid queues og implementering i os}
+
 \section{Interrupt håndtering}
 \note{Interrupt execution diagram og opsætning} 
 \subsection{Intterrupt eksekvering og task skedulering}
@@ -57,6 +59,14 @@ Sample-frekvensen og CPU frekvensen styrer værdien.
 I periodic timer mode vil timeren dekrementere fra tælleregisteret, som automatisk henter timer start værdien igen, og begynder forfra når værdien når nul. 
 Når værdien når nul, kaldes den ISR som sikrer at lydsignalet bliver samplet. \newline
 
+
+% Hvor kommer PWM ud?
+% Skal det efter ADC afsnit?
+
+\section{Sampling af lydsignal igennem ADC}
+
+\section{Modulær opbygning af effekter}
+
 \subsection{Generering af PWM-signal til DAC}
 \husk{Jes}{Hører det til 'Genskabelse af signal via DAC igennem SPI-afsnit'?}
 Timeren benyttes desuden til at generere et PWM-signal, hvis duty cycle er styret af timeren og resultatet af A/D konverteringen af indgangssignalet. 
@@ -71,14 +81,8 @@ Således genskabes signalet som et digitalt PWM signal.
 	\label{fig:PWMfromtimer}
 \end{figure}
 
-% Hvor kommer PWM ud?
-% Skal det efter ADC afsnit?
-
-\section{Sampling af lydsignal igennem ADC}
-
-\section{Håndtering af brugergrænseflade og human input interface}
-
-\section{Modulær opbygning af effekter}
 
 \section{Genskabelse af signal via DAC igennem SPI}
+
+\section{Håndtering af brugergrænseflade og human input interface}
 
