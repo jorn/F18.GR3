@@ -3,9 +3,13 @@
  
 \note{ved ikke hvordan dette afsnit skal opbygges}
 
-En af de begrænsende faktorer ved implementering af effektmodulerne er den korte tid, der er til at foretage beregninger mellem samples bliver taget til de skal ud igen.
-Den begrensede tid kan skabe et problem for store beregninger der kan tage lang tid, hvis en sådan beregning på signalet ikke bliver færdiggjort før samplet skal ud igen bliver signalbehandlingen ikke korrekt udført, eller det kan resultere i et delay af signalet, hvilket ikke ønskes. \husk{Emil}{jeg her helt bestemt ikke tilfreds med denne sætning...}
-Af hensyn til dette er det vigtigt at lave beregninger så hurgtigt og effiktivt som muligt.
+%En af de begrænsende faktorer ved implementering af effektmodulerne er den korte tid, der er til at foretage beregninger mellem samples bliver taget til de skal ud igen.
+%Den begrensede tid kan skabe et problem for store beregninger der kan tage lang tid, hvis en sådan beregning på signalet ikke bliver færdiggjort før samplet skal ud igen bliver signalbehandlingen ikke korrekt udført, eller det kan resultere i et delay af signalet, hvilket ikke ønskes. \husk{Emil}{jeg her helt bestemt ikke tilfreds med denne sætning...}
+%Af hensyn til dette er det vigtigt at lave beregninger så hurgtigt og effiktivt som muligt.
+En betydelig begrænsning i implementering af effektmodulerne er den korte tid mellem at en samples modtages og sendes ud igen.
+Dette betyder at  meget store og eller komplicerede beregninger simpelthen ikke kan udføres hurtigt nok til at undgå forsinkelser der kan opfattes af det menneskelige øre.
+Det er derfor vigtigt at optimere og begrænse alle beregninger så de bruger den mindste tid muligt. 
+\husk{Sonny}{Har skrevet en alternativ udgave af teksten herover}
 Ved både Echo- og Reverbeffektmodulerne er dette tilfældet, da der ved hvert sample kun skal laves et ganske lille antal simple beregninger.
 I Echoeffektmodulet er bliver et sample blot ganget med en gain/decay \note{hvad kalder vi det?} og derefter adderet til en værdig i en buffer.
 Reverbeffekten opnås ved en lignende metode, det er næmlig valgt at benytte en algoritmisk reverb frem for convolution reverb, altså ved foldning.
