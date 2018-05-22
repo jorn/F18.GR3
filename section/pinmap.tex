@@ -1,0 +1,88 @@
+\chapter{Pin mapping} \label{bilag:pinmap}
+\jj{Gennemgå kilder og noter i dette kap.}
+\begin{table}[h!]
+	\caption{Pin konfiguration af Tiva LaunchPad, EMP print og Projekt print}
+	\label{tab:pin_mapping}
+	\begin{threeparttable}
+		\begin{tabular}{l l l l l l}
+			\toprule
+			\textbf{Tiva Pin\tnote{a}} 	& 
+			\textbf{GPIO\tnote{b}}  	&
+			\textbf{Tiva\tnote{c}} 		& 
+			\textbf{EMP\tnote{d}}  		&
+			\textbf{Projekt\tnote{e}} 	\\ 
+			\midrule
+			1.01 &      & 3V3  	& +3.3VDC		& 3V3			 		\\
+			1.02 &  PB5 &      	& PB5			&  		\\
+			1.03 &	PB0 &	   	& PB0			&								\\
+			1.04 &	PB1 &      	& PB1			&								\\
+			1.05 &	PE4 &	   	& Audio Out     &							\\
+			1.06 &	PE5 &	   	& Audio In		&								\\
+			1.07 &	PB4 &	   	& PB4			& 		\\
+			1.08 &	PA5 &	   	& DIGI A		& 					\\
+			1.09 &	PA6 &	   	& DIGI B    	& 								\\
+			1.10 &	PA7 &	   	& DIGI P2		& 								\\
+			\midrule
+			2.01 &     	& GND  	& GND  			&  GND 						\\
+			2.02 & PB2 	&      	& PB2			&								\\
+			2.03 & PE0 	&	  	& KEYB G 		&								\\
+			2.04 & PF0 	& SW2	& 				&								\\
+			2.05 &     	& RESET	& 				&								\\
+			2.06 & PB7	&		& PB7			& 					\\
+			2.07 & PB6	&		& PB6			& 					\\
+			2.08 & PA4 	&      	& KEYB F 		&						\\
+			2.09 & PA3 	&		& KEYB E    	& 						\\
+			2.10 & PA2  &		& KEYB D		& 						\\
+			\midrule
+			3.01 &		& 5V0	& +5VDC			&								\\
+			3.02 &		& GND	& GND			&								\\
+			3.03 & PD0	&(R10)	&				&								\\
+			3.04 & PD1	&(R9)	&				&								\\
+			3.05 & PD2	&		& LCD RS		& 				\\
+			3.06 & PD3	&		& LCD E			& 						\\
+			3.07 & PE1	&		& KEYB H		& 							\\
+			3.08 & PE2	&		& KEYB J		&							\\
+			3.09 & PE3	&		& KEYB K		&								\\
+			3.10 & PF1	&LED (R)& LED R			&								\\
+			\bottomrule
+		\end{tabular}
+	
+		\begin{tablenotes}
+			\item[] Forsættes på næste side...
+		\end{tablenotes}
+	\end{threeparttable}
+\end{table}
+\newpage
+\begin{table}[ht]
+	\caption{Pin konfiguration af Tiva LaunchPad, EMP print og Projekt print}
+	\begin{threeparttable}
+		\begin{tabular}{l l l l l l}
+			\toprule
+			\textbf{Tiva Pin\tnote{a}} 	& 
+			\textbf{GPIO\tnote{b}}  	&
+			\textbf{Tiva\tnote{c}} 		& 
+			\textbf{EMP\tnote{d}}  		&
+			\textbf{Projekt\tnote{e}} 	\\ 
+			\midrule
+			4.01 & PF2	&LED (B)& LED Y			&								\\
+			4.02 & PF3	&LED (G)& LED G			&								\\
+			4.03 & PB3	&		& PB3			&	DAC $\overline{LDAC}$							\\
+			4.04 & PC4	&		& LCD D4		& 			\\
+			4.05 & PC5	&		& LCD D5		& 				\\
+			4.06 & PC6	&		& LCD D6		& 				\\
+			4.07 & PC7	&		& LCD D7		& 				\\
+			4.08 & PD6	&		& Status LED	& 		\\
+			4.09 & PD7	&		& 				&								\\
+			4.10 & PF4	& SW1	& 				&								\\
+			\bottomrule
+		\end{tabular}
+		
+		\begin{tablenotes}
+			\item[x] Jumper på EMP printet skal sættes til. \textbf{J5 pin 1-2} og \textbf{J4 pin 2-3}.
+			\item[a,b] JP1-4 på Tiva LaunchPad \cite[Afsnit 2.1.5 s. 9]{spmu296}.
+			\item[c] On-board fnuktion  \cite[Afsnit 2.1.5 s. 9]{spmu296}.
+			\item[d] EMP print funktionalitet er beskrevet i tilhørende diagram \cite{emp-diagram}.
+			\item[e] Projekt , se bilag \ref{bilag:diagram}.
+		\end{tablenotes}
+	\end{threeparttable}
+\end{table}
