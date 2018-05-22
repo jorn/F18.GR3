@@ -260,7 +260,7 @@ En generisk Sallen-Key lavpas biquad ser ud som i figur(\ref{fig:sklpbq}).
 Det blev valgt at anvende design metode 4 fra litteraturen, minimum sensitivitet.
 Denne designmetode gør filteret mindre sensitiv over for variationer i komponenter ved bl.a.
 at anvende enheds forstærkning for derfor at undvære $R_a$ og $R_b$.
-Det vælges at $R_1 = R_2$ og fastsættes til $10\si{\kilo\ohm}$, herefter findes $C_1$ og $C_2$ ved hjælp af ligning \ref{eq:dm4c1} og \ref{eq:dm4c2}.
+Det vælges at $R_1 = R_2$ og fastsættes til $1\si{\ohm}$, herefter findes $C_1$ og $C_2$ ved hjælp af ligning \ref{eq:dm4c1} og \ref{eq:dm4c2}.
 
 \vspace{15pt}
 
@@ -296,5 +296,39 @@ Dette resulterede i en amplitude karakteristik på det valgte 6. ordens filter s
 Således blev et andet sæt normaliserede kondensator værdier anvendt til fremstillingen af løsningens bi-quad filter print.
 De anvendte værdier ses i tabel xx kolonne 3 og 4 og er taget fra \cite[Table B-2: Capacitor Values for 0.1-dB Chebyshev lowpass Sallen-Key filters, n=6]{sk_data_web}
 
-% tabel med C1 og C2 fra begge sæt
- 
+\begin{table}[h!]
+	\centering
+	\caption{Norminerede kondensator værdier for Chebyshev LPF Type I Sallen-Key, $0,1\si{\decibel}$ rippel.}
+	\begin{threeparttable}
+		\begin{tabular}{l c c c c}
+			\toprule
+			& \multicolumn{2}{c}{\textbf{Matlab værdier}} & \multicolumn{2}{c}{\textbf{Tabel værdier\tnote{(*)}}} \\ 
+			\midrule
+			\textbf{Filter \#} &
+			\textbf{$C_{1n}$} 	& 
+			\textbf{$C_{2n}$}  	&
+			\textbf{$C_{1n}$} 		& 
+			\textbf{$C_{2n}$} 	\\
+			\midrule
+			1 & \num{2.3362} & \num{1.6253} & \num{2.553} & \num{1.776} \\
+			2 & \num{3.1913} & \num{0.4500} & \num{3.487} & \num{0.4917} \\
+			3 & \num{8.7189} & \num{0.1016} & \num{9.531} & \num{0.1110} \\
+			\bottomrule
+		\end{tabular}
+		
+		\begin{tablenotes}
+			\item[*] \cite[Table B-2: Chebyshev lowpass Sallen-Key filters, n=6]{sk_data_web}.
+		\end{tablenotes}
+	\end{threeparttable}
+\end{table}
+
+Denominering og impedans tilpasning af komponenterne gøres ud fra følgende
+\begin{align}
+	R &= R_n \cdot \Omega_n \\
+	C &= \frac{C_n}{2\pi f_c \Omega_n} 
+\end{align} 
+\jj{få lige styr på formler og begreber her}
+Det er valgt at bruge $\Omega_n = \num{10E3}$ og $f_c = 18\si{\kilo\hertz}$.
+De endelige komponentværdier kan alle ses i det samlede diagram i bilag \ref{bilag:diagram}.
+
+\jj{check om 2ser2par c kombi skal med her ?}
