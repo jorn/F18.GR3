@@ -19,7 +19,8 @@ kapacitans, ved at anvende op til fire kondensatorer fra rækken af værdier der
 
 Disse kondensatorer blev beregnet ved at lave et matlab script som finder alle mulige kombinationer, for de kondensatorer som var tilgængelig på SDU under projektets udførelse.
 
-Som det kan ses i tabel \ref{tab:kapvskap}
+Som det kan ses i tabel \ref{tab:kapvskap} bliver den faktiske kapacitans rigtig tæt på den
+beregnede, dog er der her ikke taget højde for usikkerheden i komponentværdierne.
 
 \begin{table}[h!]
 	\centering
@@ -46,6 +47,19 @@ Som det kan ses i tabel \ref{tab:kapvskap}
 \label{tab:kapvskap}
 \end{table}
 
+Det valgtes at lave hver bi-quad som et separat print der kan kobles sammen med et lignende
+sig selv. 
+Dette giver de fordele at det vil forekomme nemmere at fejlfinde på de enkelte led, og
+samtidigt kan der laves flere forskellige ordener af filtret uden at skulle ændre på PCB designet.
+
+Det færdige PCB design kan ses på figur \ref{fig:skbiquadpcb}. Her kortsluttes RB, og RA forbliver ikke forbundet, og så påsættes der selvfølgelig de beregnede komponenter for at opnå det specificerede filter bi-quad. Vis man sammenligner resultaterne fra testen i bilag 
+\ref{sec:test_aafilter} med den beregnede filter karakteristik vist i figur 
+\ref{fig:filter_cheb1_denorm}, kan det ses at filteret i pasbåndet har en konstant dæmpning
+på ca. $3\si\decibel$. \hlh{Hvorfor er der nu den konstante dæmpning?}
+Dette kan der dog ses bort fra da dæmpningen er konstant. Udover dette kan det ellers
+konkluderes at implementeringen af filteret overholder designet,
+da både knækfrekvensen og hældningen i mellem pas og stop bånd stemmer overens.
+
 
 \begin{figure}[H]
 	\includegraphics[width=\linewidth]{billeder/skbiquadpcb}
@@ -54,3 +68,10 @@ Som det kan ses i tabel \ref{tab:kapvskap}
 \end{figure}
 \section{Rekonstruktions filter}
 \note{Hvorfor anvendes et tilsvarende AA filter på udgangen - lidt teori her}
+
+Da udgangen fra DAC'en 
+\begin{figure}[H]
+	\includegraphics[width=\linewidth]{billeder/dacrecon}
+	\caption{Udgang fra DAC med sample-and-hold, før og efter reconstructionsfilter. Kilde:\cite{Tan2013}}
+	\label{fig:skbiquadpcb}
+\end{figure}
