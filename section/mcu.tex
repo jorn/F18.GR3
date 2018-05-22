@@ -89,6 +89,21 @@ Sample sequencers modtager resultatet.
 	% Float og offset justering
 
 \section{Modulær opbygning af effekter}
+Da effekterne skal være modulær
+Effektmodulerne bliver kaldt via 
+Effektmodulerne holdes hver især i en \textit{module control block}, $\mathtt{mcb\_t}$,  som er en data struktur bestående af en \textit{function pointer} og en booleansk variabel.
+Function pointeren benyttes til at kalde lydeffektmodulerne, og den booleanske variabel benyttes til at aktivere/deaktivere lydeffekterne.\newline
+For at tilføje en lydeffekt laves der en ny instans af $\mathtt{mcb\_t}$, og dens \textit{function pointer} sættes til at \textit{pointe} til lydeffekt rutinen.\newline
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=\textwidth]{billeder/Flowchart_for_effektmoduler.png}
+	\caption{Flowchart for iteration gennem effektmoduler}
+	\label{fig:effektmoduler}
+\end{figure}
+
+På figur (\ref{fig:effektmoduler}) illustreres det, hvordan de enkelte moduler bliver kaldet, når de er aktiveret, efter hver sample kommer ind.
+Grunden til at outputtet fra hver modul bliver sat til input, er at det ønskes at opnå en seriel kobling af effekterne.
+%indsæt flowchart her når du er tilbage
 
 \subsection{Generering af PWM-signal til DAC}
 Timeren benyttes desuden til at generere et PWM-signal, hvis duty cycle er styret af timeren og resultatet af A/D konverteringen af indgangssignalet. 
@@ -106,10 +121,20 @@ Således genskabes signalet som et digitalt PWM signal.
 \section{Håndtering af brugergrænseflade og human input interface}
 
 \husk{Sonny}{Kan dette anvendes?}
-For at kunne anvende enheden skal enheden kunne udveksle nødvendige informationer med brugeren, input skal altså kunne modtages, her valgte gruppen at anvende en "drehimpulsgeber", og respons skal oplyses, her valgte gruppen et grafisk repræsenteret menu system.
-En menu består en række valgmuligheder repræsenteret af elementer brugeren kan bladre igennem og vælge imellem.
+%For at kunne anvende enheden skal enheden kunne udveksle nødvendige informationer med brugeren, input skal altså kunne modtages, her valgte gruppen at anvende en "drehimpulsgeber", og respons skal oplyses, her valgte gruppen et grafisk repræsenteret menu system.
+For at kunne anvende enheden skal enheden kunne udveksle nødvendige informationer med brugeren. 
+Input skal kunne modtages, her valgte gruppen at anvende en "drehimpulsgeber".
+Respons skal oplyses, her valgte gruppen et grafisk repræsenteret menu system.
+%En menu består en række valgmuligheder repræsenteret af elementer brugeren kan bladre igennem og vælge imellem.
+En menu består af en række valgmuligheder repræsenteret af elementer brugeren kan bladre igennem og vælge imellem.
 Et valg kan lede til yderligere valgmuligheder inden for den valgte kategori, disse kan så præsenteres i form af en ny menu.
-Til at udføre denne funktion valgte gruppen at anvende linkede lister.
-I eksemplet herunder ses en hovedmenu "Root Menu" som linker til sit første element "Master volume", vælger brugeren dette element kan volumen sættes, elementet linker også til næste element så brugeren kan skifte til det, her er der tale om "Echo" elementet som istedet for at have en funktion linker til en ny menu nemlig "Echo menu" som så linker til sin egen liste af menu punkter.
-En "drehimpulsgeber" kan anvendes til at producere 3 forskellige typer af input, drej mod uret herefter kaldet "vr", drej med uret "hr" og click.
-Når et input  modtages af programmet lægges det i en input kø til systemet er klar til at modtage input, er der tale om et "vr" fremvises foregående element i menuen, på samme måde anvendes et "hr" input til at gå til næste element i menuen og et click anvendes til at vælge det det nuværende element.
+Til at udføre denne funktion valgte gruppen at anvende linkede lister.\newline
+\husk{Indsæt diagram af den linkede liste her}
+%I eksemplet herunder ses en hovedmenu "Root Menu" som linker til sit første element "Master volume", vælger brugeren dette element kan volumen sættes, elementet linker også til næste element så brugeren kan skifte til det, her er der tale om "Echo" elementet som istedet for at have en funktion linker til en ny menu nemlig "Echo menu" som så linker til sin egen liste af menu punkter.
+I eksemplet herunder ses en hovedmenu ''Root Menu`` som linker til sit første element ''Master volume``, vælger brugeren dette element kan volumen sættes.
+Elementet linker også til næste element så brugeren kan skifte til det, her er der tale om ''Echo`` elementet som i stedet for at have en funktion linker til en ny menu nemlig ''Echo menu`` som så linker til sin egen liste af menu punkter.
+%En "drehimpulsgeber" kan anvendes til at producere 3 forskellige typer af input, drej mod uret herefter kaldet "vr", drej med uret "hr" og click.
+%Når et input  modtages af programmet lægges det i en input kø til systemet er klar til at modtage input, er der tale om et "vr" fremvises foregående element i menuen, på samme måde anvendes et "hr" input til at gå til næste element i menuen og et click anvendes til at vælge det det nuværende element.
+Drehimpulsgeberen kan anvendes til at producere 3 forskellige typer af input, drej mod uret herefter kaldet ''vr``, drej med uret ''hr`` og click.
+\husk{Indsæt UI state machine her}
+Når et input  modtages af programmet lægges det i en input kø til systemet er klar til at modtage input. Er der tale om et ''vr`` fremvises foregående element i menuen, på samme måde anvendes et ''hr`` input til at gå til næste element i menuen og et click anvendes til at vælge det nuværende element.
