@@ -198,23 +198,46 @@ Her er det således muligt at se, at der ved fx $f_c=\num{18}\si{\kilo\hertz}$ e
 %\note{Beregninger og argumentation for SNR}
 
 \section{Specifikation og dimensionering}\label{sec:filter_spec}
+Specifikationen og dimensioneringen af filteret blev udført ved hjælp af matlab, det samlede script kan ses i bilag \ref{bilag:aafilterspec}.
+
+Ved at anvende Matlab funktionen \texttt{[z,p,k] = cheb1ap(n,Rp)}, fremstilles en normaliseret Chebyshev type I filter prototype. 
+Parameteren \texttt{n} angiver filterets orden og \texttt{Rp} den ønskede passbåndsrippel i $\si{\decibel}$. 
+Prototypen er normaliseret igennem punktet
+\begin{align}
+ |H(\omega)|_{\omega=\omega_0=1}=10^{-Rp/20}
+\end{align}
+De resulterende poler og nulpunkter oversættes derefter til en samling af 2. ordens systemer. 
+En samlet overføringsfunktion kan fremstilles, men giver ingen direkte værdi udover dens anvendelighed i Matlab.
+\\
+De resulterende 2. ordens systemer, der ses i ligning \ref{eq:sos_h1}, \ref{eq:sos_h2} og \ref{eq:sos_h3}, kan således kaskadekobles til det samlede filter som beskrevet i ligning \ref{eq:sos_cascade}. 
+\begin{align}
+H_1 &= \frac{\num{0.2048}}{s^2 + \num{0.8561} s + \num{0.2634}} \label{eq:sos_h1}\\
+H_2 &= \frac{\num{1}}{s^2 + \num{0.6267} s + \num{0.6964}} \label{eq:sos_h2}\\
+H_3 &= \frac{\num{1}}{s^2 + \num{0.2294} s + \num{1.129}} \label{eq:sos_h3}\\
+H &= H_1 \cdot H_2 \cdot H_3 \label{eq:sos_cascade}
+\end{align}
 
 
+Ud fra standard notifikationen for et 2. orden lavpas filters overføringsfunktion, ligning
+\ref{eq:stdnothlp}, kan Q-værdien og $\omega_0$ findes 
 
-\note{sprecifikation som bi-quad systemer}
-\note{hvor tæt ligger de beregnede komponent værdier i hold til de anvendte tabelværdier ?}
-\note{Sallen Kay - metode 4 i afs matr.}
-\note{Hvordan kommer aliasing til at have indflydelse på det endelige signal ved valg af 6. ordens filter} 
+\begin{equation}
+\label{eq:stdnothlp}
+H_{LP}(s) = \frac{G\omega_0^2}{s^2 + \left(\frac{\omega_0}{Q}\right)s + \omega_0^2}
+\end{equation}
 
-Til anti aliasing filtrene anvendes aktive filtre, dette er valgt da det så ikke er
-nødvendigt at skulle anvende spoler, da disse ofte fylder meget og heller ikke er
-tilgængelige i et lige så bredt omfang, som kondensatorer og modstander, på SDU.
-Samtidigt er det nemt at implementere da systemet i forvejen har strømforsyning til
-mikroprocessoren, som kan anvendes til filtrenes operationsforstærker.
+%\note{hvor tæt ligger de beregnede komponent værdier i hold til de anvendte tabelværdier ?}
+%\note{Sallen Kay - metode 4 i afs matr.}
 
-Aktive filtre opbygges generelt af 2. ordens filtre som seriekobles til den ønskede orden,
-i dette tilfælde anvendes et 6. ordens filter så derfor seriekobles 3 filtre. Disse led
-eller filtre kaldes bi-quads.
+Til anti aliasing filtrene anvendes aktive filtre, dette er valgt da det så ikke er nødvendigt at skulle anvende spoler, da disse ofte fylder meget.
+Samtidigt er de nemme at implementere da systemet i forvejen har strømforsyning til mikroprocessoren, som kan anvendes til filtrenes operationsforstærker.
+
+Aktive filtre opbygges generelt af 2. ordens bi-quad filtre som cascadekobles til den ønskede orden,
+i dette tilfælde seriekobles 3 filtre. 
+
+%\note{Argumenteret valg er OpAmp -> den bedste der var som SMD}
+%\note{Kort begrundelse for enkelt R i metoden og brug af op til 4 stk. C som proto type -> hvordan ville det se ud hvis kun brugte den nærmeste C i serien og hvor stor indflydelse vil det have. Måske Sensitivitesmetoden eller H(jw) -> var det er klogt valg og måske lidt overdrevet.}
+
 
 \subsection{Sallen-Key}
 
@@ -225,7 +248,7 @@ En generisk Sallen-Key lavpas biquad ser ud som i figur(\ref{fig:sklpbq}).
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\textwidth]{billeder/sklpbq}
+	\includegraphics[width=.6\textwidth]{billeder/sklpbq}
 	\caption{Sallen-Key lowpass biquad \cite{KendallSu}}
 	\label{fig:sklpbq}
 \end{figure}
@@ -260,22 +283,3 @@ kondensator værdierne, som stiger afhængigt af filterets Q-værdi, som ses i l
 \label{eq:kondspred}
 \frac{C_1}{C_2} = 4Q^2
 \end{equation}
-
-\subsection{Specifikation}
-
-Specifikationen og dimensioneringen af filteret blev udført ved hjælp af matlab, det samlede script kan ses i bilage \ref{sec:aafilterspec}.
-
-Ud fra standard notifikationen for en lav pas 2. ordens overføringsfunktion, ligning
-\ref{eq:stdnothlp}, kan Q-værdien og $\omega_0$ findes
-
-\begin{equation}
-\label{eq:stdnothlp}
-	H_{LP}(s) = \frac{G\omega_0^2}{s^2 + (\frac{\omega_0}{Q})s + \omega_0^2}
-\end{equation}
-
-\note{Fremstilling i bi-quad print}
-\note{Argumenteret valg er OpAmp -> den bedste der var som SMD}
-\note{Kort begrundelse for enkelt R i metoden og brug af op til 4 stk. C som proto type -> hvordan ville det se ud hvis kun brugte den nærmeste C i serien og hvor stor indflydelse vil det have. Måske Sensitivitesmetoden eller H(jw) -> var det er klogt valg og måske lidt overdrevet.}
-
-
-
