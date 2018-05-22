@@ -86,3 +86,11 @@ Således genskabes signalet som et digitalt PWM signal.
 
 \section{Håndtering af brugergrænseflade og human input interface}
 
+\husk{Sonny}{Kan dette anvendes?}
+For at kunne anvende enheden skal enheden kunne udveksle nødvendige informationer med brugeren, input skal altså kunne modtages, her valgte gruppen at anvende en "drehimpulsgeber", og respons skal oplyses, her valgte gruppen et grafisk repræsenteret menu system.
+En menu består en række valgmuligheder repræsenteret af elementer brugeren kan bladre igennem og vælge imellem.
+Et valg kan lede til yderligere valgmuligheder inden for den valgte kategori, disse kan så præsenteres i form af en ny menu.
+Til at udføre denne funktion valgte gruppen at anvende linkede lister.
+I eksemplet herunder ses en hovedmenu "Root Menu" som linker til sit første element "Master volume", vælger brugeren dette element kan volumen sættes, elementet linker også til næste element så brugeren kan skifte til det, her er der tale om "Echo" elementet som istedet for at have en funktion linker til en ny menu nemlig "Echo menu" som så linker til sin egen liste af menu punkter.
+En "drehimpulsgeber" kan anvendes til at producere 3 forskellige typer af input, drej mod uret herefter kaldet "vr", drej med uret "hr" og click.
+Når et input  modtages af programmet lægges det i en input kø til systemet er klar til at modtage input, er der tale om et "vr" fremvises foregående element i menuen, på samme måde anvendes et "hr" input til at gå til næste element i menuen og et click anvendes til at vælge det det nuværende element.
