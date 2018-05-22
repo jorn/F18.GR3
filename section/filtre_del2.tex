@@ -56,8 +56,9 @@ Det færdige PCB design kan ses på figur \ref{fig:skbiquadpcb}. Her kortsluttes
 \ref{sec:test_aafilter} med den beregnede filter karakteristik vist i figur 
 \ref{fig:filter_cheb1_denorm}, kan det ses at filteret i pasbåndet har en konstant dæmpning
 på ca. $3\si\decibel$. \hlh{Hvorfor er der nu den konstante dæmpning?}
-Dette kan der dog ses bort fra da dæmpningen er konstant. Udover dette kan det ellers
-konkluderes at implementeringen af filteret overholder designet,
+Dette kan der dog ses bort fra da dæmpningen er konstant. 
+\hlh{Måske dette skal føres til en delkonklusion i kapitlet??}
+Udover dette kan det ellers konkluderes at implementeringen af filteret overholder designet,
 da både knækfrekvensen og hældningen i mellem pas og stop bånd stemmer overens.
 
 
@@ -66,12 +67,24 @@ da både knækfrekvensen og hældningen i mellem pas og stop bånd stemmer overe
 	\caption{Lav pas biquad prototype PCB design}
 	\label{fig:skbiquadpcb}
 \end{figure}
+
 \section{Rekonstruktions filter}
 \note{Hvorfor anvendes et tilsvarende AA filter på udgangen - lidt teori her}
 
-Da udgangen fra DAC'en 
+Når signalet skal genskabes efter behandling i mikroprocessoren gøres dette ved hjælp af en DAC (Digital to Analog Converter). 
+Måden denne virker på er ved at anvende et så kaldt sample-and-hold kredsløb,
+dette betyder at værdien der skal genskabes bliver sat og holdt i en
+tidsperiode ($T=\frac{1}{f_s}$), dette skaber en række firkant pulser som
+illustreret til venstre i figur \ref{fig:samplholdrecon}.
+
+Her skabes dog så en masse højfrekvente komponenter som er uønskede, disse dele af signalet kan så filtreres fra ved at anvende et rekonstruktions lav-pas filter.
+
+I praksis anvendes oftes det samme filter signal som anti-aliasing filteret,
+så længe at sampling frekvensen er konstant og bit opløsningen på DAC og ADC
+er ens. Dette er muligt da det rekonstruerede signal er i det samme frekvens spektrum som det der samples.
+
 \begin{figure}[H]
 	\includegraphics[width=\linewidth]{billeder/dacrecon}
-	\caption{Udgang fra DAC med sample-and-hold, før og efter reconstructionsfilter. Kilde:\cite{Tan2013}}
-	\label{fig:skbiquadpcb}
+	\caption{Udgang fra DAC med sample-and-hold, før og efter rekonstruktionsfilter. Kilde:\cite{Tan2013}}
+	\label{fig:samplholdrecon}
 \end{figure}
