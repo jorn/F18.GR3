@@ -27,7 +27,7 @@ FreeRTOS skeduleringsalgoritme sørger så for at den task med højest prioritet
 \end{figure}
 Figur \ref{fig:taskmodel} vise en oversigt over de task der køre i løsningen.
 Som udgangspunkt ligger \texttt{UI} tasken som den centrale del der styre konfigurationen, menusystemet.
-Alt input fra HID\footnote{HID - Human Inputer Devices} enhederne på emp-printes - tastatur, switches og digiswitch, bliver sendt ind i en kø med en fast defineret datastruktur som se i figur \ref{fig:hid_msg}, og som \texttt{UI} tasken således er forbruger af.
+Alt input fra HID\footnote{HID - Human Inputer Devices} enhederne på emp-printes - tastatur, switches og digiswitch, bliver sendt ind i en kø med en fast defineret datastruktur som se i figur \ref{fig:hid_msg_t}, og som \texttt{UI} tasken således er forbruger af.
 \lstset{language=C,
 	frame=sigle,
 	basicstyle=\ttfamily\tiny,
@@ -52,15 +52,14 @@ Alt input fra HID\footnote{HID - Human Inputer Devices} enhederne på emp-printe
 		uint8_t   event;          // Eventkode definederet af HID_EVENT_xxx
 		} hid_msg_t;
 	\end{lstlisting}
-	
 \end{tabular}
-\label{fig:hid_msg}
 \caption{struct hid\_msg\_t}
+\label{fig:hid_msg_t}
 \end{figure}
 
-Datastrukturen \texttt{Menu} indeholder den dynamiske pointer struktur til menusystemet der bliver beskrevet i afsnit \ref{} på side \pageref{} og datastrukturerne \texttt{System konfiguration} og \texttt{Modules} indeholder information til styring af systemet som helhed, herunder mono/stereo mode og hvilke enheder der er anvendes som audio ind/ud.
+Datastrukturen \texttt{Menu} indeholder den dynamiske pointer struktur til menusystemet der bliver beskrevet i afsnit \ref{sec:HID} på side \pageref{sec:HID} og datastrukturerne \texttt{System konfiguration} og \texttt{Modules} indeholder information til styring af systemet som helhed, herunder mono/stereo mode og hvilke enheder der er anvendes som audio ind/ud.
 
-LCD diaplayet bliver hold opdateret af en \texttt{LCD} task, der løbende overfører tegn fra \texttt{LCD bufferen}, dette system er nærmere beskrevet i afsnit xx.
+LCD diaplayet bliver hold opdateret af en \texttt{LCD} task, der løbende overfører tegn fra \texttt{LCD bufferen}, dette system er nærmere beskrevet i afsnit \ref{sec:LCD_driver}.
 
 Den grundliggende timing og lydbehandling styres igennem \texttt{Sample Handler} ISR\footnote{ISR - Interrupt Service Routine}.
 Denne ISR sørger for at hente lyddata fra ADC'en, finder frem til hvilke moduler der skal medtages i databehandlingen og hvordan og til hvilke buffere, \texttt{Buffer} eller \texttt{Rev. Buffer} data skal gemmes i.
@@ -175,37 +174,15 @@ Figur \ref{fig:PWMfromtimer} viser hvordan PWM-signalets duty cycle bliver beste
 Den værdi kommer fra den periodiske sampling af lydsignalet gennem ADC'en, hvor resultatet af hver sampling netop gemmes i match registeret. 
 Således genskabes signalet som et digitalt PWM signal. 
 
-Ifølge databladet er datakommunikation op til $20\si{\mega\hertz}$ mulig, men SPI port konfigurationen på MCU'en sættes til $10\si{\mega\hertz}$ og forbindes direkte til mikrokontrolleren via en SPI bus - De valgte pins er beskrevet i bilag \ref{bilag:pinmap}.
-
-En SPI clockfrekvens på $F_{SCK} = 10\si{\mega\hertz}$, giver en datatransmissionstid $t_{cmd}$ af SPI kommandoen for begge lydkanaler på minimum på 
-\begin{align}
-t_{cmd} = \frac{N_{kanal} \cdot 16bit}{F_{SCK}} = \frac{2 \cdot 16}{10\si{\mega\hertz}} = 3\si{\micro\second}
-\end{align}
-
-I figur \ref{fig:dac12bit_writecmd} ses den nødvendige kommando-bitsekvens med tilhørende timingsdiagram for \textbf{CS}, \textbf{SCK} og \textbf{LDAC}  .\\
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=.8\textwidth]{billeder/dac12bit_writecmd.png}
-	\caption{Skrive kommando til 12bit MCP4922 DAC.\cite[s. 25]{mcp4922}}
-	\label{fig:dac12bit_writecmd}
-\end{figure}
-
-I overensstemmelse med databladene for DAC'en og mikrokontrolleren, anvendes \emph{SPI Freescale Fame} formatet\footnote{Se afsnit 15.3.4 \cite[s. 954]{tm4c123gh6pm}} i \textbf{Mode 0,0}.
-
-
 \section{Genskabelse af signal via DAC igennem SPI}
 Genskabelsen af udgangssignalet fra mikorcontrolleren gøren igennem en ekstern 12bit DAC \texttt{MCP4922E/P}\footnote{Microchip MCP4922E/P 12-Bit Dual Voltage Output Digital-to-Analog Converter with SPI Interface \cite{mcp4922} }.
 
-Den valgte DAC har en maksimal indsvingningstid på $t_{settling} = \num{4.5}\si{\micro\second}$, hvilket passer fint til samplingsperioden på $T_s = 23\si{\micro\second}$.
 
-Spændingsdifferencen for LSb\footnote{LSB - Least Significant Bitden} er $ V_{LSb} = V_{ref} / 4096 \approx \num{0,8}\si{\milli\volt} $, ved den anvendte referencespænding på $V_{ref} = 3,3\si{\volt}$.
 
- 
-
-\section{LCD driver}
+\section{LCD Driver}
+\label{sec:LCD_driver}
 Når $\mathtt{lcd\_write\_char}$, $\mathtt{lcd\_write}$ og $\mathtt{lcd\_clear}$ bliver kaldt bliver deres argumenter sat over i en LCD buffer, $\mathtt{lcd\_display\_buffer}$.
-Når de så skal skrives til LCDen tager LCD tasken sig af det.
+Når de så skal skrives til LCDen tager LCD tasken sig af at skrive til skærmen, når scheduleren når til tasken.
 \begin{figure}[!ht]
 	\centering
 	\includegraphics[width=0.5\textwidth]{billeder/lcd_state_machine.png}
@@ -213,11 +190,13 @@ Når de så skal skrives til LCDen tager LCD tasken sig af det.
 	\label{fig:LCD_state_machine}
 \end{figure}
 \newline
-Måden den virker på er, at den har en state machine som er vist på figur (\ref{fig:LCD_state_machine}).\newline
+Måden LCD tasken virker på er, at den har en state machine som er vist på figur (\ref{fig:LCD_state_machine}).\newline
 I state machinen bliver der itereret gennem $\mathtt{lcd\_display\_buffer}$, hvori der kaldes $\mathtt{lcd\_direct\_write\_data\_nodelay}$ på bufferen med $\mathtt{state}$ som index.\newline
 $\mathtt{lcd\_direct\_write\_data\_nodelay}$ som er en skrivefunktion som ikke har noget \textit{end delay}.
+Når $\mathtt{state}$ når $16$ skrives der videre på næste linje.
 
 \section{Håndtering af brugergrænseflade og human input interface}
+\label{sec:HID}
 
 \husk{Sonny}{Kan dette anvendes?}
 
