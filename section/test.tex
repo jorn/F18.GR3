@@ -31,8 +31,12 @@ Analysen sættes op med følgende indstillinger:
 Vælg Trace 1 til Magnitude (dB) og Trace 2 til Tg. \newline
 Med Bode Analyzer suite laves en kalibrering af Bode 100, når udgangen og indgangene på Bode 100 er koblet sammen. 
 Skillekondensatoren skal være på udgangen. \newline
+<<<<<<< Updated upstream
 \husk{FH}{Henvis til det færdige diagram på fig:lols plads}
 Opsæt det samlede system som vist på figur \ref{fig:lol}. 
+=======
+Opsæt det samlede system som vist i bilag \ref{bilag:diagram}. 
+>>>>>>> Stashed changes
 Bode 100's udgang med skillekondensator og CH1 kobles til indgangen på den ene kanal af det samlede system. 
 CH2 kobles til udgangen af det samlede system for den tilsvarende kanal. 
 Analysen kan nu udføres. 
@@ -55,8 +59,12 @@ Der skal benyttes det samme udstyr, som til testen af det samlede system i afsni
 
 \subsection{Fremgangsmåde og forsøgsopstilling}
 Frem til og med kalibreringen af Bode 100 følger testen samme fremgangsmåde som ved testen af det samlede system i afsnit \ref{sec:test_samlet}. \newline
+<<<<<<< Updated upstream
 \husk{FH}{Henvis til det færdige diagram på fig:lols plads}
 Opsæt biquads-filtrene i kaskade som vist på figur \ref{fig:lol}. 
+=======
+Opsæt biquads-filtrene i kaskade som vist i bilag \ref{bilag:diagram} i kassen 'Generisk sjette ordens filter'. 
+>>>>>>> Stashed changes
 Bode 100's udgang med skillekondensator og CH1 kobles til indgangen på det første biquad filter. 
 CH2 kobles til udgangen af det sidste biquad filter. \newline
 Analysen kan nu udføres. 
@@ -64,6 +72,13 @@ Analysen kan nu udføres.
 \subsection{Resultat af test}
 Datasættet for resultatet af testen kan ses i den vedhæftede fil \textit{pølse.csv}. Amplitude-karakteristikken for anti-aliasing filtret er vist på \ref{fig:tf_filter}. 
 \husk{Jes}{Filnavn skal rettes her!}
+
+%\begin{wrapfigure}[15]{c}{0.5\textwidth}
+%	\caption{\label{fig:fig:tf_filter}Amplitude-karakteristikken for ét anti-aliasing filter.}
+%	\centering
+%	\includegraphics[width=1\textwidth]{matlab/tf_AAfilter.png}
+%\end{wrapfigure}
+
 \begin{figure}[h]
 	\caption{Amplitude-karakteristikken for ét anti-aliasing filter.}
 	\includegraphics[width=1\linewidth]{matlab/tf_AAfilter.png}
