@@ -17,7 +17,8 @@ Det ønskes at indgangssignalet har mulighed for at svinge både så højt og la
 \end{equation}
 Ved et offset på 1,65V kan signalet ideelt have en maksimal amplitude på 1,65V. 
 %Herfra skal den valgte operationsforstærkers output swing i forhold til dens forsyningsspænding trækkes fra. (vender tilbage til det her når op-amp skal vælges)
-Ved at opbygge en spændingsdeler, kan offsettet skabes. Kredsløbet ses på figur \ref{fig:modtagerKreds}.
+Ved at opbygge en spændingsdeler, kan offsettet skabes. 
+Kredsløbet kan ses i bilag \ref{bilag:diagram} i kassen 'Input stages for venstre og højre kanal'.
 
 \subsubsection{Valg af operationsforstærker til forstærkning af indgangssignalet}
 Operationsforstærkeren som skal forstærke signalet vælges ud fra en række krav. 
@@ -32,11 +33,11 @@ Operationsforstærkeren som skal forstærke signalet vælges ud fra en række kr
 Den nødvendige slew rate kan beregnes ved formel \ref{eq:slewrate}.\cite{slewrate}
 \begin{equation}
 \label{eq:slewrate}
-\text{Slew rate} = 2 \pi \cdot f_{maks} \cdot V_{maks} = 2\pi \cdot 44,1\text{kHz} \cdot 1,65\text{V} = 0,46\text{V/\micro S}
+\text{Slew rate} = 2 \pi \cdot f_{maks} \cdot V_{maks} = 2\pi \cdot 44,1\si\kilo\hertz \cdot 1,65\si\volt = 0,46\si[per-mode=symbol]{\volt\per\micro\second}
 \end{equation}
 \husk{JES}{Er det egentligt kun 20kHz her?}
 Ud fra kravene vælges operationsforstærkeren AD8031 som SMD komponent. 
-Forstærkeren kan operere ved en single-supply forsyning ned til 2,7V, har 80MHz -3dB båndbredde ved en forstærkning på 1 og en slew rate på 30V/\micro S. 
+Forstærkeren kan operere ved en single-supply forsyning ned til 2,7V, har 80MHz -3dB båndbredde ved en forstærkning på 1 og en slew rate på 30\si[per-mode=symbol]{\volt\per\micro\second}
 Forstærkerens output swing ligger inden for 20mV af rail-spændingen. Ved 3,3V ligger spændingsvidden således fra 0,02V til 3,28V. 
 Forstærkerens specifikationer overgår kravene med en stor margen. 
 Det var ikke muligt at finde en anden operationsforstærker som var tilgængelig som SMD, der både havde en acceptabel slew rate, samt muligheden for en single-supply forsyningsspænding på 3,3V. 
@@ -46,7 +47,7 @@ Havde der været mere tid, kunne det have været bestilt hjem.
 For at forstærke signalet, opsættes operationsforstærkeren som en ikke-inverterende forstærker. 
 Da indgangssignalets maksimale amplitude vil variere alt efter input, skal forstærkningens styrke kunne justeres. 
 Derfor sættes en variabel modstand i serie med feedback-modstanden. 
-Det ses på figur \ref{fig:modtagerKreds}. 
+Det ses i bilag \ref{bilag:diagram}. 
 Den variable modstand kan gå fra at være tæt på kortsluttet og op til 100k$\Omega$.
 For at undgå en kortslutning fra operationsforstærkerens output og til den inverterende indgang, er den variable modstand sat i serie med en feedback-modstand på 5k$\Omega$. 
 $R_2$ er valgt til 47k$\Omega$, så modstanden matcher modstanden fra højpasfilteret. 
@@ -63,7 +64,7 @@ A_{min.} = 1 + \frac{R_{feedback}}{R_2} = 1 + \frac{5\text{k} \Omega}{47\text{k}
 
 \subsubsection{Højpas filter-design}
 Mellem inputtet og operationsforstærkeren sidder en kapacitor, som blokerer for al DC fra indgangssignalet. 
-Som det ses på figur \ref{fig:modtagerKreds}, vil kapacitoren og modstandene fra offsettet udgøre et højpas filter. 
+Som det ses i bilag \ref{bilag:diagram}, vil kapacitoren og modstandene fra offsettet udgøre et højpas filter. 
 Filterets knækfrekvens sættes så lavt, at alle frekvenser i det hørbare område ikke påvirkes. 
 Ved AC-analyse kortsluttet forsyningen. Derfor sidder modstandene $R1$ og $R2$ parallelt.
 Det endelige kredsløb er kopieret, således der er to udgange for at opnå stereo. 
@@ -71,12 +72,31 @@ Det endelige kredsløb er kopieret, således der er to udgange for at opnå ster
 f_c = \frac{1}{2\pi R C} = \frac{1}{2 \pi \frac{1}{\frac{1}{47k \Omega}+\frac{1}{47k \Omega}}  470\text{nF}} = 14,1\text{Hz}
 \end{equation}
 
-\begin{figure}[h]
-\caption{Kredsløbet for modtageren af indgangssignalet.}
-\includegraphics[width=0.8\linewidth]{./billeder/Modtager.png}
-\label{fig:modtagerKreds}
-\end{figure}
-
-\husk{Jes}{Hvis der er problemer med antal sider, kan der henvises til et bilag med det samlede print i stedet. Opdatering: Bilag med samlet print er ved at blive lavet. }
-
 \section{Output stage}
+
+Da de rekonstruerede signal stadigvæk er offset skal DC-værdien fjernes igen inden signalet føres ud af systemet.
+Dette gøres ved at anvende en kondensator inden udgangen, dette danner et højpas led med belastningen på udgagen med en knækfrekvens der kan beregnes med ligning \ref{eq:fchp1}.
+
+\begin{equation}
+	f_c = \frac{1}{2\pi RC}
+\label{eq:fchp1}
+\end{equation}
+
+Ved lidt søgning kan der findes frem til at indgangs impedansen på lyd forstærkere og lignende typisk ligger på $10\si{\kilo\ohm}$ og opefter.
+
+Knækfrekvensen skal gerne være på maksimum $20\si{\hertz}$.
+
+Herefter kan ligning \ref{eq:fchp1} omskrives til ligning \ref{eq:fchp2}, for at finde kondensator værdien.
+
+\begin{equation}
+	C = \frac{1}{2\pi Rf_c} = \frac{1}{2\pi 10\si{\kilo\ohm} 20\si{\hertz}} = 0,796\si{\micro\farad}
+\label{eq:fchp2}
+\end{equation}
+
+Det findes så at kondensatoren skal være ca. 0,8\si\micro\farad.
+For nemhedens skyld valgtes en værdi på 1\si\micro\farad, da det er en let tilgængeligt standard værdi.
+Med denne kondensator vil belastningen kunne være ned til cirka 8\si\kilo\ohm, før at knækfrekvensen vil overstige 20\si\hertz, Hvilket overholder kravspecifikationen for denne.
+
+\section{Opsummering}
+I dette afsnit har vi yada yada yada
+

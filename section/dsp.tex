@@ -89,11 +89,11 @@ H(z) = b_0 + b_1z^{-1} + \cdots + b_Kz^{-K}
 Hvori $b_i$ er filterets koefficienter.\cite[p.218]{Tan2013}\newline
 Filteret og dets koefficienter bliver ved run-time beregnet efter brugeren inputter cutoff frekvensen. Filteret designes og det koefficienter bliver beregnet via frequency sampling metoden.
 Grunden til frequency sampling valgtes som designmetode er, fordi algoritmen er baseret på invers diskret frekvens/tid fourier transformation (IDFT), hvilket kan beregnes effektivt via FFT.\newline
-\section{Frequency Sampling}
+\subsection{Frequency Sampling}
 Frequency sampling metoden virker ved at man lader $h(n)$ for $n = 0, 1, \cdots, N - 1$ approksimere filterets impulsrespons, hvor $N$ er antal koefficienter, hvilket for FIR filtre er deres koefficienter, og $H(k)$ for $k = 0, 1, \cdots, N - 1$ er de diskrete Fourier transformationskoefficienter.
 \begin{figure}[!ht]
 	\includegraphics[width=\textwidth]{billeder/frequencysampling.png}
-	\caption{Frekvenssampling af amplitudekarakteristik}
+	\caption{Frekvenssampling af amplitudekarakteristik\cite{Tan2013}}
 	\label{fig:frequencysampling}
 \end{figure}
 $H(k)$ findes ved at sample den ønskede amplitudekarakteristik i frekvensdomænet ved lige adskilte frekvenser som vist i figur \ref{fig:frequencysampling}.
@@ -102,14 +102,14 @@ FIR koefficienterne findes så ved
 b_n = h(n) = \frac{1}{2M + 1} \left\{H_0 + 2\displaystyle\sum_{k = 1}^{M}\, H_k\cos\left(\frac{2\pi k (n - M)}{2M + 1} \right) \right\} \quad \mathrm{for} \quad n = 0, 1, \cdots, M
 \end{equation}
 hvor $M = \frac{N - 1}{2}$
-Resten af koefficienterne findes ved $h(n) = h(2M - n) \quad \mathrm{for} n = M + 1, \cdots, 2M$ ved brug af symmetri, når filteret antages at have lineær fase.
+Resten af koefficienterne findes ved $h(n) = h(2M - n) \quad \mathrm{for} \quad n = M + 1, \cdots, 2M$ ved brug af symmetri, når filteret antages at have lineær fase.
 
 
-\section{Implementering af FIR filter}
+\subsection{Implementering af FIR filter}
 Det digitale filter blev valgt at blive implementeret som et FIR filter, fordi FIR filtre giver mulighed for at have lineær negativ fase hvilket medfører konstant gruppeløbetid.\newline
 Negativ lineær fase medfører konstant gruppeløbetid da gruppeløbetid er givet ved
 \[
-\tau = \frac{\mathrm{d}\varphi}{\mathrm{d}\omega}
+\tau = -\frac{\mathrm{d}\varphi}{\mathrm{d}\omega}
 \]
 Konstant gruppeløbetid er en fordel at have i audio applikationer da en varierende gruppeløbetid kan komme til at lyde forkert.\newline
 Modulet virker ved at det tager en cutoff frekvens som brugerinput og dernæst beregner normerede cutoff frekvens ved
@@ -120,8 +120,25 @@ Dernæst beregnes en array af amplitudekarakteristikken $H_k$ for de normerede f
 Når $H_k$ haves beregnes $M$ filterkoefficienter via. \ref{eq:fir_koefficienter} og resten findes ved symmetri.\newline
 Filteret virker ved at en buffer fyldes med $x$ samples og dernæst bliver der foretaget en foldning for hver sampel i bufferen med hver filterkoefficient.
 
-\section{Delkonklusion}
-Echoeffekten blev implementeret via en delay buffer og et feedback loop således at inputtet bliver ført tilbage med en dæmpning på.\newline
-Reverbeffekten blev implementeret som et all-pass filter, hvorved samples bliver ført ind i et dæmpningsled samt en delaybuffer samt at blive outputtet med det samme.
+%\section{Delkonklusion}
+\section{Opsummering}
+En betydelig begrænsning i implementering af effektmodulerne er den korte tid mellem at en samples modtages og sendes ud igen.
+Dette betyder at  meget store og eller komplicerede beregninger simpelthen ikke kan udføres hurtigt nok til at undgå forsinkelser der kan opfattes af det menneskelige øre.
+Det er derfor vigtigt at optimere og begrænse alle beregninger så de bruger den mindste tid muligt. 
+Echoeffekten blev implementeret algoritmisk via en delay buffer hvor der gemmes en dæmpet del af inputtet.
+Ved brug af samme delay buffer blev reverbeffekten implementeret algoritmisk som et all-pass filter, dette er udført ved at anvende samme metode som echoeffekten samt et feedback loop hvor en dæmpet udgave af outputtet også bliver tilføjet delay bufferen.
+%Ved både Echo- og Reverbeffektmodulerne er dette tilfældet, da der ved hvert sample kun skal laves et ganske lille antal simple beregninger.
+%I Echoeffektmodulet er bliver et sample blot ganget med en gain/decay \note{hvad kalder vi det?} og derefter adderet til en værdig i en buffer.
+%Reverbeffekten opnås ved en lignende metode, det er næmlig valgt at benytte en algoritmisk reverb frem for convolution reverb, altså ved foldning.
+Dette er valgt, selvom der i teorien ville kunne opnås en bedre, mere realistisk, reverbeffekt ved convolution reverb.
+Valget er truffet, da det ville betyde at der skulle foretages flere beregninger imellem input og output samples.
+Hvilket ville betyde, at der ville være en risiko for ikke at nå beregningerne, uden en stor mængde planlægning af beregningerne.
+Denne metode har også behov for en større mængde hukommelse end den algoritmiske reverb effekt.
+Dette er også en af grundende til, at dette valg blev truffet. 
+Da det endte med en pladsmangel på microcontrolleren, når der skal ligge flere forskellige moduler på.
+%Echoeffekten blev implementeret algoritmisk via en delay buffer og et feedback loop således at inputtet bliver ført tilbage med en dæmpning på.\newline
+%Reverbeffekten blev implementeret som et all-pass filter, hvorved samples bliver ført ind i et dæmpningsled samt en delaybuffer samt at blive outputtet med det samme.
 Filtereffekten blev implementeret som et FIR filter da disse giver mulighed for negativ lineær fase som medfører konstant gruppetid.
 Der blev valgt frequency sampling som design metode, da den giver fine resultater og fordi algoritmen kræver relativt få beregninger, hvilket gør den godt egnet til real-time filter design.
+
+
