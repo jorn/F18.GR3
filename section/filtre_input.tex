@@ -32,11 +32,11 @@ Operationsforstærkeren som skal forstærke signalet vælges ud fra en række kr
 Den nødvendige slew rate kan beregnes ved formel \ref{eq:slewrate}.\cite{slewrate}
 \begin{equation}
 \label{eq:slewrate}
-\text{Slew rate} = 2 \pi \cdot f_{maks} \cdot V_{maks} = 2\pi \cdot 44,1\text{kHz} \cdot 1,65\text{V} = 0,46\text{V/\micro S}
+\text{Slew rate} = 2 \pi \cdot f_{maks} \cdot V_{maks} = 2\pi \cdot 44,1\si\kilo\hertz \cdot 1,65\si\volt = 0,46\si[per-mode=symbol]{\volt\per\micro\second}
 \end{equation}
 \husk{JES}{Er det egentligt kun 20kHz her?}
 Ud fra kravene vælges operationsforstærkeren AD8031 som SMD komponent. 
-Forstærkeren kan operere ved en single-supply forsyning ned til 2,7V, har 80MHz -3dB båndbredde ved en forstærkning på 1 og en slew rate på 30V/\micro S. 
+Forstærkeren kan operere ved en single-supply forsyning ned til 2,7V, har 80MHz -3dB båndbredde ved en forstærkning på 1 og en slew rate på 30\si[per-mode=symbol]{\volt\per\micro\second}
 Forstærkerens output swing ligger inden for 20mV af rail-spændingen. Ved 3,3V ligger spændingsvidden således fra 0,02V til 3,28V. 
 Forstærkerens specifikationer overgår kravene med en stor margen. 
 Det var ikke muligt at finde en anden operationsforstærker som var tilgængelig som SMD, der både havde en acceptabel slew rate, samt muligheden for en single-supply forsyningsspænding på 3,3V. 
@@ -80,3 +80,30 @@ f_c = \frac{1}{2\pi R C} = \frac{1}{2 \pi \frac{1}{\frac{1}{47k \Omega}+\frac{1}
 \husk{Jes}{Hvis der er problemer med antal sider, kan der henvises til et bilag med det samlede print i stedet. Opdatering: Bilag med samlet print er ved at blive lavet. }
 
 \section{Output stage}
+
+Da de rekonstruerede signal stadigvæk er offset skal DC-værdien fjernes igen inden signalet føres ud af systemet.
+Dette gøres ved at anvende en kondensator inden udgangen, dette danner et højpas led med belastningen på udgagen med en knækfrekvens der kan beregnes med ligning \ref{eq:fchp1}.
+
+\begin{equation}
+	f_c = \frac{1}{2\pi RC}
+\label{eq:fchp1}
+\end{equation}
+
+Ved lidt søgning kan der findes frem til at indgangs impedansen på lyd forstærkere og lignende typisk ligger på $10\si{\kilo\ohm}$ og opefter.
+
+Knækfrekvensen skal gerne være på maksimum $20\si{\hertz}$.
+
+Herefter kan ligning \ref{eq:fchp1} omskrives til ligning \ref{eq:fchp2}, for at finde kondensator værdien.
+
+\begin{equation}
+	C = \frac{1}{2\pi Rf_c} = \frac{1}{2\pi 10\si{\kilo\ohm} 20\si{\hertz}} = 0,796\si{\micro\farad}
+\label{eq:fchp2}
+\end{equation}
+
+Det findes så at kondensatoren skal være ca. 0,8\si\micro\farad.
+For nemhedens skyld valgtes en værdi på 1\si\micro\farad, da det er en let tilgængeligt standard værdi.
+Med denne kondensator vil belastningen kunne være ned til cirka 8\si\kilo\ohm, før at knækfrekvensen vil overstige 20\si\hertz, Hvilket overholder kravspecifikationen for denne.
+
+\section{Opsummering}
+I dette afsnit har vi yada yada yada
+
