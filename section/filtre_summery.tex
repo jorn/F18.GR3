@@ -1,2 +1,17 @@
-\section{opsummering}
+\section{Opsummering}
 
+\hlh{Noget i denne stil eller er det helt hen i vejret?..}
+For helt at undgå aliasing effekten ville det kræve en ekstrem stor filter orden, for at overholde specifikationer.
+Derfor er det valgt at der skal anvendes et 6. ordens anti-aliasing filter for herefter at analysere effekten af det.
+
+Ved nærmere analyse fandtes et 6. ordens Chebychev 1 filter til at klare sig bedst inden
+for kravende. Det viste sig at have en aliasing effekt på op til $5,4\si\percent$ ved
+filterets knækfrekvens på $18\si\kilo\hertz$.
+
+Ud fra det er der blevet designet et Sallen-Key aktivt lav-pas filter, som også er implementeret på et prototype print.
+
+Der skal også anvendes et rekonstruktions filter til at udglatte signalet der bliver genereret af DAC'en, dette er valgt til at være det samme som anti-aliasing filteret da både indput og output tilhører samme frekvens spektrum.
+
+Anti-alias filteret er dermed designet og implementeret efter planen, og overholder de stillede krav.
+
+Udover det er der blevet produceret et indgangs led til at offsette indgangs-signalet til et niveau både filteret og mikrocontrolleren kan arbejde med. Der er ligeledes lavet et udgangsled der fjerne dette offset igen.
