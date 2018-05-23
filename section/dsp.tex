@@ -94,7 +94,7 @@ Frequency sampling metoden virker ved at man lader $h(n)$ for $n = 0, 1, \cdots,
 	\caption{Frekvenssampling af amplitudekarakteristik\cite{Tan2013}}
 	\label{fig:frequencysampling}
 \end{figure}
-$H(k)$ findes ved at sample den ønskede amplitudekarakteristik i frekvensdomænet ved lige adskilte frekvenser som vist i figur \ref{fig:frequencysampling}.
+$H(k)$ findes ved at sample den ønskede amplitudekarakteristik i frekvensdomænet ved lige adskilte frekvenser som vist i figur (\ref{fig:frequencysampling}).\newline
 FIR koefficienterne findes så ved
 \begin{equation} \label{eq:fir_koefficienter}
 b_n = h(n) = \frac{1}{2M + 1} \left\{H_0 + 2\displaystyle\sum_{k = 1}^{M}\, H_k\cos\left(\frac{2\pi k (n - M)}{2M + 1} \right) \right\} \quad \mathrm{for} \quad n = 0, 1, \cdots, M
@@ -115,7 +115,7 @@ Modulet virker ved at det tager en cutoff frekvens som brugerinput og dernæst b
 Hvor $f_c$ er cutoff frekvensen og $f_s$ er samplingsfrekvensen.
 Dernæst beregnes en array af amplitudekarakteristikken $H_k$ for de normerede frekvenser fra $0$ til $\pi$ ved 
 \[ \Omega_k = \frac{2\pi k}{(2M + 1)} \quad \mathrm{for} \quad k = 0, 1, \cdots, M \]
-Når $H_k$ haves beregnes $M$ filterkoefficienter via. \ref{eq:fir_koefficienter} og resten findes ved symmetri.\newline
+Når $H_k$ haves beregnes $M$ filterkoefficienter via. ligning (\ref{eq:fir_koefficienter}) og resten findes ved symmetri.\newline
 Filteret virker ved at en buffer fyldes med $x$ samples og dernæst bliver der foretaget en foldning for hver sampel i bufferen med hver filterkoefficient.
 
 %\section{Delkonklusion}
