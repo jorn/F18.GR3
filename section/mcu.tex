@@ -177,10 +177,33 @@ Figur \ref{fig:PWMfromtimer} viser hvordan PWM-signalets duty cycle bliver beste
 Den værdi kommer fra den periodiske sampling af lydsignalet gennem ADC'en, hvor resultatet af hver sampling netop gemmes i match registeret. 
 Således genskabes signalet som et digitalt PWM signal. 
 
+Ifølge databladet er datakommunikation op til $20\si{\mega\hertz}$ mulig, men SPI port konfigurationen på MCU'en sættes til $10\si{\mega\hertz}$ og forbindes direkte til mikrokontrolleren via en SPI bus - De valgte pins er beskrevet i bilag \ref{bilag:pinmap}.
+
+En SPI clockfrekvens på $F_{SCK} = 10\si{\mega\hertz}$, giver en datatransmissionstid $t_{cmd}$ af SPI kommandoen for begge lydkanaler på minimum på 
+\begin{align}
+t_{cmd} = \frac{N_{kanal} \cdot 16bit}{F_{SCK}} = \frac{2 \cdot 16}{10\si{\mega\hertz}} = 3\si{\micro\second}
+\end{align}
+
+I figur \ref{fig:dac12bit_writecmd} ses den nødvendige kommando-bitsekvens med tilhørende timingsdiagram for \textbf{CS}, \textbf{SCK} og \textbf{LDAC}  .\\
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[width=.8\textwidth]{billeder/dac12bit_writecmd.png}
+	\caption{Skrive kommando til 12bit MCP4922 DAC.\cite[s. 25]{mcp4922}}
+	\label{fig:dac12bit_writecmd}
+\end{figure}
+
+I overensstemmelse med databladene for DAC'en og mikrokontrolleren, anvendes \emph{SPI Freescale Fame} formatet\footnote{Se afsnit 15.3.4 \cite[s. 954]{tm4c123gh6pm}} i \textbf{Mode 0,0}.
+
+
 \section{Genskabelse af signal via DAC igennem SPI}
 Genskabelsen af udgangssignalet fra mikorcontrolleren gøren igennem en ekstern 12bit DAC \texttt{MCP4922E/P}\footnote{Microchip MCP4922E/P 12-Bit Dual Voltage Output Digital-to-Analog Converter with SPI Interface \cite{mcp4922} }.
 
+Den valgte DAC har en maksimal indsvingningstid på $t_{settling} = \num{4.5}\si{\micro\second}$, hvilket passer fint til samplingsperioden på $T_s = 23\si{\micro\second}$.
 
+Spændingsdifferencen for LSb\footnote{LSB - Least Significant Bitden} er $ V_{LSb} = V_{ref} / 4096 \approx \num{0,8}\si{\milli\volt} $, ved den anvendte referencespænding på $V_{ref} = 3,3\si{\volt}$.
+
+ 
 
 \section{Håndtering af brugergrænseflade og human input interface}
 
