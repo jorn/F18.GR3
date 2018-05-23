@@ -1,5 +1,5 @@
 \section{FreeRTOS}
-\note{Kort intro til hvad FreeRTOS er og hvilken funktionalitet det stiller tilrådighed}
+%\note{Kort intro til hvad FreeRTOS er og hvilken funktionalitet det stiller tilrådighed}
 Som indlejret styresystem benyttes FreeRTOS. 
 FreeRTOS er et open source real-tids styresystem til indlejrede systemer, som er blevet en industriel standard. 
 Styresystemet er valgt, da det er simpelt at gå til. 
@@ -90,7 +90,7 @@ ARM Cortex-M4 tilbyder otte interrupt prioriteter.
 
 Når det indgående lydsignal skal samples gennem ADC'en, skal samplingen foregå periodisk på nøjagtigt det samme tidspunkt i hver periode.
 Det faste tidspunkt for sampling giver minimal jitter med en minimal forsinkelse i samplingen af signalet. 
-\husk{Jes}{Dansk ord for jitter? Det er et teknisk engelsk ord, så det kan vel gå.. } 
+%\husk{Jes}{Dansk ord for jitter? Det er et teknisk engelsk ord, så det kan vel gå.. } 
 For at sikre, at mikrocontrolleren sætter alle andre opgaver på pause, og begynder at sample på det korrekte tidspunkt, implementeres samplingen i en ISR.
 
 \subsection{Implementering af interrupt-styring med timer}

@@ -53,11 +53,13 @@ sig selv.
 Dette giver de fordele at det vil forekomme nemmere at fejlfinde på de enkelte led, og
 samtidigt kan der laves flere forskellige ordener af filtret uden at skulle ændre på PCB designet.
 
-Det færdige PCB design kan ses på figur \ref{fig:skbiquadpcb}. Her kortsluttes RB, og RA forbliver ikke forbundet, og så påsættes der selvfølgelig de beregnede komponenter for at opnå det specificerede filter bi-quad. Vis man sammenligner resultaterne fra testen i bilag 
+Det færdige PCB design kan ses på figur \ref{fig:skbiquadpcb}. Her kortsluttes RB, og RA forbliver ikke forbundet, og så påsættes der selvfølgelig de beregnede komponenter for at opnå det specificerede filter bi-quad. 
+
+is man sammenligner resultaterne fra testen i bilag 
 \ref{sec:test_aafilter} med den beregnede filter karakteristik vist i figur 
 \ref{fig:filter_cheb1_denorm}, kan det ses at filteret i pasbåndet har en konstant dæmpning
-på ca. $3\si\decibel$. \hlh{Hvorfor er der nu den konstante dæmpning?}
-Dette kan der dog ses bort fra da dæmpningen er konstant. 
+på ca. $3\si\decibel$. Denne dæmpning er senere fundet til at være pga. en for stor indgangs spænding under forsøget, hvilket har ført til at operationsforstærkerne i filteret er gået i mætning, der har dog ikke været tid til at lave nye målinger.
+Dette kan der dog ses bort fra da karakteristikken ellers er korrekt bortset fra en forskydning på $3\si\decibel$. 
 \hlh{Måske dette skal føres til en delkonklusion i kapitlet??}
 Udover dette kan det ellers konkluderes at implementeringen af filteret overholder designet,
 da både knækfrekvensen og hældningen i mellem pas og stop bånd stemmer overens.
