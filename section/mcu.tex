@@ -150,8 +150,6 @@ Ved hjælp af timer 3, udregnes rutinens procentuelle andel af processortiden, h
 Den benyttede tid vil desuden være afhængig af antallet af modulære effekter, som også skal processeres i sample handleren. 
 
 \section{Modulær opbygning af effekter}
-Da effekterne skal være modulær
-Effektmodulerne bliver kaldt via 
 Effektmodulerne holdes hver især i en \textit{module control block}, $\mathtt{mcb\_t}$,  som er en data struktur bestående af en \textit{function pointer} og en booleansk variabel.
 Function pointeren benyttes til at kalde lydeffektmodulerne, og den booleanske variabel benyttes til at aktivere/deaktivere lydeffekterne.\newline
 For at tilføje en lydeffekt laves der en ny instans af $\mathtt{mcb\_t}$, og dens \textit{function pointer} sættes til at \textit{pointe} til lydeffekt rutinen.\newline
@@ -162,9 +160,9 @@ For at tilføje en lydeffekt laves der en ny instans af $\mathtt{mcb\_t}$, og de
 	\label{fig:effektmoduler}
 \end{figure}
 
-På figur (\ref{fig:effektmoduler}) illustreres det, hvordan de enkelte moduler bliver kaldet, når de er aktiveret, efter hver sample kommer ind.
+På figur (\ref{fig:effektmoduler}) illustreres det, hvordan de enkelte moduler bliver itereret over, hvis de er aktive.
+Hvori $\mathtt{MCB\_POOL\_SIZE}$ er antal af moduler, $\mathtt{mcb\_pool}$ er en array af $\mathtt{mcb\_t}$ strukturer, $\mathtt{mcb\_pool.module}$ er \textit{function pointeren}, $mathtt{mcb\_pool.active}$ er den \textit{booleanske} variabel og $\mathtt{fp\_sample\_in}$ og $\mathtt{fp\_sample\_out}$ er hhv. input- og outputsamples.
 Grunden til at outputtet fra hver modul bliver sat til input, er at det ønskes at opnå en seriel kobling af effekterne.
-%indsæt flowchart her når du er tilbage
 
 \subsection{Generering af PWM-signal til DAC}
 Timeren benyttes desuden til at generere et PWM-signal, hvis duty cycle er styret af timeren og resultatet af A/D konverteringen af indgangssignalet. 
@@ -204,6 +202,20 @@ Den valgte DAC har en maksimal indsvingningstid på $t_{settling} = \num{4.5}\si
 Spændingsdifferencen for LSb\footnote{LSB - Least Significant Bitden} er $ V_{LSb} = V_{ref} / 4096 \approx \num{0,8}\si{\milli\volt} $, ved den anvendte referencespænding på $V_{ref} = 3,3\si{\volt}$.
 
  
+
+\section{LCD driver}
+Når $\mathtt{lcd\_write\_char}$, $\mathtt{lcd\_write}$ og $\mathtt{lcd\_clear}$ bliver kaldt bliver deres argumenter sat over i en LCD buffer, $\mathtt{lcd\_display\_buffer}$.
+Når de så skal skrives til LCDen tager LCD tasken sig af det.
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=0.5\textwidth]{billeder/lcd_state_machine.png}
+	\caption{LCD state machine}
+	\label{fig:LCD_state_machine}
+\end{figure}
+\newline
+Måden den virker på er, at den har en state machine som er vist på figur (\ref{fig:LCD_state_machine}).\newline
+I state machinen bliver der itereret gennem $\mathtt{lcd\_display\_buffer}$, hvori der kaldes $\mathtt{lcd\_direct\_write\_data\_nodelay}$ på bufferen med $\mathtt{state}$ som index.\newline
+$\mathtt{lcd\_direct\_write\_data\_nodelay}$ som er en skrivefunktion som ikke har noget \textit{end delay}.
 
 \section{Håndtering af brugergrænseflade og human input interface}
 
