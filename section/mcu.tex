@@ -78,7 +78,7 @@ ADC'en er drevet af en 16MHz clock, og det tager 250ns at tage én sample.
 ADC0 og ADC1 er sat op til at modtage et analogt signal, for henholdsvis venstre og højre kanal, direkte på to general purpose input pins (GPIO). 
 Start af sampling er indstillet, så det trigges af et processor event. 
 Det betyder at en sampling i praksis startes ved at skrive til ADC Processor Sample Sequence Initiate registeret. 
-Resultatet af en A/D konvertering, kan læses i sequence 3. 
+Resultatet af en A/D konvertering kan læses i sequence 3. 
 ADC'en har fire individuelle sequence registre, som kan indeholde op til flere samples efter FIFO princippet. 
 Sequence 3 er valgt, da den kun kan indeholde én sample, hvilket er praktisk når samplingens timing skal være præcis. 
 Yderligere samples ville ikke være brugbare, fordi de ville være målt på et forkert tidspunkt. 
@@ -92,19 +92,17 @@ Fordelen er at hver gang ISR'en bliver kaldt, vil samplen ligge klar.
 Der skal ikke ventes på en konvertering. 
 Det betyder også at forsinkelsen fra en konvertering bliver konstant. Forsinkelsen vil være givet ved $\frac{1}{f_s}$. 
 
-\subsection{Offset og trunkering af samplet data}
+\subsection{Offset af samplet data}
 Værdien af den modtagede sample fra AD konverteringen vil have et offset pga. DC forskydningen ved input stage, som tidligere beskrevet i afsnit \ref{sec:inputstage}.
 Offsettet fjernes igen ved at trække $\frac{4096}{2} = 2048$ fra resultatet af AD konverteringen. 
 Resultatet gemmes som en værdi af data typen float. 
-\husk{Jes}{Skal vi have en graf, hvor man kan se at signalet flyttes?}
-\husk{Jes}{Afsnit ikke færdigt!}
-% Der sker noget mere.. 11 bit offset, trunkering og cast?
+\husk{Jes}{Hvis der er plads, kunne det være rart med en graf her.}
 
 \subsection{Sample handler og processortid}
 Da sample handleren kører periodisk, og i form af en ISR har højeste prioritet til processortid, skal alle andre processoropgaver foregå i al den mellemliggende tid. 
-Det betyder at sample handleren og AD konverteringen skal være effektiv, således andre tasks kan nå at køre færdig, inden sample handleren kaldes igen. 
-\husk{Jes}{Har vi mulighed for at kende den tid det tager rutinen at køre igennem? }
-% tid per sample. Hvad kan nås osv.
+Det betyder at sample handleren og AD konverteringen skal være tidseffektiv, således andre tasks kan nå at køre færdig, inden sample handleren kaldes igen. 
+Ved hjælp af timer 3, udregnes rutinens procentuelle andel af processortiden, hvilket kan skrives ud til brugeren ved brug af LCD displayet. 
+Den benyttede tid vil desuden være afhængig af antallet af modulære effekter, som også skal processeres i sample handleren. 
 
 \section{Modulær opbygning af effekter}
 Da effekterne skal være modulær
@@ -139,6 +137,13 @@ Således genskabes signalet som et digitalt PWM signal.
 \section{Håndtering af brugergrænseflade og human input interface}
 
 \husk{Sonny}{Kan dette anvendes?}
+
+\begin{wrapfigure}[18]{r}{0.5\textwidth}
+	\centering 
+	\includegraphics[width=0.5\textwidth]{billeder/menuesdiagram.png} 
+	\caption{Generisk diagram over menu opsætning. } 
+	\label{fig:menuesdiagram} 
+\end{wrapfigure}
 %For at kunne anvende enheden skal enheden kunne udveksle nødvendige informationer med brugeren, input skal altså kunne modtages, her valgte gruppen at anvende en "drehimpulsgeber", og respons skal oplyses, her valgte gruppen et grafisk repræsenteret menu system.
 For at kunne anvende enheden skal enheden kunne udveksle nødvendige informationer med brugeren. 
 Input skal kunne modtages, her valgte gruppen at anvende en "drehimpulsgeber".
@@ -147,12 +152,19 @@ Respons skal oplyses, her valgte gruppen et grafisk repræsenteret menu system.
 En menu består af en række valgmuligheder repræsenteret af elementer brugeren kan bladre igennem og vælge imellem.
 Et valg kan lede til yderligere valgmuligheder inden for den valgte kategori, disse kan så præsenteres i form af en ny menu.
 Til at udføre denne funktion valgte gruppen at anvende linkede lister.\newline
-\husk{Indsæt diagram af den linkede liste her}
 %I eksemplet herunder ses en hovedmenu "Root Menu" som linker til sit første element "Master volume", vælger brugeren dette element kan volumen sættes, elementet linker også til næste element så brugeren kan skifte til det, her er der tale om "Echo" elementet som istedet for at have en funktion linker til en ny menu nemlig "Echo menu" som så linker til sin egen liste af menu punkter.
-I eksemplet herunder ses en hovedmenu ''Root Menu`` som linker til sit første element ''Master volume``, vælger brugeren dette element kan volumen sættes.
-Elementet linker også til næste element så brugeren kan skifte til det, her er der tale om ''Echo`` elementet som i stedet for at have en funktion linker til en ny menu nemlig ''Echo menu`` som så linker til sin egen liste af menu punkter.
+På figur \ref{fig:menuesdiagram} ses en hovedmenu ''menu 1`` som linker til sit første element ''menu item 1.1``, herfra kan brugeren bladre til næste element ''menu item 1.2`` eller vælge dette element, vælges elementet ''menu item 1.1`` ses det på diagrammet at under menuen ''menu 2`` åbnes, derved vises nu første element fra ''menu 2`` som er ''menu item 2.1`` som har en funktion brugeren kan anvende.
+%kan volumen sættes.
+%Elementet linker også til næste element så brugeren kan skifte til det, her er der tale om ''Echo`` elementet som i stedet for at have en funktion linker til en ny menu nemlig ''Echo menu`` som så linker til sin egen liste af menu punkter.
 %En "drehimpulsgeber" kan anvendes til at producere 3 forskellige typer af input, drej mod uret herefter kaldet "vr", drej med uret "hr" og click.
 %Når et input  modtages af programmet lægges det i en input kø til systemet er klar til at modtage input, er der tale om et "vr" fremvises foregående element i menuen, på samme måde anvendes et "hr" input til at gå til næste element i menuen og et click anvendes til at vælge det det nuværende element.
 Drehimpulsgeberen kan anvendes til at producere 3 forskellige typer af input, drej mod uret herefter kaldet ''vr``, drej med uret ''hr`` og click.
-\husk{Indsæt UI state machine her}
+\husk{FreHal}{Indsæt UI state machine her}
+
+\begin{wrapfigure}[20]{r}{5cm} 
+	\centering 
+	\includegraphics[width=4.5cm]{billeder/menuesdiagram.png} 
+	\caption{UI state machine diagram. } 
+	\label{fig:uistatemachine} 
+\end{wrapfigure}
 Når et input  modtages af programmet lægges det i en input kø til systemet er klar til at modtage input. Er der tale om et ''vr`` fremvises foregående element i menuen, på samme måde anvendes et ''hr`` input til at gå til næste element i menuen og et click anvendes til at vælge det nuværende element.
