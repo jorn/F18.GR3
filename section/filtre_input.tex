@@ -32,7 +32,7 @@ Operationsforstærkeren som skal forstærke signalet vælges ud fra en række kr
 Den nødvendige slew rate kan beregnes ved formel \ref{eq:slewrate}.\cite{slewrate}
 \begin{equation}
 \label{eq:slewrate}
-\text{Slew rate} = 2 \pi \cdot f_{maks} \cdot V_{maks} = 2\pi \cdot 44,1\si\kilo\hertz \cdot 1,65\si\volt = 0,46\si[per-mode=symbol]{\volt\per\micro\second}
+\text{Slew rate} = 2 \pi \cdot f_{maks} \cdot V_{maks} = 2\pi \cdot 22,05\si\kilo\hertz \cdot 1,65\si\volt = 0,46\si[per-mode=symbol]{\volt\per\micro\second}
 \end{equation}
 \husk{JES}{Er det egentligt kun 20kHz her?}
 Ud fra kravene vælges operationsforstærkeren AD8031 som SMD komponent. 
@@ -105,5 +105,6 @@ For nemhedens skyld valgtes en værdi på 1\si\micro\farad, da det er en let til
 Med denne kondensator vil belastningen kunne være ned til cirka 8\si\kilo\ohm, før at knækfrekvensen vil overstige 20\si\hertz, Hvilket overholder kravspecifikationen for denne.
 
 \section{Opsummering}
-I dette afsnit har vi yada yada yada
+
+
 
