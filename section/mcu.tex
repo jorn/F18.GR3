@@ -219,14 +219,9 @@ $\mathtt{lcd\_direct\_write\_data\_nodelay}$ som er en skrivefunktion som ikke h
 
 \section{Håndtering af brugergrænseflade og human input interface}
 
-\husk{Sonny}{Kan dette anvendes?}
+%\husk{Sonny}{Kan dette anvendes?}
 
-\begin{wrapfigure}[12]{r}{0.5\textwidth}
-	\centering 
-	\includegraphics[width=0.5\textwidth]{billeder/menuesdiagram.png} 
-	\caption{Generisk diagram over menu opsætning. } 
-	\label{fig:menuesdiagram} 
-\end{wrapfigure}
+
 %For at kunne anvende enheden skal enheden kunne udveksle nødvendige informationer med brugeren, input skal altså kunne modtages, her valgte gruppen at anvende en "drehimpulsgeber", og respons skal oplyses, her valgte gruppen et grafisk repræsenteret menu system.
 For at kunne anvende enheden skal enheden kunne udveksle nødvendige informationer med brugeren. 
 Input skal kunne modtages, her valgte gruppen at anvende en "drehimpulsgeber" eller digiswitch, samt to switches.
@@ -234,6 +229,12 @@ Respons skal oplyses, her valgte gruppen et grafisk repræsenteret menu system.
 %En menu består en række valgmuligheder repræsenteret af elementer brugeren kan bladre igennem og vælge imellem.
 En menu består af en række valgmuligheder repræsenteret af elementer brugeren kan bladre igennem og vælge imellem.
 Et valg kan lede til yderligere valgmuligheder inden for den valgte kategori, disse kan så præsenteres i form af en ny menu.
+\begin{figure}[!ht]
+	\centering 
+	\includegraphics[width=0.8\textwidth]{billeder/menuesdiagram.png} 
+	\caption{Generisk diagram over menu opsætning. } 
+	\label{fig:menuesdiagram} 
+\end{figure}
 Til at udføre denne funktion valgte gruppen at anvende linkede lister.\newline
 %I eksemplet herunder ses en hovedmenu "Root Menu" som linker til sit første element "Master volume", vælger brugeren dette element kan volumen sættes, elementet linker også til næste element så brugeren kan skifte til det, her er der tale om "Echo" elementet som istedet for at have en funktion linker til en ny menu nemlig "Echo menu" som så linker til sin egen liste af menu punkter.
 På figur \ref{fig:menuesdiagram} ses en hovedmenu ''menu 1`` som linker til sit første element ''menu item 1.1``, herfra kan brugeren bladre til næste element ''menu item 1.2`` eller vælge dette element, vælges elementet ''menu item 1.1`` ses det på diagrammet at under menuen ''menu 2`` åbnes, derved vises nu første element fra ''menu 2`` som er ''menu item 2.1`` som har en funktion brugeren kan anvende.
@@ -242,31 +243,40 @@ På figur \ref{fig:menuesdiagram} ses en hovedmenu ''menu 1`` som linker til sit
 %En "drehimpulsgeber" kan anvendes til at producere 3 forskellige typer af input, drej mod uret herefter kaldet "vr", drej med uret "hr" og click.
 %Når et input  modtages af programmet lægges det i en input kø til systemet er klar til at modtage input, er der tale om et "vr" fremvises foregående element i menuen, på samme måde anvendes et "hr" input til at gå til næste element i menuen og et click anvendes til at vælge det det nuværende element.
 Drehimpulsgeberen kan anvendes til at producere 4 forskellige typer af input, drej mod uret herefter kaldet ''Dl``, drej med uret ''Dr``, click og langt tryk.
-\husk{FreHal}{Indsæt UI state machine her det her billede sidder overhovedet ikke rigtgt..}
+%\husk{FreHal}{Indsæt UI state machine her det her billede sidder overhovedet ikke rigtgt..}
 
-\begin{wrapfigure}[12]{r}{5cm} 
+\begin{wrapfigure}[14]{r}{0.6\textwidth} 
 	\centering 
-	\includegraphics[width=4.5cm]{billeder/ui_statemachine.png} 
+	\includegraphics[width= 0.6\textwidth]{billeder/ui_statemachine.png} 
 	\caption{UI state machine diagram. } 
 	\label{fig:uistatemachine} 
 \end{wrapfigure}
 
 Når et input  modtages af programmet lægges det i en input kø til systemet er klar til at modtage input. Er der tale om et ''Dl`` fremvises foregående element i menuen, på samme måde anvendes et ''Dr`` input til at gå til næste element i menuen, et click anvendes til at vælge det nuværende element og et langt tryk til at gå tilbage fra undermenuer.
+
 På figur \ref{fig:uistatemachine} ses den state machine der styre UI.
 UI'en der skrives til displayet afhænger af hvilken state der er aktiv.
+\begin{wrapfigure}[14]{r}{0.4\textwidth}
+	\centering 
+	\includegraphics[width=0.4\textwidth]{billeder/buttons_statemachine.png} 
+	\caption{State machine diagram for switches. } 
+	\label{fig:SW_statemachine} 
+\end{wrapfigure}
 I staten MENU vises det overordnede menu system, styret af drehimpulsgeberen. 
 Er STATUS staten aktiv vises en skærm hvor CPU loaden kan læses.
 FUNCTION staten aktiveres hvis der vælges en funktion i menusystemet, i denne state bliver en funktion kaldt fra et af effektmodulerne, denne funktion skriver selv input, og  UI til displayet.
 Når denne funktion ikke længere skal bruges, hvis brugeren for eksempel går tilbage, vil state machinen skifte tilbage til MENU.
 SW2$\_$FUNC fungere på samme måde. \newline
 Tryk på de to switches og den integrerede switch i drehimpulsgeberen håndteres af tre identiske state machines, et diagram over statemachinen ses på figur \ref{fig:SW_statemachine}.
-\begin{figure}[!ht]
+
+\begin{wrapfigure}[12]{r}{0.4\textwidth} 
 	\centering 
-	\includegraphics[width=0.5\textwidth]{billeder/buttons_statemachine.png} 
-	\caption{State machine diagram for switches. } 
-	\label{fig:SW_statemachine} 
-\end{figure}
+	\includegraphics[width=0.4\textwidth]{billeder/digi_interrupt_flow.png} 
+	\caption{Flowchart af interrupthandleren til drehimpulsgeberen. } 
+	\label{fig:digiFlow} 
+\end{wrapfigure}
 Rotation af drehimpulsgeberen generere impulser på to forskellige pins henholsvis A og B.
 Afhængig af rotationsretningen skifter de ene før den anden. 
 Et interrupt er sat til at trigger på både stigende og faldende flanker af pin A.
-Interrupthandleren Følger algoritmen der ses på figur
+Interrupthandleren Følger algoritmen der ses på figur \ref{fig:digiFlow}.
+
