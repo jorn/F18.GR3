@@ -3,7 +3,7 @@
 %\note{Generel intro til audio signaler}
 
 \section{Analoge filtres rolle ved digital signalbehandling}\label{sec:filter_intro}
-For at kunne udfører digital signalbehandling af et analogt signal, bliver man nød til at overfører signalet fra den analoge verden til den digitale og tilbage igen - dette sker ved sampling og rekonstruktion.
+For at kunne udføre digital signalbehandling af et analogt signal, bliver man nødt til at overføre signalet fra den analoge verden til den digitale og tilbage igen - dette sker ved sampling og rekonstruktion.
 Denne signalbehandling følger nogle faste deltrin, som kan ses i et generelt signal-blok diagram i figur \ref{fig:dsp_model}. 
 \begin{figure}[h!]
 	\centering
@@ -12,7 +12,7 @@ Denne signalbehandling følger nogle faste deltrin, som kan ses i et generelt si
 	\label{fig:dsp_model}
 \end{figure}
 
-Helt overordnet, kan ideal sampling af et vilkårligt signal beskrives som 
+Helt overordnet kan ideel sampling af et vilkårligt signal beskrives som 
 \begin{align}
 x_s(t) = x(t)p(t)
 \end{align}
@@ -20,7 +20,7 @@ hvor $x_s(t)$ er det samplede signal, $x(t)$ er det analoge indgangssignal og $p
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=.9\textwidth]{billeder/sampling.png}
-	\caption{Ideal samplings model af signal $x(t)$. Kilde:\protect\cite[Figure 2.5 s.18 ]{Tan2013}}
+	\caption{Ideel samplings model af signal $x(t)$. Kilde:\protect\cite[Figure 2.5 s.18 ]{Tan2013}}
 	\label{fig:sampling_signal}
 \end{figure}
 Med udgangspunkt i en Fourier transform af det kontinuerlige og vilkårlige signal $x(t)$ 
@@ -38,7 +38,7 @@ Med en skaleret frekvensakse $\Omega = 2\pi f T_s$ kan en periodisk egenskab vis
 	X(\Omega + 2\pi) = \sum_{n=-\infty}^{\infty}x(n)e^{-j(\Omega + 2\pi) n} = \sum_{n=-\infty}^{\infty}x(n)e^{-j\Omega n}
 \end{align}
 
-Således vil det diskrete frekvensspektrum gentages hvert $1/T_S$ eller $f_s$ som angiver sampelfrekvensen.
+Således vil det diskrete frekvensspektrum gentages hvert $1/T_S$ eller $f_s$ som angiver samplefrekvensen.
 I figur \ref{fig:alias}(b) vises gentagelserne i frekvensspektrummet også kaldet aliases.
 
 \begin{figure}[h!]
@@ -68,20 +68,20 @@ I figur \ref{fig:alias}(b) vises gentagelserne i frekvensspektrummet også kalde
 	\label{fig:alias}
 \end{figure}
 
-Således kan det ses at den maksimale frekvens $B$ i det ønskede samplede signal, ikke må overstige $f_s/2$ også kaldet for Nyquist frekvensen.
+Således kan det ses at den maksimale frekvens $B$ i det ønskede samplede signal ikke må overstige $f_s/2$, også kaldet for Nyquist frekvensen.
 \begin{align}
 	f_{max} \leq f_s/2 \label{eq:shannons}
 \end{align}
-Ligning \ref{eq:shannons} er Shannons sampling theorem og intervallet mellem $-f_s/2$ og $f_s/2$ er Nyquist intervallet 
-Hvis den maksimale frekvens i signalet er større end $f_s/2$ og Sahannons samlings theorem derved ikke er overholdt, opstår der aliasing i det samplede signal som ses som skraveret område i figur \ref{fig:alias}(c).
+Ligning \ref{eq:shannons} er Shannons sampling theorem og intervallet mellem $-f_s/2$ og $f_s/2$ er Nyquist intervallet.
+Hvis den maksimale frekvens i signalet er større end $f_s/2$ og Sahannons samplings theorem derved ikke er overholdt, opstår der aliasing i det samplede signal som ses som det skraverede område i figur \ref{fig:alias}(c).
 \\
-I figur \ref{fig:dsp_model} fremstår det analoge filter på indgangen som en båndbrede begrænsning.
-Denne begrænsning er således en nødvendighed for at undgår aliasing. 
+I figur \ref{fig:dsp_model} fremstår det analoge filter på indgangen som en båndbredde begrænsning.
+Denne begrænsning er således en nødvendighed for at undgå aliasing. 
 \\
-Som udgangspunkt blev opløsningen af den Analog-Digital Converter (ADC) brugt til at vurdere hvor meget dæmpning et analogt filter skulle have for at kunne sikre en komplet og tabsfri gengivelse af signalet.
+Som udgangspunkt blev opløsningen af den Analog-til-Digital Converter (ADC) brugt til at vurdere hvor meget dæmpning et analogt filter skulle have for at kunne sikre en komplet og tabsfri gengivelse af signalet.
 
 Ud fra de fremsatte krav til projektet, benyttes der en \emph{ARM Cortex-M4F} baseret microcontroller fra Texas Instruments \cite{spmu296} der er udstyret med en 12bit ADC på de analoge indgange.
-For at bestemme opløsning på ADC'en, kan den unipolære\footnote{Unipolær kvanteficering skyldes ADC'ens spændingsområde på $0 \longmapsto \num{3.3}\si{\volt}$.} kvanteficering $\Delta_{ADC}$ bestemmes samt Signal to Noise Ratio $SNR_Q$.
+For at bestemme opløsning på ADC'en, kan den unipolære\footnote{Unipolær kvantificering skyldes ADC'ens spændingsområde på $0 \longmapsto \num{3.3}\si{\volt}$.} kvanteficering $\Delta_{ADC}$ bestemmes samt Signal to Noise Ratio $SNR_Q$.
    
 \begin{align}
 	\Delta_{ADC} &= \frac{V_{max}}{2^N} = \frac{\num{3.3}\si{\volt}}{2^{12}} \approx \num{80.6}\si{\milli\volt}\\
@@ -90,15 +90,15 @@ For at bestemme opløsning på ADC'en, kan den unipolære\footnote{Unipolær kva
  
 Således er det mindste målbare signal, og deraf kan konkluderes at aliasing effekten skal dæmpes med tilsvarende $74\si{\decibel}$ for at den ikke har indflydelse på det samplede signal.
 
-Når der er tale om et audio signal, hvor det ønskede frekvensområde der ønskes bevaret er $20\si{\hertz}$ til $18\si{\kilo\hertz}$ og en samplingsfrekvens på $f_s = 44,1\si{\kilo\hertz}$ resultere dette i en filter orden af ekstrem størrelse.
+Når der er tale om et audio signal, hvor det ønskede frekvensområde der ønskes bevaret er $20\si{\hertz}$ til $18\si{\kilo\hertz}$ og en samplingsfrekvens på $f_s = 44,1\si{\kilo\hertz}$ resulterer dette i en filter orden af ekstrem størrelse.
 
 Valget faldt således på at anvende et 6. ordens filter der giver et fornuftigt antal komponenter ved implementeringen og derefter at kortlægge de uønskede effekter der opstår ved dette valg. 
  
 
 \section{Analyse af filter typer}\label{sec:filter_analyse}
 %\note{Gennem gang af de filter topologier der har været i betragtning som en mulig løsning.}
-For at kunne finde frem til et passende lavpasfilter som antialiasing filter, bliver 4 tilter typer sammenlignet - Butterworth, Chebyshev type I og II samt Bessel (Thomson).
-Hver af disse filtre har en tilhørende amplitudekarakteristik der beskrives med følgende overføringsfunktion\cite{anfilter}.
+For at kunne finde frem til et passende lavpasfilter som anti aliasing filter, bliver fire filter typer sammenlignet - Butterworth, Chebyshev type I og II samt Bessel (Thomson).
+Hver af disse filtre har en tilhørende amplitudekarakteristik der beskrives med følgende overføringsfunktioner\cite{anfilter}.
 
 \begin{align} 
 H_{butterworth}(j\omega_n) &= \frac{1}{\sqrt{1 + \omega_n^{2n}}} \label{eq:H_butt} \\
