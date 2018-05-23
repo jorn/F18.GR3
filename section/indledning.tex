@@ -16,7 +16,7 @@ Problemformuleringen, som dækker over de fire fagligheder, er beskrevet i følg
 
 \section{Problemformulering}
 Formålet med projektet er at undersøge, hvordan lyd kan behandles og manipuleres ved at bruge real-time digital signalbehandling i et embedded miljø.
-Løsningen skal opbygges som en modulær løsning, således at nye "effektmoduler" ville kunne udvikles senere og tilføjes.  
+Løsningen skal opbygges som en modulær løsning, således at nye ''effektmoduler`` ville kunne udvikles senere og tilføjes. 
 Styringen af modulerne skal kunne foregå igennem EMP boardet - her tænkes det at kunne anvende HID styringen, som dette board stiller til rådighed og som sammen med LCD'en skal udgøre en platform til UI'en. 
 Signalinput såvel som output vil føres gennem en udvidelse til EMP-boardet indeholdende hhv. anti-aliasing lavpasfilter, et rekonstruktionsfilter og en digital til analog konverter (DAC).
 Det samlede digitale signalprocesseringssystem bygges oven på FreeRTOS kernelen.
@@ -25,13 +25,12 @@ Det samlede digitale signalprocesseringssystem bygges oven på FreeRTOS kernelen
 \husk{JES}{Det forstår jeg ikke.}
 
 \begin{itemize}
-	\item Er det muligt at lave et modulært audio effekt system der kan leve op til de fastsatte krav ? 
+	\item Er det muligt at lave et modulært audio effekt system der kan leve op til de fastsatte krav? 
 
 	\begin{itemize}
-		
 		\item Realtids lydbehandling 
-		\item Digital filter design
-		\item Analog filter design
+		\item Digitalt filter design
+		\item Analogt filter design
 		\item OS krav / design
 		\item Test krav og eftervisning af forventede
 	\end{itemize}
@@ -58,7 +57,7 @@ Kravspecikationerne for projektet er fastsat, dels ud fra kravet til selve proje
 
 
 \section{Løsningsmodel}
-Med udgangspunkt i problemstillingen og de opsatte krav til løsningen, vælges det at implementer en løsning med den mest simple signalvej.
+Med udgangspunkt i problemstillingen og de opsatte krav til løsningen, vælges det at implementere en løsning med den mest simple signalvej.
 I figur xx ses et blokdiagram af den samlede løsningsmodel.
 
 \jj{Diagram af den ønskede løsningsmodel indsættes her - som fig 1.1 i SIG bogen men med input og output offset trin}
