@@ -1,5 +1,5 @@
 \section{FreeRTOS}
-\note{Kort intro til hvad FreeRTOS er og hvilken funktionalitet det stiller tilrådighed}
+%\note{Kort intro til hvad FreeRTOS er og hvilken funktionalitet det stiller tilrådighed}
 Som indlejret styresystem benyttes FreeRTOS. 
 FreeRTOS er et open source real-tids styresystem til indlejrede systemer, som er blevet en industriel standard. 
 Styresystemet er valgt, da det er simpelt at gå til. 
@@ -27,7 +27,7 @@ FreeRTOS skeduleringsalgoritme sørger så for at den task med højest prioritet
 \end{figure}
 Figur \ref{fig:taskmodel} vise en oversigt over de task der køre i løsningen.
 Som udgangspunkt ligger \texttt{UI} tasken som den centrale del der styre konfigurationen, menusystemet.
-Alt input fra HID\footnote{HID - Human Inputer Devices} enhederne på emp-printes - tastatur, switches og digiswitch, bliver sendt ind i en kø med en fast defineret datastruktur som se i figur \ref{fig:hid_msg}, og som \texttt{UI} tasken således er forbruger af.
+Alt input fra HID\footnote{HID - Human Inputer Devices} enhederne på emp-printes - tastatur, switches og digiswitch, bliver sendt ind i en kø med en fast defineret datastruktur som se i figur \ref{fig:hid_msg_t}, og som \texttt{UI} tasken således er forbruger af.
 \lstset{language=C,
 	frame=sigle,
 	basicstyle=\ttfamily\tiny,
@@ -52,15 +52,14 @@ Alt input fra HID\footnote{HID - Human Inputer Devices} enhederne på emp-printe
 		uint8_t   event;          // Eventkode definederet af HID_EVENT_xxx
 		} hid_msg_t;
 	\end{lstlisting}
-	
 \end{tabular}
-\label{fig:hid_msg}
 \caption{struct hid\_msg\_t}
+\label{fig:hid_msg_t}
 \end{figure}
 
-Datastrukturen \texttt{Menu} indeholder den dynamiske pointer struktur til menusystemet der bliver beskrevet i afsnit \ref{} på side \pageref{} og datastrukturerne \texttt{System konfiguration} og \texttt{Modules} indeholder information til styring af systemet som helhed, herunder mono/stereo mode og hvilke enheder der er anvendes som audio ind/ud.
+Datastrukturen \texttt{Menu} indeholder den dynamiske pointer struktur til menusystemet der bliver beskrevet i afsnit \ref{sec:HID} på side \pageref{sec:HID} og datastrukturerne \texttt{System konfiguration} og \texttt{Modules} indeholder information til styring af systemet som helhed, herunder mono/stereo mode og hvilke enheder der er anvendes som audio ind/ud.
 
-LCD diaplayet bliver hold opdateret af en \texttt{LCD} task, der løbende overfører tegn fra \texttt{LCD bufferen}, dette system er nærmere beskrevet i afsnit xx.
+LCD diaplayet bliver hold opdateret af en \texttt{LCD} task, der løbende overfører tegn fra \texttt{LCD bufferen}, dette system er nærmere beskrevet i afsnit \ref{sec:LCD_driver}.
 
 Den grundliggende timing og lydbehandling styres igennem \texttt{Sample Handler} ISR\footnote{ISR - Interrupt Service Routine}.
 Denne ISR sørger for at hente lyddata fra ADC'en, finder frem til hvilke moduler der skal medtages i databehandlingen og hvordan og til hvilke buffere, \texttt{Buffer} eller \texttt{Rev. Buffer} data skal gemmes i.
@@ -90,7 +89,7 @@ ARM Cortex-M4 tilbyder otte interrupt prioriteter.
 
 Når det indgående lydsignal skal samples gennem ADC'en, skal samplingen foregå periodisk på nøjagtigt det samme tidspunkt i hver periode.
 Det faste tidspunkt for sampling giver minimal jitter med en minimal forsinkelse i samplingen af signalet. 
-\husk{Jes}{Dansk ord for jitter? Det er et teknisk engelsk ord, så det kan vel gå.. } 
+%\husk{Jes}{Dansk ord for jitter? Det er et teknisk engelsk ord, så det kan vel gå.. } 
 For at sikre, at mikrocontrolleren sætter alle andre opgaver på pause, og begynder at sample på det korrekte tidspunkt, implementeres samplingen i en ISR.
 
 \subsection{Implementering af interrupt-styring med timer}
@@ -150,8 +149,6 @@ Ved hjælp af timer 3, udregnes rutinens procentuelle andel af processortiden, h
 Den benyttede tid vil desuden være afhængig af antallet af modulære effekter, som også skal processeres i sample handleren. 
 
 \section{Modulær opbygning af effekter}
-Da effekterne skal være modulær
-Effektmodulerne bliver kaldt via 
 Effektmodulerne holdes hver især i en \textit{module control block}, $\mathtt{mcb\_t}$,  som er en data struktur bestående af en \textit{function pointer} og en booleansk variabel.
 Function pointeren benyttes til at kalde lydeffektmodulerne, og den booleanske variabel benyttes til at aktivere/deaktivere lydeffekterne.\newline
 For at tilføje en lydeffekt laves der en ny instans af $\mathtt{mcb\_t}$, og dens \textit{function pointer} sættes til at \textit{pointe} til lydeffekt rutinen.\newline
@@ -162,13 +159,13 @@ For at tilføje en lydeffekt laves der en ny instans af $\mathtt{mcb\_t}$, og de
 	\label{fig:effektmoduler}
 \end{figure}
 
-På figur (\ref{fig:effektmoduler}) illustreres det, hvordan de enkelte moduler bliver kaldet, når de er aktiveret, efter hver sample kommer ind.
+På figur (\ref{fig:effektmoduler}) illustreres det, hvordan de enkelte moduler bliver itereret over, hvis de er aktive.
+Hvori $\mathtt{MCB\_POOL\_SIZE}$ er antal af moduler, $\mathtt{mcb\_pool}$ er en array af $\mathtt{mcb\_t}$ strukturer, $\mathtt{mcb\_pool.module}$ er \textit{function pointeren}, $mathtt{mcb\_pool.active}$ er den \textit{booleanske} variabel og $\mathtt{fp\_sample\_in}$ og $\mathtt{fp\_sample\_out}$ er hhv. input- og outputsamples.
 Grunden til at outputtet fra hver modul bliver sat til input, er at det ønskes at opnå en seriel kobling af effekterne.
-%indsæt flowchart her når du er tilbage
 
 \subsection{Generering af PWM-signal til DAC}
 Timeren benyttes desuden til at generere et PWM-signal, hvis duty cycle er styret af timeren og resultatet af A/D konverteringen af indgangssignalet. 
-\begin{wrapfigure}{r}{0.5\textwidth}
+\begin{wrapfigure}[15]{r}{0.5\textwidth}
 	\centering
 	\includegraphics[width=0.5\textwidth]{billeder/timer3PWM.png}
 	\caption{\label{fig:PWMfromtimer}Generering af PWM-signal ud fra timer. }
@@ -177,51 +174,46 @@ Figur \ref{fig:PWMfromtimer} viser hvordan PWM-signalets duty cycle bliver beste
 Den værdi kommer fra den periodiske sampling af lydsignalet gennem ADC'en, hvor resultatet af hver sampling netop gemmes i match registeret. 
 Således genskabes signalet som et digitalt PWM signal. 
 
-Ifølge databladet er datakommunikation op til $20\si{\mega\hertz}$ mulig, men SPI port konfigurationen på MCU'en sættes til $10\si{\mega\hertz}$ og forbindes direkte til mikrokontrolleren via en SPI bus - De valgte pins er beskrevet i bilag \ref{bilag:pinmap}.
-
-En SPI clockfrekvens på $F_{SCK} = 10\si{\mega\hertz}$, giver en datatransmissionstid $t_{cmd}$ af SPI kommandoen for begge lydkanaler på minimum på 
-\begin{align}
-t_{cmd} = \frac{N_{kanal} \cdot 16bit}{F_{SCK}} = \frac{2 \cdot 16}{10\si{\mega\hertz}} = 3\si{\micro\second}
-\end{align}
-
-I figur \ref{fig:dac12bit_writecmd} ses den nødvendige kommando-bitsekvens med tilhørende timingsdiagram for \textbf{CS}, \textbf{SCK} og \textbf{LDAC}  .\\
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=.8\textwidth]{billeder/dac12bit_writecmd.png}
-	\caption{Skrive kommando til 12bit MCP4922 DAC.\cite[s. 25]{mcp4922}}
-	\label{fig:dac12bit_writecmd}
-\end{figure}
-
-I overensstemmelse med databladene for DAC'en og mikrokontrolleren, anvendes \emph{SPI Freescale Fame} formatet\footnote{Se afsnit 15.3.4 \cite[s. 954]{tm4c123gh6pm}} i \textbf{Mode 0,0}.
-
-
 \section{Genskabelse af signal via DAC igennem SPI}
 Genskabelsen af udgangssignalet fra mikorcontrolleren gøren igennem en ekstern 12bit DAC \texttt{MCP4922E/P}\footnote{Microchip MCP4922E/P 12-Bit Dual Voltage Output Digital-to-Analog Converter with SPI Interface \cite{mcp4922} }.
 
-Den valgte DAC har en maksimal indsvingningstid på $t_{settling} = \num{4.5}\si{\micro\second}$, hvilket passer fint til samplingsperioden på $T_s = 23\si{\micro\second}$.
 
-Spændingsdifferencen for LSb\footnote{LSB - Least Significant Bitden} er $ V_{LSb} = V_{ref} / 4096 \approx \num{0,8}\si{\milli\volt} $, ved den anvendte referencespænding på $V_{ref} = 3,3\si{\volt}$.
 
- 
+\section{LCD Driver}
+\label{sec:LCD_driver}
+Når $\mathtt{lcd\_write\_char}$, $\mathtt{lcd\_write}$ og $\mathtt{lcd\_clear}$ bliver kaldt bliver deres argumenter sat over i en LCD buffer, $\mathtt{lcd\_display\_buffer}$.
+Når de så skal skrives til LCDen tager LCD tasken sig af at skrive til skærmen, når scheduleren når til tasken.
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=0.5\textwidth]{billeder/lcd_state_machine.png}
+	\caption{LCD state machine}
+	\label{fig:LCD_state_machine}
+\end{figure}
+\newline
+Måden LCD tasken virker på er, at den har en state machine som er vist på figur (\ref{fig:LCD_state_machine}).\newline
+I state machinen bliver der itereret gennem $\mathtt{lcd\_display\_buffer}$, hvori der kaldes $\mathtt{lcd\_direct\_write\_data\_nodelay}$ på bufferen med $\mathtt{state}$ som index.\newline
+$\mathtt{lcd\_direct\_write\_data\_nodelay}$ som er en skrivefunktion som ikke har noget \textit{end delay}.
+Når $\mathtt{state}$ når $16$ skrives der videre på næste linje.
 
 \section{Håndtering af brugergrænseflade og human input interface}
+\label{sec:HID}
 
-\husk{Sonny}{Kan dette anvendes?}
 
-\begin{wrapfigure}[18]{r}{0.5\textwidth}
-	\centering 
-	\includegraphics[width=0.5\textwidth]{billeder/menuesdiagram.png} 
-	\caption{Generisk diagram over menu opsætning. } 
-	\label{fig:menuesdiagram} 
-\end{wrapfigure}
+
+
 %For at kunne anvende enheden skal enheden kunne udveksle nødvendige informationer med brugeren, input skal altså kunne modtages, her valgte gruppen at anvende en "drehimpulsgeber", og respons skal oplyses, her valgte gruppen et grafisk repræsenteret menu system.
 For at kunne anvende enheden skal enheden kunne udveksle nødvendige informationer med brugeren. 
-Input skal kunne modtages, her valgte gruppen at anvende en "drehimpulsgeber".
+Input skal kunne modtages, her valgte gruppen at anvende en "drehimpulsgeber" eller digiswitch, samt to switches.
 Respons skal oplyses, her valgte gruppen et grafisk repræsenteret menu system.
 %En menu består en række valgmuligheder repræsenteret af elementer brugeren kan bladre igennem og vælge imellem.
 En menu består af en række valgmuligheder repræsenteret af elementer brugeren kan bladre igennem og vælge imellem.
 Et valg kan lede til yderligere valgmuligheder inden for den valgte kategori, disse kan så præsenteres i form af en ny menu.
+\begin{figure}[!ht]
+	\centering 
+	\includegraphics[width=0.8\textwidth]{billeder/menuesdiagram.png} 
+	\caption{Generisk diagram over menu opsætning. } 
+	\label{fig:menuesdiagram} 
+\end{figure}
 Til at udføre denne funktion valgte gruppen at anvende linkede lister.\newline
 %I eksemplet herunder ses en hovedmenu "Root Menu" som linker til sit første element "Master volume", vælger brugeren dette element kan volumen sættes, elementet linker også til næste element så brugeren kan skifte til det, her er der tale om "Echo" elementet som istedet for at have en funktion linker til en ny menu nemlig "Echo menu" som så linker til sin egen liste af menu punkter.
 På figur \ref{fig:menuesdiagram} ses en hovedmenu ''menu 1`` som linker til sit første element ''menu item 1.1``, herfra kan brugeren bladre til næste element ''menu item 1.2`` eller vælge dette element, vælges elementet ''menu item 1.1`` ses det på diagrammet at under menuen ''menu 2`` åbnes, derved vises nu første element fra ''menu 2`` som er ''menu item 2.1`` som har en funktion brugeren kan anvende.
@@ -229,13 +221,41 @@ På figur \ref{fig:menuesdiagram} ses en hovedmenu ''menu 1`` som linker til sit
 %Elementet linker også til næste element så brugeren kan skifte til det, her er der tale om ''Echo`` elementet som i stedet for at have en funktion linker til en ny menu nemlig ''Echo menu`` som så linker til sin egen liste af menu punkter.
 %En "drehimpulsgeber" kan anvendes til at producere 3 forskellige typer af input, drej mod uret herefter kaldet "vr", drej med uret "hr" og click.
 %Når et input  modtages af programmet lægges det i en input kø til systemet er klar til at modtage input, er der tale om et "vr" fremvises foregående element i menuen, på samme måde anvendes et "hr" input til at gå til næste element i menuen og et click anvendes til at vælge det det nuværende element.
-Drehimpulsgeberen kan anvendes til at producere 3 forskellige typer af input, drej mod uret herefter kaldet ''vr``, drej med uret ''hr`` og click.
-\husk{FreHal}{Indsæt UI state machine her}
+Drehimpulsgeberen kan anvendes til at producere 4 forskellige typer af input, drej mod uret herefter kaldet ''Dl``, drej med uret ''Dr``, click og langt tryk.
 
-\begin{wrapfigure}[20]{r}{5cm} 
+
+\begin{wrapfigure}[14]{r}{0.6\textwidth} 
 	\centering 
-	\includegraphics[width=4.5cm]{billeder/menuesdiagram.png} 
+	\includegraphics[width= 0.6\textwidth]{billeder/ui_statemachine.png} 
 	\caption{UI state machine diagram. } 
 	\label{fig:uistatemachine} 
 \end{wrapfigure}
-Når et input  modtages af programmet lægges det i en input kø til systemet er klar til at modtage input. Er der tale om et ''vr`` fremvises foregående element i menuen, på samme måde anvendes et ''hr`` input til at gå til næste element i menuen og et click anvendes til at vælge det nuværende element.
+
+Når et input  modtages af programmet lægges det i en input kø til systemet er klar til at modtage input. Er der tale om et ''Dl`` fremvises foregående element i menuen, på samme måde anvendes et ''Dr`` input til at gå til næste element i menuen, et click anvendes til at vælge det nuværende element og et langt tryk til at gå tilbage fra undermenuer.
+
+På figur \ref{fig:uistatemachine} ses den state machine der styre UI.
+UI'en der skrives til displayet afhænger af hvilken state der er aktiv.
+\begin{wrapfigure}[14]{r}{0.4\textwidth}
+	\centering 
+	\includegraphics[width=0.4\textwidth]{billeder/buttons_statemachine.png} 
+	\caption{State machine diagram for switches. } 
+	\label{fig:SW_statemachine} 
+\end{wrapfigure}
+I staten MENU vises det overordnede menu system, styret af drehimpulsgeberen. 
+Er STATUS staten aktiv vises en skærm hvor CPU loaden kan læses.
+FUNCTION staten aktiveres hvis der vælges en funktion i menusystemet, i denne state bliver en funktion kaldt fra et af effektmodulerne, denne funktion skriver selv input, og  UI til displayet.
+Når denne funktion ikke længere skal bruges, hvis brugeren for eksempel går tilbage, vil state machinen skifte tilbage til MENU.
+SW2$\_$FUNC fungere på samme måde. \newline
+Tryk på de to switches og den integrerede switch i drehimpulsgeberen håndteres af tre identiske state machines, et diagram over statemachinen ses på figur \ref{fig:SW_statemachine}.
+
+\begin{wrapfigure}[12]{r}{0.4\textwidth} 
+	\centering 
+	\includegraphics[width=0.4\textwidth]{billeder/digi_interrupt_flow.png} 
+	\caption{Flowchart af interrupthandleren til drehimpulsgeberen. } 
+	\label{fig:digiFlow} 
+\end{wrapfigure}
+Rotation af drehimpulsgeberen generere impulser på to forskellige pins henholsvis A og B.
+Afhængig af rotationsretningen skifter de ene før den anden. 
+Et interrupt er sat til at trigger på både stigende og faldende flanker af pin A.
+Interrupthandleren Følger algoritmen der ses på figur \ref{fig:digiFlow}.
+
