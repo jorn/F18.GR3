@@ -35,7 +35,6 @@ Den nødvendige slew rate kan beregnes ved formel \ref{eq:slewrate}.\cite{slewra
 \label{eq:slewrate}
 \text{Slew rate} = 2 \pi \cdot f_{maks} \cdot V_{maks} = 2\pi \cdot 22,05\si\kilo\hertz \cdot 1,65\si\volt = 0,46\si[per-mode=symbol]{\volt\per\micro\second}
 \end{equation}
-\husk{JES}{Er det egentligt kun 20kHz her?}
 Ud fra kravene vælges operationsforstærkeren AD8031 som SMD komponent. 
 Forstærkeren kan operere ved en single-supply forsyning ned til 2,7V, har 80MHz -3dB båndbredde ved en forstærkning på 1 og en slew rate på 30\si[per-mode=symbol]{\volt\per\micro\second}
 Forstærkerens output swing ligger inden for 20mV af rail-spændingen. Ved 3,3V ligger spændingsvidden således fra 0,02V til 3,28V. 
