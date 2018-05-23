@@ -17,7 +17,8 @@ Det ønskes at indgangssignalet har mulighed for at svinge både så højt og la
 \end{equation}
 Ved et offset på 1,65V kan signalet ideelt have en maksimal amplitude på 1,65V. 
 %Herfra skal den valgte operationsforstærkers output swing i forhold til dens forsyningsspænding trækkes fra. (vender tilbage til det her når op-amp skal vælges)
-Ved at opbygge en spændingsdeler, kan offsettet skabes. Kredsløbet ses på figur \ref{fig:modtagerKreds}.
+Ved at opbygge en spændingsdeler, kan offsettet skabes. 
+Kredsløbet kan ses i bilag \ref{bilag:diagram} i kassen 'Input stages for venstre og højre kanal'.
 
 \subsubsection{Valg af operationsforstærker til forstærkning af indgangssignalet}
 Operationsforstærkeren som skal forstærke signalet vælges ud fra en række krav. 
@@ -46,7 +47,7 @@ Havde der været mere tid, kunne det have været bestilt hjem.
 For at forstærke signalet, opsættes operationsforstærkeren som en ikke-inverterende forstærker. 
 Da indgangssignalets maksimale amplitude vil variere alt efter input, skal forstærkningens styrke kunne justeres. 
 Derfor sættes en variabel modstand i serie med feedback-modstanden. 
-Det ses på figur \ref{fig:modtagerKreds}. 
+Det ses i bilag \ref{bilag:diagram}. 
 Den variable modstand kan gå fra at være tæt på kortsluttet og op til 100k$\Omega$.
 For at undgå en kortslutning fra operationsforstærkerens output og til den inverterende indgang, er den variable modstand sat i serie med en feedback-modstand på 5k$\Omega$. 
 $R_2$ er valgt til 47k$\Omega$, så modstanden matcher modstanden fra højpasfilteret. 
@@ -63,21 +64,13 @@ A_{min.} = 1 + \frac{R_{feedback}}{R_2} = 1 + \frac{5\text{k} \Omega}{47\text{k}
 
 \subsubsection{Højpas filter-design}
 Mellem inputtet og operationsforstærkeren sidder en kapacitor, som blokerer for al DC fra indgangssignalet. 
-Som det ses på figur \ref{fig:modtagerKreds}, vil kapacitoren og modstandene fra offsettet udgøre et højpas filter. 
+Som det ses i bilag \ref{bilag:diagram}, vil kapacitoren og modstandene fra offsettet udgøre et højpas filter. 
 Filterets knækfrekvens sættes så lavt, at alle frekvenser i det hørbare område ikke påvirkes. 
 Ved AC-analyse kortsluttet forsyningen. Derfor sidder modstandene $R1$ og $R2$ parallelt.
 Det endelige kredsløb er kopieret, således der er to udgange for at opnå stereo. 
 \begin{equation}
 f_c = \frac{1}{2\pi R C} = \frac{1}{2 \pi \frac{1}{\frac{1}{47k \Omega}+\frac{1}{47k \Omega}}  470\text{nF}} = 14,1\text{Hz}
 \end{equation}
-
-\begin{figure}[h]
-\caption{Kredsløbet for modtageren af indgangssignalet.}
-\includegraphics[width=0.8\linewidth]{./billeder/Modtager.png}
-\label{fig:modtagerKreds}
-\end{figure}
-
-\husk{Jes}{Hvis der er problemer med antal sider, kan der henvises til et bilag med det samlede print i stedet. Opdatering: Bilag med samlet print er ved at blive lavet. }
 
 \section{Output stage}
 
