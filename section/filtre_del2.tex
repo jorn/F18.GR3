@@ -8,7 +8,8 @@ figur \ref{fig:skbiquadsch}.
 
 
 \begin{figure}[H]
-	\includegraphics[width=\linewidth]{billeder/skbiquadsch}
+	\centering
+	\includegraphics[width=.7\linewidth]{billeder/skbiquadsch}
 	\caption{Lav pas biquad prototype kredsløb}
 	\label{fig:skbiquadsch}
 \end{figure}
@@ -63,13 +64,13 @@ da både knækfrekvensen og hældningen i mellem pas og stop bånd stemmer overe
 
 
 \begin{figure}[H]
-	\includegraphics[width=\linewidth]{billeder/skbiquadpcb}
+	\centering
+	\includegraphics[width=.7\linewidth]{billeder/skbiquadpcb}
 	\caption{Lav pas biquad prototype PCB design}
 	\label{fig:skbiquadpcb}
 \end{figure}
 
 \section{Rekonstruktions filter}
-\note{Hvorfor anvendes et tilsvarende AA filter på udgangen - lidt teori her}
 
 Når signalet skal genskabes efter behandling i mikroprocessoren gøres dette ved hjælp af en DAC (Digital to Analog Converter). 
 Måden denne virker på er ved at anvende et så kaldt sample-and-hold kredsløb,
@@ -77,14 +78,18 @@ dette betyder at værdien der skal genskabes bliver sat og holdt i en
 tidsperiode ($T=\frac{1}{f_s}$), dette skaber en række firkant pulser som
 illustreret til venstre i figur \ref{fig:samplholdrecon}.
 
-Her skabes dog så en masse højfrekvente komponenter som er uønskede, disse dele af signalet kan så filtreres fra ved at anvende et rekonstruktions lav-pas filter.
+Her skabes dog så en masse højfrekvente komponenter som er uønskede, disse dele af signalet kan så filtreres fra, og derved "udglatte" signalet, ved at anvende et rekonstruktions lav-pas filter.
 
 I praksis anvendes oftes det samme filter signal som anti-aliasing filteret,
 så længe at sampling frekvensen er konstant og bit opløsningen på DAC og ADC
-er ens. Dette er muligt da det rekonstruerede signal er i det samme frekvens spektrum som det der samples.
+er ens. Dette er muligt da det rekonstruerede signal er i det samme frekvens
+spektrum som det der samples.
+
+Til dette projekt er der også anvendt det samme filter design, til både anti-aliasing og rekonstruktions filteret.
 
 \begin{figure}[H]
-	\includegraphics[width=\linewidth]{billeder/dacrecon}
+	\centering
+	\includegraphics[width=0.6\linewidth]{billeder/dacrecon}
 	\caption{Udgang fra DAC med sample-and-hold, før og efter rekonstruktionsfilter. Kilde:\cite{Tan2013}}
 	\label{fig:samplholdrecon}
 \end{figure}
