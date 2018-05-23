@@ -1,7 +1,6 @@
 \chapter{Effektmoduler}\label{chap:DSP}
 
 \section{Echo effektmodul}\label{sec:echo}
-\note{ved ikke om det skal ligge her}
 Et echo opstår når en lydbølge reflekteres tilbage på en overflade, sålede at den kan høres igen blot forsinket den tid, det tager for lyden at bevæge sig gennem luften.
 Det vil sige at jo længere væk overfladen, som lyden reflekteres på, er fra udgangspunktet for lydkilden og hvor lyden høres, jo længere går der imellem den oprindelige lyd og echoet.
 Et echo opstår som regel i et stort åbent område hvor der så er en eller flere store relativt ubrudte flader, såsom facaden på en stor bygning eller en bjergside.
@@ -17,6 +16,7 @@ Dette gøres ved at gemme en dæmpet kopi af outputsignalet i en buffer og efter
 	\caption{Simulink model af echo effekt.}
 	\label{fig:echo_simulink}
 \end{figure}
+Bufferen der blev valgt at implementere til dette er af en cyklisk natur, hvor der til hver samplingstid udlæses en værdi fra den af pointeren indikerede plads, pladsen nulstilles så og pointeren incrementeres så der til næste sample udlæses fra den næste plads i bufferen, herved opnås en buffer hvor der kan indsættes værdier der skal tilføres outputtet med en given forsinkelse angivet i antal samplingstider senere.
 
 \section{Reverb effektmodul}\label{sec:reverb}
 Reverb, rumklang, er resultatet af lydbølger som bliver reflekteret tilbage af %samtlige overflader med forskellige vinkler.\newline
@@ -70,13 +70,11 @@ Resultatet gemmes og bliver tillagt outputet til delay tiden og dermed opnås en
 Ulempen ved denne metode er at den skal serie kobles flere gange med forskellige delay tider for at opnå realistiske resultater.
 
 
-
-
 \section{Implementering af reverb}
 Gruppen valgte at implementere en algoritmisk reverb funktion da mikrochippen tilrådighed kun havde en meget begrænset mængde hukommelse.
 Dette blev opnået ved at anvende en buffer til konstant at gemme reducerede samples af input og output som så kunne tilføjes outputtet til delay tiden.
 
-Bufferen der blev valgt at implementere til dette er af en cyklisk natur, hvor der til hver samplingstid udlæses en værdi fra den af pointeren indikerede plads, pladsen nulstilles så og pointeren incrementeres så der til næste sample udlæses fra den næste plads i bufferen, herved opnås en buffer hvor der kan indsættes værdier der skal tilføres outputtet med en given forsinkelse angivet i antal samplingstider senere. 
+%Bufferen der blev valgt at implementere til dette er af en cyklisk natur, hvor der til hver samplingstid udlæses en værdi fra den af pointeren indikerede plads, pladsen nulstilles så og pointeren incrementeres så der til næste sample udlæses fra den næste plads i bufferen, herved opnås en buffer hvor der kan indsættes værdier der skal tilføres outputtet med en given forsinkelse angivet i antal samplingstider senere. 
 
 
 
