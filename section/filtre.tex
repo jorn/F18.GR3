@@ -142,12 +142,12 @@ Bessel filteret, det er designet som et filter med maksimal fald fase, har dog l
 Det vælges at anvende et Chebychev type I filter, der viser sig at have den bedste dæmpning i overgangsbåndet.
 Det høje udsving på gruppeløbetiden for denne filtertype, som det fremgår nederst i figur \ref{fig:filter_typer}, vil på det denomaliserede filter ligger indenfor, de i projektet, acceptable værdier. 
 \\
-I figur \ref{fig:filter_cheb1_denorm} ses den denormaliserede filterkarakteristik for det valgte filter med en pasbåndsrippel på $0,1 \si{\decibel}$ og en knækfrekvens på $f_c = 18 \si{\kilo\hertz}$. 
+I figur \ref{fig:filter_cheb1_denorm} øverst ses den denormaliserede filterkarakteristik for det valgte filter med en pasbåndsrippel på $0,1 \si{\decibel}$ og en knækfrekvens på $f_c = 18 \si{\kilo\hertz}$ og nederst ses filterets nominerede gruppeløbstid. 
 
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=1\textwidth]{matlab/filter_cheb1_denorm.png}
-	\caption{Denormeret 6.ordens filter karakteristik og guppeløbstid af Chebyshev Type I ($0,1 \si{\decibel}$}
+	\caption{Denormeret 6.ordens filter karakteristik og normineret guppeløbstid af Chebyshev Type I ($0,1 \si{\decibel}$}
 	\label{fig:filter_cheb1_denorm}
 \end{figure}
 \jj{ret matlab fil med denormineret grpdelay}
@@ -324,9 +324,8 @@ De anvendte værdier ses i tabel xx kolonne 3 og 4 og er taget fra \cite[Table B
 
 Denominering og impedans tilpasning af komponenterne gøres ud fra følgende
 \begin{align}
-	R &= R_n \cdot \Omega_n \\
-	C &= \frac{C_n}{2\pi f_c \Omega_n} 
+	R &= R_n \cdot Z_n \\
+	C &= \frac{C_n}{\Omega_n} \quad , \quad \Omega_n = 2\pi f_p 
 \end{align} 
-\jj{få lige styr på formler og begreber her}
-Det er valgt at bruge $\Omega_n = \num{10E3}$ og $f_c = 18\si{\kilo\hertz}$.
+Det er valgt at bruge $Z_n = \num{10E3}$ og $f_p = 18\si{\kilo\hertz}$.
 De endelige komponentværdier kan alle ses i det samlede diagram i bilag \ref{bilag:diagram}.

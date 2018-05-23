@@ -29,8 +29,9 @@ ylabel({'|H(f)| [dB]'});
 %legend('Butterworth', 'Chebychev I', 'Chebychev II', 'Bessel','Location','southwest');
 
 subplot(2,1,2);
-axis([1E2 10E4 -2 15])
+
 gd = groupDelaytf(H_cheb1);
+%axis([1E2 10E4 -15 10])
 grid on
 xlabel({'f [Hz]'});
 ylabel({'D(f) [s]'});
