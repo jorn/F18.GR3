@@ -68,7 +68,7 @@ I figur \ref{fig:alias}(b) vises gentagelserne i frekvensspektrummet også kalde
 	\label{fig:alias}
 \end{figure}
 
-Således kan det ses at den maksimale frekvens $B$ i det ønskede samplede signal ikke må overstige $f_s/2$, også kaldet for Nyquist frekvensen.
+Således kan det ses, at den maksimale frekvens $B$ i det ønskede samplede signal ikke må overstige $f_s/2$, også kaldet for Nyquist frekvensen.
 \begin{align}
 	f_{max} \leq f_s/2 \label{eq:shannons}
 \end{align}
@@ -88,11 +88,11 @@ For at bestemme opløsning på ADC'en, kan den unipolære\footnote{Unipolær kva
 	SNR_{Q,dB} &= 10 \log \left[6,02 N + 2 \right] = 10 \log \left[6,02\cdot 12+2\right] = 74,24 \si{\decibel} 
 \end{align}
  
-Således er det mindste målbare signal, og deraf kan konkluderes at aliasing effekten skal dæmpes med tilsvarende $74\si{\decibel}$ for at den ikke har indflydelse på det samplede signal.
+Således er det mindste målbare signal $SNR_Q$ og deraf kan konkluderes at aliasing effekten skal dæmpes med tilsvarende $74\si{\decibel}$ for at den ikke har indflydelse på det samplede signal.
 
 Når der er tale om et audio signal, hvor det ønskede frekvensområde der ønskes bevaret er $20\si{\hertz}$ til $18\si{\kilo\hertz}$ og en samplingsfrekvens på $f_s = 44,1\si{\kilo\hertz}$ resulterer dette i en filter orden af ekstrem størrelse.
 
-Valget faldt således på at anvende et 6. ordens filter der giver et fornuftigt antal komponenter ved implementeringen og derefter at kortlægge de uønskede effekter der opstår ved dette valg. 
+Valget faldt således på at anvende et 6. ordens filter. Dette giver et fornuftigt antal komponenter under implementeringen og den efterfølgende kortlægning af de uønskede effekter må vise om, hvorvidt det er et fornuftigt valg.  
  
 
 \section{Analyse af filter typer}\label{sec:filter_analyse}
@@ -132,7 +132,7 @@ Gruppeløbetiden, der er defineret i ligning (\ref{eq:groupdelay_def})\cite{anfi
 	D(\omega) \stackrel{def}{=} - \dfrac{d(arg(N(\omega)))}{d\omega}\label{eq:groupdelay_def}
 \end{align}
 
-Hvis signal forsinkelsen bliver for stor i et givet frekvensområde, vil der fremstå en hørbar ændring af lydbilledet.
+Hvis signalforsinkelsen bliver for stor i et givet frekvensområde, vil der fremstå en hørbar ændring af lydbilledet.
 Dette fænomen er dog ret subjektivt og der findes mange meninger om hvilke tærskelværdier der kan accepteres.
 Ud fra en lettere gennemgang inden for området, antages en acceptabel relativ tidsforsinkelse på $D_{rel}(\omega) < -10 \si{\milli\second}$ til projektet.   
 
@@ -236,7 +236,7 @@ De fundne $Q$ og $\omega_o$ værdier for det normerede filter er således
 De analoge filtre bliver implementeret som aktive filtre. Dette er valgt da det så ikke er nødvendigt at skulle anvende spoler, da disse ofte fylder meget.
 Samtidigt er de nemme at implementere da systemet i forvejen har strømforsyning til mikroprocessoren, som kan anvendes til filtrenes operationsforstærker.
 
-Aktive filtre opbygges generelt af 2. ordens bi-quad filtre som kaskadekobles til den ønskede orden.
+Aktive filtre opbygges generelt af 2. ordens bi-quad filtre, der kaskadekobles til den ønskede orden.
 I dette tilfælde seriekobles 3 filtre. 
 
 %\note{Sallen Kay - metode 4 i afs matr.}
@@ -259,7 +259,7 @@ En generisk Sallen-Key lavpas biquad ser ud som i figur\ref{fig:sklpbq}.
 Det blev valgt at anvende design metode 4 fra litteraturen, minimum sensitivitet.
 Denne designmetode gør filteret mindre sensitiv over for variationer i komponenter ved bl.a.
 at anvende enhedsforstærkning for derfor at undvære $R_a$ og $R_b$.
-Det vælges at $R_1 = R_2$ og de fastsættes til $1\si{\ohm}$. Herefter findes $C_1$ og $C_2$ ved hjælp af ligning \ref{eq:dm4c1} og \ref{eq:dm4c2}.
+Det vælges at $R_1 = R_2$ der fastsættes til $1\si{\ohm}$. Herefter findes $C_1$ og $C_2$ ved hjælp af ligning \ref{eq:dm4c1} og \ref{eq:dm4c2}.
 
 \vspace{15pt}
 

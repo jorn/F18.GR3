@@ -14,9 +14,9 @@ figur \ref{fig:skbiquadsch}.
 	\label{fig:skbiquadsch}
 \end{figure}
 
-Som det kan ses på figuren så er begge kondensatorer erstattet med en parallelforbindelse af 
+Som det kan ses på figur \ref{fig:skbiquadsch}, så er begge kondensatorer erstattet med en parallelforbindelse af 
 to serieforbundne kondensatorer. Dette valg gør det langt nemmere at opnå en specifik 
-kapacitans ved at anvende op til fire kondensatorer fra rækken af værdier, der er tilgængelige.
+kapacitans ved at anvende op til fire kondensatorer fra $E6$ rækken, der er tilgængelige.
 
 Disse kondensatorer blev beregnet ved at lave et Matlab script som finder alle mulige kombinationer, for de kondensatorer som var tilgængeligt på SDU under projektets udførelse.
 
@@ -48,17 +48,17 @@ beregnede, dog er der her ikke taget højde for usikkerheden i komponentværdier
 \label{tab:kapvskap}
 \end{table}
 
-Det valgtes at lave hver bi-quad som et separat print der kan kobles sammen med et lignende
-sig selv. 
-Dette giver de fordele at det vil forekomme nemmere at fejlfinde på de enkelte led, og
-samtidigt kan der laves flere forskellige ordener af filtret uden at skulle ændre på PCB designet.
+Det valgtes at lave hver bi-quad som et separat print der kan kobles sammen i kaskade. 
+Dette giver den fordel, at der vil forekomme mindre fejlfinding på de enkelte led, og
+at der kan laves flere forskellige ordener af filtret uden at skulle ændre på PCB designet.
 
-Det færdige PCB design kan ses på figur \ref{fig:skbiquadpcb}. Her kortsluttes RB, og RA forbliver ikke forbundet, og så påsættes der selvfølgelig de beregnede komponenter for at opnå det specificerede filter bi-quad. 
-
+Det færdige PCB design kan ses på figur \ref{fig:skbiquadpcb}. Her kortsluttes RB og RA forbliver åben og der påsættes de beregnede komponenter for at opnå det specificerede filter bi-quad. 
+\\
+\\
 Hvis man sammenligner resultaterne fra testen i bilag 
 \ref{sec:test_aafilter} med den beregnede filter karakteristik vist i figur 
 \ref{fig:filter_cheb1_denorm}, kan det ses at filteret i pasbåndet har en konstant dæmpning
-på ca. $3\si\decibel$. Denne dæmpning er senere fundet til at være pga. en for stor indgangs spænding under forsøget, hvilket har ført til at operationsforstærkerne i filteret er gået i mætning. 
+på ca. $3\si\decibel$. Denne dæmpning er senere fundet til at være opstået pga. en for stor indgangs spænding under forsøget, hvilket har ført til at operationsforstærkerne i filteret er gået i mætning. 
 Der har dog ikke været tid til at lave nye målinger.
 Dette kan der dog ses bort fra da karakteristikken ellers er korrekt bortset fra en forskydning på $3\si\decibel$. 
 Det leder hermed til at implementeringen af filteret overholder designet,
@@ -83,7 +83,7 @@ illustreret til venstre i figur \ref{fig:samplholdrecon}.
 Her skabes dog så en masse højfrekvente komponenter som er uønskede.
 Disse dele af signalet kan så filtreres fra, og derved ''udglatte'' signalet, ved at anvende et rekonstruktions lavpas filter.
 
-I praksis anvendes oftest det samme filter signal som anti-aliasing filteret,
+I praksis anvendes oftest det samme filter design som anti-aliasing filteret,
 så længe at sampling frekvensen er konstant og bit opløsningen på DAC og ADC
 er ens. Dette er muligt da det rekonstruerede signal er i det samme frekvens
 spektrum som det der samples.
