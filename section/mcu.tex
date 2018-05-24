@@ -208,7 +208,7 @@ Et valg kan lede til yderligere valgmuligheder inden for den valgte kategori, di
 \begin{figure}[!ht]
 	\centering 
 	\includegraphics[width=0.8\textwidth]{billeder/menuesdiagram.png} 
-	\caption{Generisk diagram over menu opsætning. } 
+	\caption{Generisk diagram over menu datastruktur. } 
 	\label{fig:menuesdiagram} 
 \end{figure}
 Til at udføre denne funktion valgte gruppen at anvende linkede lister.\newline
@@ -221,9 +221,9 @@ På figur \ref{fig:menuesdiagram} ses en hovedmenu ''menu 1`` som linker til sit
 Drehimpulsgeberen kan anvendes til at producere 4 forskellige typer af input, drej mod uret herefter kaldet ''Dl``, drej med uret ''Dr``, click og langt tryk.
 
 
-\begin{wrapfigure}[14]{r}{0.6\textwidth} 
+\begin{wrapfigure}[14]{r}{0.5\textwidth} 
 	\centering 
-	\includegraphics[width= 0.6\textwidth]{billeder/ui_statemachine.png} 
+	\includegraphics[width= 0.5\textwidth]{billeder/ui_statemachine.png} 
 	\caption{UI state machine diagram. } 
 	\label{fig:uistatemachine} 
 \end{wrapfigure}
@@ -232,23 +232,7 @@ Når et input  modtages af programmet lægges det i en input kø til systemet er
 
 På figur \ref{fig:uistatemachine} ses den state machine der styre UI.
 UI'en der skrives til displayet afhænger af hvilken state der er aktiv.
-\begin{figure}[!ht]
-	\centering
-	\begin{minipage}[b]{0.50\textwidth}
-		\centering 
-	\includegraphics[width=0.8\textwidth]{billeder/buttons_statemachine.png}
-	\newline 
-	\caption{State machine diagram for switches. } 
-	\label{fig:SW_statemachine}
-	\end{minipage}\hfill
-	\begin{minipage}[b]{0.50\textwidth}
-		\centering 
-		\includegraphics[width=0.8\textwidth]{billeder/digi_interrupt_flow.png} 
-		\caption{Flowchart af interrupthandleren til drehimpulsgeberen. } 
-		\label{fig:digiFlow} 
-	\end{minipage}
-\end{figure}
-\newline
+
 I staten MENU vises det overordnede menu system, styret af drehimpulsgeberen. 
 Er STATUS staten aktiv vises en skærm hvor CPU loaden kan læses.
 FUNCTION staten aktiveres hvis der vælges en funktion i menusystemet, i denne state bliver en funktion kaldt fra et af effektmodulerne, denne funktion skriver selv input, og  UI til displayet.
@@ -260,6 +244,22 @@ Rotation af drehimpulsgeberen generere impulser på to forskellige pins henholsv
 Afhængig af rotationsretningen skifter de ene før den anden. 
 Et interrupt er sat til at trigger på både stigende og faldende flanker af pin A.
 Interrupthandleren Følger algoritmen der ses på figur \ref{fig:digiFlow}.\newline
+\begin{figure}[!ht]
+	\centering
+	\begin{minipage}[b]{0.50\textwidth}
+		\centering 
+		\includegraphics[width=0.8\textwidth]{billeder/buttons_statemachine.png}
+		\newline 
+		\caption{State machine diagram for switches. } 
+		\label{fig:SW_statemachine}
+	\end{minipage}\hfill
+	\begin{minipage}[b]{0.50\textwidth}
+		\centering 
+		\includegraphics[width=0.8\textwidth]{billeder/digi_interrupt_flow.png} 
+		\caption{Flowchart af interrupthandleren til drehimpulsgeberen. } 
+		\label{fig:digiFlow} 
+	\end{minipage}
+\end{figure}
 \pagebreak
 \section{Opsummering}
 FreeRTOS' scheduleringsalgoritme er en prioritetsbaseret preemptive scheduler.

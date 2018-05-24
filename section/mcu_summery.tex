@@ -34,3 +34,9 @@ Det samplede data indeholder et offset fra input stage, som efter samplingen fje
 
 
 \subsection{Håndtering af brugergrænseflade og human input interface}
+%Et modulært menu system er nødvendigt for at effektmoduler kan tilføres helt uafhængigt af systemet, det lykkedes dog ikke at producere et sådant system men det skyldtes dog blot tidsmangel og kunne nemt implementeres i det nuværende menu system i form af en software patch, derfor blev dette ned prioriteret så deadline kunne overholdes. 
+
+Et menu system er udviklet til enheden, bestående af en datastruktur i form af en linked list og en state machine der skriver menuen til displayet.
+Et modulært menu system er nødvendigt for at effektmoduler kan tilføres helt uafhængigt af systemet, dette er dog blevet nedpriorieteret grundet tidspres, og er derfor ikke gjort.
+Input fra brugeren sker gennem to switches på TIVA-boardet, samt en drehimpulsgeber på EMP-boardet.
+Der bliver pullet på switchesne og events bliver genereret af en statemachine og sendt ud til andre tasks, hvor rotation på drehimpulsgeberen trigger et interrupt der afgøre retningen af rotation.
