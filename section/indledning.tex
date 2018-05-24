@@ -8,39 +8,30 @@ Rapporten afspejler og dokumenterer det udførte projektarbejde på 4. semester 
 
 \section{Formål}
 Semesterets hovedemne omhandler \emph{Indlejrede systemer og signalbehandling}, hvor faglighederne \emph{Analoge filtre og signaler}, \emph{Digital signalbehandling}, \emph{Embedded programmering} og \emph{Operativsystemer} er inkluderet.
-Ud fra projektbeskrivelsen\footnote{ref. til  semesterprojekt beskrivelse her...} er formålet\textit{ "at skabe en applikation, der gør noget meningsfuldt, således at semesterets fire fagligheder er dækket ind"}. \newline
+Ud fra projektbeskrivelsen\cite{projekt_op} er formålet\textit{ "at skabe en applikation, der gør noget meningsfuldt, således at semesterets fire fagligheder er dækket ind"}. \newline
 Problemformuleringen, som dækker over de fire fagligheder, er beskrevet i følgende afsnit. 
-
-\husk{JJ}{Find overgang mellem formål og problemformulering}
-\husk{JES}{Sådan som en meta-linje eller hvad? Det har jeg tilføjet.}
 
 \section{Problemformulering}
 Formålet med projektet er at undersøge, hvordan lyd kan behandles og manipuleres ved at bruge real-time digital signalbehandling i et embedded miljø.
 Løsningen skal opbygges som en modulær løsning, således at nye ''effektmoduler`` ville kunne udvikles senere og tilføjes. 
-Styringen af modulerne skal kunne foregå igennem EMP boardet - her tænkes det at kunne anvende HID styringen, som dette board stiller til rådighed og som sammen med LCD'en skal udgøre en platform til UI'en. 
+Styringen af modulerne skal kunne foregå igennem EMP boardet\footnote{Udviklings print anvendt i undervisningen.\cite{emp-diagram}} - her tænkes det at kunne anvende HID\footnote{HID - Human Input Device, se bilag \ref{bilag:ordliste}} styringen, som dette board stiller til rådighed. Sammen med LCD displayet skal udgøre en platform til UI'en\footnote{UI - User Interface, se bilag \ref{bilag:ordliste}}. 
 Signalinput såvel som output vil føres gennem en udvidelse til EMP-boardet indeholdende hhv. anti-aliasing lavpasfilter, et rekonstruktionsfilter og en digital til analog konverter (DAC).
 Det samlede digitale signalprocesseringssystem bygges oven på FreeRTOS kernelen.
-\husk{FH}{Evt. noget om de "ændringer" til kernelen vi vil lave?}
-\husk{JJ}{Husk at få indelt problemformulering i 3 grupper - Overodnet (motivation), Konkret og specifik (Udkast i listen).}
-\husk{JES}{Det forstår jeg ikke.}
 
 \begin{itemize}
-	\item Er det muligt at lave et modulært audio effekt system der kan leve op til de fastsatte krav? 
+	\item Hvilken rolle har analoge filtre i et digitalt signalbehandlingssystem og hvilke krav stilles der til disse?
+		
+	\item Hvordan skal digitale effekter implementeres, således at de kan anvendes i et realtidssystem?
 
-	\begin{itemize}
-		\item Realtids lydbehandling 
-		\item Digitalt filter design
-		\item Analogt filter design
-		\item OS krav / design
-		\item Test krav og eftervisning af forventede
-	\end{itemize}
+	\item Hvilken krav stiller et realtidssystem til hardware og underliggende OS (FreeRTOS)?
+	\item Er det muligt at lave et modulært audio effekt system, der kan leve op til de fastsatte krav? 
+
 \end{itemize}
-\husk{JJ}{Formulering af hoved- og underspørgsmål tilrettes.}
 
 \section{Projektafgrænsning}
 Produktet udvikles ikke til et slutprodukt. 
-I stedet udvikles et proof of concept, som kan modtage, behandle og afspille lyd. 
-UI'en begrænses desuden til de muligheder for kommunikation mellem hardware og bruger, som Tiva™ C Series TM4C123G LaunchPad Evaluation Kit'et sammen med EMP-boardet giver. 
+I stedet udvikles et \textit{proof of concept}, som kan modtage, behandle og afspille lyd. 
+UI'en begrænses desuden til de muligheder for kommunikation mellem hardware og bruger, som \texttt{Tiva™ C Series TM4C123G LaunchPad Evaluation} Kit'et sammen med EMP-boardet giver. 
 
 \section{Kravspecifikation} 
 Kravspecikationerne for projektet er fastsat, dels ud fra kravet til selve projektbeskrivelsen og dels for at efterligne projekter udenfor det akademiske miljø.
@@ -51,8 +42,8 @@ Kravspecikationerne for projektet er fastsat, dels ud fra kravet til selve proje
 	\item FreeRTOS anvendes som embedded kernel.
 	\item Kildekoden er en del af produktet og skal overholde \textit{EMP C Code Standard}\cite{emp-c}.
 	\item Der anvendes en samplingsfrekvens på $f_s = 44.1 \si{\kilo\hertz}$ stereo.
-	\item Der ønskes et frekvens spektrum på $20\si\hertz$ til $18\si\kilo\hertz$
-	\item Belastningen på udgangen skal kunne være ned til minimum $10\si{\kilo\ohm}$.
+	\item Der ønskes et frekvens spektrum på $20\si\hertz$ til $18\si\kilo\hertz$.
+	\item Udgangen skal kunne håndtere en indgangsimpedans på minimum $10\si{\kilo\ohm}$.
 \end{itemize}
 
 
@@ -62,18 +53,22 @@ I figur xx ses et blokdiagram af den samlede løsningsmodel.
 
 \jj{Diagram af den ønskede løsningsmodel indsættes her - som fig 1.1 i SIG bogen men med input og output offset trin}
 
-Modellen indeholder de mest basale blokke der er nødvendig for at opnå en løsning og signalet følger pilenes retning.
+Modellen indeholder de mest basale blokke der er nødvendige for at opnå en løsning og signalet følger pilenes retning.
 
-Modellens enkelte blokke danner grundlag for denne rapports opbygning og vil systematisk blive gennemgået og gennemarbejdet i de efterfølgende kapitler.
+Modellens enkelte blokke danner grundlag for denne rapports opbygning og vil blive gennemgået og gennemarbejdet i de efterfølgende kapitler.
 
 
 \section{Implementerings trin}
-\jj{Måske for løsnings specifik - skal generaliseres eller flyttes}
 
 \subsection{Trin 1}
 Implementering af anti aliasing filtrene som diskrete bi-quad moduler. 
 Derved kan det enkelte moduls virkemåde eftervises og chancen for konstruktionsfejl nedsættes.
+Simpelt styresystem implementeres med et basis udvalg af effekter.
 
 \subsection{Trin 2}
+\textit{Planlagt trin, men ikke opnået indenfor projektets tidsramme.}
+\\
+\\
 Den samlede løsning sammenbygges til én enhed og effektiviseres med hensyn til bl.a. komponent valg. 
 Andre faktorer som fx over- eller underdimensionering af krav til løsning kan også tilpasses her, så en mere fornuftig og anvendelig løsning opnås.
+Et mere generisk styresystem implementeres og muligheden for equalizer filtre tilføjes, som fx lavpas, højpas og andre profiler. 

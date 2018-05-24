@@ -1,2 +1,11 @@
 \chapter{Konklusion} \label{kap:konklusion}
 
+De analoge filtre i løsningen blev implementeret som 6. ordens Chebyshev Type I filtre. Filtre skulle bruges som båndbreddebegrænsning i et anti-aliasing filter på indgang til mikrocontrolleren og et symmetrisk filterdesign blev anvendt som rekonstruktionsfilter på udgangen.
+Kravene til disse filtre viste sig at være ret subjektive, så derfor blev konsekvenserne af de endelige valg analyseret og kortlagt i stedet. 
+\\
+For at kunne implementere de digitale effekter, skulle et \textit{signal-flow} diagram anvendes og en passende buffer arkitektur var nødvendig. 
+Begrænsede systemressourcer var betydeligt mere afgørende for implementeringsvalget end realtidskravet. 
+\\	
+Den valgte mikrocontroller viste sig tilstrækkelig for at kunne implementere et realtidssystem og FreeRTOS stillede en lang række funktionaliteter til rådighed, der viste sig passende for løsningen. 
+\\
+Således var det overordnet muligt at fremstille et modulært effekt system, der levede op til de stillede krav.
