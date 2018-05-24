@@ -1,22 +1,23 @@
 \section{FreeRTOS}
 %\note{Kort intro til hvad FreeRTOS er og hvilken funktionalitet det stiller tilrådighed}
 Som indlejret styresystem benyttes FreeRTOS. 
-FreeRTOS er et open source real-tids styresystem til indlejrede systemer, som er blevet en industriel standard. 
-Styresystemet er valgt, da det er simpelt at gå til. 
+FreeRTOS er et open source real-tids styresystem til indlejrede systemer, som er blevet en industriel standard\cite{FreeRTOSfundamentals}. 
+FreeRTOS er valgt, da det er simpelt at gå til. 
 Det er desuden primært skrevet i programmeringssproget C, som også benyttes i projektet. 
-FreeRTOS benytter preemptive schedulering til at administrere CPU-tiden mellem tasks. 
+FreeRTOS benytter preemptive schedulering til at administrere CPU-tiden mellem tasks.
+Derudover tilbyder FreeRTOS en masse brugbare faciliteter såsom tasks, semaforer, event groups, stack overflow detection mm.\cite[Features Overview]{FreeRTOSfundamentals}.
 
 \section{Preemptive schedulering}
-FreeRTOS er bygget på en prioritetsbaseret preemptive scheduleringsalgoritme.\newline
-Når et operativ system opererer med en preemptive scheduleringsalgoritme kan kørende processer preemptes - blive stoppet - og skiftet ud med en anden proces.\newline
+FreeRTOS benytter en prioritetsbaseret preemptive scheduleringsalgoritme.
+Når et operativ system opererer med en preemptive scheduleringsalgoritme kan kørende tasks \textit{preemptes}, hvilket betyder tasken bliver stoppet og skiftet ud med en anden task af højere prioritet.\newline
 Det kan f.eks. være at en proces der har ventet på en I/O device får tilgang til denne.
-Scheduleren vil så skifte den nuværende kørende proces ud og skifte den hidtil ventende proces ind så den kan køres.
-Dette gør scheduleren via et context switch.\newline
-Når et context switch sker gemmes ''konteksten`` af den nuværende task i en process control block (PCB), og ydermere sker der et state restore, hvor informationen i PCBen af den task, der skal skiftes til hentes.
-Det som bliver gemt i PCBen er værdierne i CPU registrene (Program counter, etc.) og anden vigtig operativ systemsinformation.\newline
-Prioritetsbaseret skeduleringsalgoritmer tildeler alle tasks en prioritet som er baseret på taskens vigtighed.\newline
-FreeRTOS er et real-time operativ system og et primært formål ved real-time operativ systemer er at give et respons på begivenheder indenfor en vis deadline.
-FreeRTOS skeduleringsalgoritme sørger så for at den task med højest prioritet bliver givet processortid.
+Scheduleren vil så skifte den nuværende, kørende proces ud og skifte den hidtil ventende proces ind fra \textit{ready queuen} og den gives CPU-tid.
+Dette gør scheduleren via et context switch.
+Når et context switch sker, gemmes ''konteksten`` af den nuværende task i en process control block (PCB), og ydermere sker der et \textit{state restore}, hvor informationen i PCBen af den task, der skal skiftes til hentes.
+Det som bliver gemt i PCBen er værdierne i CPU registrene (Program counter, etc.) og anden vigtig operativsystems information.\newline
+Prioritetsbaseret scheduleringsalgoritmer tildeler alle tasks en prioritet som er baseret på taskens vigtighed.\newline
+FreeRTOS er et real-time operativ system og et primært formål ved real-time operativ systemer er at give et respons på begivenheder indenfor en hvis deadline.
+FreeRTOS scheduleringsalgoritme sørger så for at den task med højeste prioritet bliver givet processortid ligeså snart den bliver placeret i \textit{ready queuen}.
 
 \section{Løsningsimplementering og task model}
 \begin{figure}[h]
@@ -25,9 +26,9 @@ FreeRTOS skeduleringsalgoritme sørger så for at den task med højest prioritet
 	\caption{Task model af den implementrede løsning.}
 	\label{fig:taskmodel}
 \end{figure}
-Figur \ref{fig:taskmodel} vise en oversigt over de task der køre i løsningen.
-Som udgangspunkt ligger \texttt{UI} tasken som den centrale del der styre konfigurationen, menusystemet.
-Alt input fra HID\footnote{HID - Human Inputer Devices} enhederne på emp-printes - tastatur, switches og digiswitch, bliver sendt ind i en kø med en fast defineret datastruktur som se i figur \ref{fig:hid_msg_t}, og som \texttt{UI} tasken således er forbruger af.
+Figur \ref{fig:taskmodel} viser en oversigt over de tasks, der kører i løsningen.
+Som udgangspunkt ligger \texttt{UI} tasken som den centrale del der styrer konfigurationen og menusystemet.
+Alt input fra HID\footnote{HID - Human Input Devices} enhederne på emp-printes - tastatur, switches og digiswitch, bliver sendt ind i en kø med en fast defineret datastruktur som set i figur \ref{fig:hid_msg_t}, og som \texttt{UI} tasken således er forbruger af.
 \lstset{language=C,
 	frame=sigle,
 	basicstyle=\ttfamily\tiny,
@@ -57,26 +58,26 @@ Alt input fra HID\footnote{HID - Human Inputer Devices} enhederne på emp-printe
 \label{fig:hid_msg_t}
 \end{figure}
 
-Datastrukturen \texttt{Menu} indeholder den dynamiske pointer struktur til menusystemet der bliver beskrevet i afsnit \ref{sec:HID} på side \pageref{sec:HID} og datastrukturerne \texttt{System konfiguration} og \texttt{Modules} indeholder information til styring af systemet som helhed, herunder mono/stereo mode og hvilke enheder der er anvendes som audio ind/ud.
+Datastrukturen \texttt{Menu} indeholder den dynamiske pointer struktur til menusystemet der bliver beskrevet i afsnit \ref{sec:HID} på side \pageref{sec:HID}, og datastrukturerne \texttt{System konfiguration} og \texttt{Modules} indeholder information til styring af systemet som helhed, herunder mono/stereo mode og hvilke enheder der anvendes som audio ind/ud.
 
-LCD diaplayet bliver hold opdateret af en \texttt{LCD} task, der løbende overfører tegn fra \texttt{LCD bufferen}, dette system er nærmere beskrevet i afsnit \ref{sec:LCD_driver}.
+LCD displayet bliver holdt opdateret af en \texttt{LCD} task, der løbende overfører tegn fra \texttt{LCD bufferen}. Dette system er nærmere beskrevet i afsnit \ref{sec:LCD_driver}.
 
 Den grundliggende timing og lydbehandling styres igennem \texttt{Sample Handler} ISR\footnote{ISR - Interrupt Service Routine}.
-Denne ISR sørger for at hente lyddata fra ADC'en, finder frem til hvilke moduler der skal medtages i databehandlingen og hvordan og til hvilke buffere, \texttt{Buffer} eller \texttt{Rev. Buffer} data skal gemmes i.
+Denne ISR sørger for at hente lyddata fra ADC'en og finder frem til hvilke moduler der skal medtages i databehandlingen samt rækkefølgen disse tilføres signalet. %og hvordan og til hvilke buffere, \texttt{Buffer} eller \texttt{Rev. Buffer} data skal gemmes i.
 Der vil i de efterfølgende afsnit komme en mere uddybende gennemgang for hver af systemets tasks og implementeringer. 
 
 
-\section{Intterrupt eksekvering og task skedulering}
+\section{Interrupt eksekvering og task schedulering}
 \label{subsec:int_task}
 Figur \ref{fig:int_task} viser hvordan tasks og interrupts håndteres i FreeRTOS. 
 Til tiden t1 kører en lavt prioriteret task. 
 Ved t2 bliver en interrupt service rutine, fremover kaldet en ISR, kaldt. 
-Den prioriteres højest, og den lavt prioriteret task pauses indtil ISR'en er færdig.
-ISR'eren er færdig til tiden t3, hvor den lavt prioriteret task kan genoptages.
+ISRen prioriteres højst, og den lavt prioriterede task pauses indtil ISR'en er færdig.
+ISR'eren er færdig til tiden t3, hvor den lavt prioriterede task kan genoptages.
 Ved t4 sker et context switch til en højere prioriteret task.
-Skeduleringen mellem tasks er styret af FreeRTOS scheduler med respekt til den prioritet, som hver task er givet. 
+Scheduleringen mellem tasks er styret af FreeRTOS scheduler ud fra den prioritet, som hver task er givet. 
 Interrupts prioriteres højere end alle tasks, uanset prioriteten af den pågældende task. 
-Interrupts har også prioriteter i mellem sig, såfremt flere skulle blive kaldt. 
+Interrupts har også prioriteter i mellem sig, såfremt flere skulle blive kaldt samtidig. 
 Modsat tasks, vil en interrupt dog altid afsluttes, før den næste kan begynde. 
 ARM Cortex-M4 tilbyder otte interrupt prioriteter. 
 \begin{figure}[h]
@@ -89,7 +90,7 @@ ARM Cortex-M4 tilbyder otte interrupt prioriteter.
 Når det indgående lydsignal skal samples gennem ADC'en, skal samplingen foregå periodisk på nøjagtigt det samme tidspunkt i hver periode.
 Det faste tidspunkt for sampling giver minimal jitter med en minimal forsinkelse i samplingen af signalet. 
 %\husk{Jes}{Dansk ord for jitter? Det er et teknisk engelsk ord, så det kan vel gå.. } 
-For at sikre, at mikrocontrolleren sætter alle andre opgaver på pause, og begynder at sample på det korrekte tidspunkt, implementeres samplingen i en ISR.
+For at sikre, at mikrocontrolleren sætter alle andre opgaver på pause, og den begynder at sample på det korrekte tidspunkt, implementeres samplingen i en ISR.
 
 \subsection{Implementering af interrupt-styring med timer}
 \label{subsec:impl_int}
@@ -105,20 +106,20 @@ I periodic timer mode vil timeren dekrementere fra tælleregisteret, som automat
 Når værdien når nul, kaldes den ISR som sikrer at lydsignalet bliver samplet. \newline
 
 \section{Sampling af lydsignal igennem ADC}\label{sec:ADC}
-Microcontrolleren har to identiske ADC moduler, som opererer uafhængigt ad hinanden. 
+Mikrocontrolleren har to identiske ADC moduler, som opererer uafhængigt af hinanden. 
 De kan derfor sample på samme tidspunkt. 
-ADC'erne er opbygget med Successive Approximation Register arkitektur, som leverer en opløsning på 12-bit, hvilket giver 4096 mulige steps i det digitale resultat. 
-ADC'ens interne forsyningsspænding og ground er på henholdsvis 3,3V og 0V, hvilket samtidig er den maksimale og minimale spændingsreference, som ADC'en kan læse. 
-Stepsizen er $\Delta$ er udregnet i formel \ref{eq:ADC_res}.
+ADC'erne er opbygget med Successive Approximation Register arkitektur, som leverer en opløsning på $12$-bit, hvilket giver $4096$ mulige steps i det digitale resultat. 
+ADC'ens interne forsyningsspænding og ground er på henholdsvis $3,3\si{V}$ og $0\si{V}$, hvilket samtidig er den maksimale og minimale spændingsreference, som ADC'en kan læse. 
+Stepsizen $\Delta$ er udregnet i formel \ref{eq:ADC_res}.
 \begin{equation}
 \label{eq:ADC_res}
 	\Delta = \frac{X_{maks}-X_{min}}{steps} = \frac{3\text{V}-0\text{V}}{4096} = 0,73\text{mV}
 \end{equation}
-ADC'en er drevet af en 16MHz clock, og det tager 250ns at tage én sample. 
+ADC'en er drevet af en $16\si{MHz}$ clock, og det tager $250\si{ns}$ at tage én sample. 
 
 \subsection{Opsætning af ADC}
-ADC0 og ADC1 er sat op til at modtage et analogt signal, for henholdsvis venstre og højre kanal, direkte på to general purpose input pins (GPIO). 
-Start af sampling er indstillet, så det trigges af et processor event. 
+ADC0 og ADC1 er sat op til at modtage et analogt signal, for henholdsvis venstre og højre kanal, direkte på to general purpose input/output pins (GPIO). 
+Start af sampling er indstillet, så det trigges af et \textit{processor event}. 
 Det betyder at en sampling i praksis startes ved at skrive til ADC Processor Sample Sequence Initiate registeret. 
 Resultatet af en A/D konvertering kan læses i sequence 3. 
 ADC'en har fire individuelle sequence registre, som kan indeholde op til flere samples efter FIFO princippet. 
@@ -128,8 +129,8 @@ Yderligere samples ville ikke være brugbare, fordi de ville være målt på et 
 \subsection{ISR sample handler og ADC}
 Som nævnt i afsnit \ref{subsec:int_task}, vil det timerstyrede interrupt kalde sample handler rutinen.
 I rutinen startes samplingen som det allersidste. 
-Det betyder at dataene fra samplingen bliver gemt i sequence 3 registeret indtil næste gang interruptet kaldes. 
-Næste gang interruptet kaldes, gemmes dataene i en variabel, og en ny AD konvertering bliver herefter igen udført. 
+Det betyder at data fra samplingen bliver gemt i sequence 3 registret indtil næste gang interruptet kaldes. 
+Næste gang interruptet kaldes, gemmes data i en variabel, og en ny AD konvertering bliver herefter igen udført. 
 Fordelen er at hver gang ISR'en bliver kaldt, vil samplen ligge klar.
 Der skal ikke ventes på en konvertering. 
 Det betyder også at forsinkelsen fra en konvertering bliver konstant. Forsinkelsen vil være givet ved $\frac{1}{f_s}$. 
@@ -141,13 +142,13 @@ Det betyder også at forsinkelsen fra en konvertering bliver konstant. Forsinkel
 	\caption{\label{fig:PWMfromtimer}Generering af PWM-signal ud fra timer. }
 \end{wrapfigure}
 Værdien af den modtagede sample fra AD konverteringen vil have et offset pga. DC forskydningen ved input stage, som tidligere beskrevet i afsnit \ref{sec:inputstage}.
-Offsettet fjernes igen ved at trække $\frac{4096}{2} = 2048$ fra resultatet af AD konverteringen. 
-Resultatet gemmes som en værdi af data typen float. 
+Offsettet fjernes nu digitalt ved at trække $\frac{4096}{2} = 2048$ fra resultatet af AD konverteringen. 
+Resultatet gemmes som en værdi af data typen \texttt{float}. 
 
 \subsection{Sample handler og processortid}
-
-Da sample handleren kører periodisk, og i form af en ISR har højeste prioritet til processortid, skal alle andre processoropgaver foregå i al den mellemliggende tid. 
-Det betyder at sample handleren og AD konverteringen skal være tidseffektiv, således andre tasks kan nå at køre færdig, inden sample handleren kaldes igen. 
+Da sample handleren kører periodisk i form af en ISR, har den højeste prioritet til processortid, og derfor skal alle andre processoropgaver foregå i den mellemliggende tid.
+%Da sample handleren kører periodisk, og i form af en ISR har højeste prioritet til processortid, skal alle andre processoropgaver foregå i al den mellemliggende tid. 
+Det betyder at sample handleren og AD konverteringen skal være tidseffektiv, således at andre tasks kan nå at køre færdig, inden sample handleren kaldes igen. 
 Ved hjælp af timer 3, udregnes rutinens procentuelle andel af processortiden, hvilket kan skrives ud til brugeren ved brug af LCD displayet. 
 Den benyttede tid vil desuden være afhængig af antallet af modulære effekter, som også skal processeres i sample handleren. 
 
@@ -160,7 +161,7 @@ Således genskabes signalet som et digitalt PWM signal.
 
 \section{Modulær opbygning af effekter}
 Effektmodulerne holdes hver især i en \textit{module control block}, $\mathtt{mcb\_t}$,  som er en data struktur bestående af en \textit{function pointer} og en boolsk variabel.
-Functionspointeren benyttes til at kalde lydeffektmodulerne, og den booleanske variabel benyttes til at aktivere/deaktivere lydeffekterne.\newline
+Function pointeren benyttes til at kalde lydeffektmodulerne, og den boolske variabel benyttes til at aktivere/deaktivere lydeffekterne.\newline
 For at tilføje en lydeffekt laves der en ny instans af $\mathtt{mcb\_t}$, og dens \textit{function pointer} sættes til at \textit{pointe} til lydeffekt rutinen.\newline
 \begin{figure}[!ht]
 	\centering
@@ -172,15 +173,37 @@ For at tilføje en lydeffekt laves der en ny instans af $\mathtt{mcb\_t}$, og de
 På figur (\ref{fig:effektmoduler}) illustreres, hvordan de enkelte moduler bliver itereret over, hvis de er aktive.
 Hvori $\mathtt{MCB\_POOL\_SIZE}$ er antallet af moduler, $\mathtt{mcb\_pool}$ er et array af $\mathtt{mcb\_t}$ strukturer, $\mathtt{mcb\_pool.module}$ er en \textit{function pointeren}, $mathtt{mcb\_pool.active}$ er den \textit{boolske} variabel og $\mathtt{fp\_sample\_in}$ og $\mathtt{fp\_sample\_out}$ er hhv. input- og outputsamples.
 Grunden til, at outputtet fra hvert modul bliver sat som input til den næste, er et ønskes om at opnå en serielkobling af effekterne.
-For at tilføje et effektmodul, tilføjes et nyt element til $\mathtt{mcb\_pool}$, \textit{function pointerent} sættes til at \textit{pointe} til effektroutinen og den boolske variabel sættes til $\mathtt{TRUE}$.
+For at tilføje et effektmodul, tilføjes et nyt element til $\mathtt{mcb\_pool}$, \textit{function pointeren} sættes til at \textit{pointe} til effektroutinen og den boolske variabel sættes til $\mathtt{TRUE}$.
 
 \section{Genskabelse af signal via DAC igennem SPI}
 Genskabelsen af udgangssignalet fra mikorcontrolleren gøres igennem en ekstern 12bit DAC \texttt{MCP4922E/P}\footnote{Microchip MCP4922E/P 12-Bit Dual Voltage Output Digital-to-Analog Converter with SPI Interface \cite{mcp4922} }.
+Den valgte DAC har en maksimal indsvingningstid på $t_{settling} = \num{4.5}\si{\micro\second}$, hvilket passer fint til samplingsperioden på $T_s = 23\si{\micro\second}$. 
+\\
+Spændingsdifferencen for LSb\footnote{LSb - Least Significant Bit} er $ V_{LSb} = V_{ref} / 4096 \approx \num{0,8}\si{\milli\volt} $, ved den anvendte referencespænding på $V_{ref} = 3,3\si{\volt}$. 
+\\
+Ifølge databladet er datakommunikation op til $20\si{\mega\hertz}$ mulig, men SPI port konfigurationen på MCU'en sættes til $10\si{\mega\hertz}$ og forbindes direkte til mikrokontrolleren via en SPI bus - De valgte pins er beskrevet i bilag \ref{bilag:pinmap}. 
+En SPI clockfrekvens på $F_{SCK} = 10\si{\mega\hertz}$, giver en datatransmissionstid $t_{cmd}$ af SPI kommandoen for begge lydkanaler på minimum på  
+\begin{align} 
+t_{cmd} = \frac{N_{kanal} \cdot 16bit}{F_{SCK}} = \frac{2 \cdot 16}{10\si{\mega\hertz}} = 3\si{\micro\second} 
+\end{align} 
+
+I figur \ref{fig:dac12bit_writecmd} ses den nødvendige kommando-bitsekvens med tilhørende timingsdiagram for \textbf{CS}, \textbf{SCK} og \textbf{LDAC}  .\\ 
+
+\begin{figure}[h!] 
+	\centering 
+	\includegraphics[width=.8\textwidth]{billeder/dac12bit_writecmd.png} 
+	\caption{Skrive kommando til 12bit MCP4922 DAC.\cite[s. 25]{mcp4922}} 
+	\label{fig:dac12bit_writecmd} 
+\end{figure} 
+
+I overensstemmelse med databladene for DAC'en og mikrocontrolleren, anvendes \emph{SPI Freescale Frame} formatet\footnote{Se afsnit 15.3.4 \cite[s. 954]{tm4c123gh6pm}} i \textbf{Mode 0,0}. 
+
+
 
 \section{LCD Driver}
 \label{sec:LCD_driver}
-Når $\mathtt{lcd\_write\_char}$, $\mathtt{lcd\_write}$ og $\mathtt{lcd\_clear}$ bliver kaldt bliver deres argumenter sat over i en LCD buffer, $\mathtt{lcd\_display\_buffer}$.
-Når de så skal skrives til LCDen tager LCD tasken sig af at skrive til skærmen, når scheduleren når til tasken.
+Når funktionerne $\mathtt{lcd\_write\_char}$, $\mathtt{lcd\_write}$ og $\mathtt{lcd\_clear}$ bliver kaldt, bliver deres argumenter sat over i en LCD buffer, $\mathtt{lcd\_display\_buffer}$.
+Når de så skal skrives til LCD'et, tager LCD tasken sig af at skrive dem, én ad gangen, til skærmen, når tasken bliver scheduleret.
 \begin{figure}[!ht]
 	\centering
 	\includegraphics[width=0.5\textwidth]{billeder/lcd_state_machine.png}
@@ -189,18 +212,19 @@ Når de så skal skrives til LCDen tager LCD tasken sig af at skrive til skærme
 \end{figure}
 \newline
 Måden LCD tasken virker på er, at den har en state machine som er vist på figur (\ref{fig:LCD_state_machine}).\newline
-I state machinen bliver der itereret gennem $\mathtt{lcd\_display\_buffer}$, hvori der kaldes $\mathtt{lcd\_direct\_write\_data\_nodelay}$ på bufferen med $\mathtt{state}$ som index.\newline
-$\mathtt{lcd\_direct\_write\_data\_nodelay}$ som er en skrivefunktion som ikke har noget \textit{end delay}.
+I state machinen bliver der itereret igennem $\mathtt{lcd\_display\_buffer}$, hvorfra der kaldes \newline \texttt{lcd\_direct\_write\_data\_nodelay} på bufferen med $\mathtt{state}$ som index.\footnote{
+$\mathtt{lcd\_direct\_write\_data\_nodelay}$ som er en skrivefunktion som ikke har noget \textit{end delay}.}
 Når $\mathtt{state}$ når $16$ skrives der videre på næste linje.
 
 \section{Håndtering af brugergrænseflade og human input interface}
 \label{sec:HID}
 %For at kunne anvende enheden skal enheden kunne udveksle nødvendige informationer med brugeren, input skal altså kunne modtages, her valgte gruppen at anvende en "drehimpulsgeber", og respons skal oplyses, her valgte gruppen et grafisk repræsenteret menu system.
-For at kunne anvende enheden skal enheden kunne udveksle nødvendige informationer med brugeren. 
-Input skal kunne modtages, her valgte gruppen at anvende en "drehimpulsgeber" eller digiswitch, samt to switches.
-Respons skal oplyses, her valgte gruppen et grafisk repræsenteret menu system.
+For at kunne anvende enheden skal enheden kunne udveksle nødvendige informationer med brugeren og input skal kunne modtages.
+Her valgte gruppen at anvende en ``drehimpulsgeber'' eller digiswitch, samt to switches.
+Brugeren skal ligeledes kunne få information retur, her valgte gruppen et grafisk repræsenteret menu system.
 %En menu består en række valgmuligheder repræsenteret af elementer brugeren kan bladre igennem og vælge imellem.
-En menu består af en række valgmuligheder repræsenteret af elementer brugeren kan bladre igennem og vælge imellem.
+\\
+En menu består af en række valgmuligheder repræsenteret af elementer brugeren kan bladre igennem og vælge.
 Et valg kan lede til yderligere valgmuligheder inden for den valgte kategori, disse kan så præsenteres i form af en ny menu.
 \begin{figure}[!ht]
 	\centering 
@@ -210,7 +234,8 @@ Et valg kan lede til yderligere valgmuligheder inden for den valgte kategori, di
 \end{figure}
 Til at udføre denne funktion valgte gruppen at anvende linkede lister.\newline
 %I eksemplet herunder ses en hovedmenu "Root Menu" som linker til sit første element "Master volume", vælger brugeren dette element kan volumen sættes, elementet linker også til næste element så brugeren kan skifte til det, her er der tale om "Echo" elementet som istedet for at have en funktion linker til en ny menu nemlig "Echo menu" som så linker til sin egen liste af menu punkter.
-På figur \ref{fig:menuesdiagram} ses en hovedmenu ''menu 1`` som linker til sit første element ''menu item 1.1``, herfra kan brugeren bladre til næste element ''menu item 1.2`` eller vælge dette element, vælges elementet ''menu item 1.1`` ses det på diagrammet at under menuen ''menu 2`` åbnes, derved vises nu første element fra ''menu 2`` som er ''menu item 2.1`` som har en funktion brugeren kan anvende.
+På figur \ref{fig:menuesdiagram} ses en hovedmenu ''menu 1`` som linker til sit første element ''menu item 1.1``, herfra kan brugeren bladre til næste element ''menu item 1.2`` eller vælge dette element.
+Vælges elementet ''menu item 1.1`` ses det på diagrammet at under menuen ''menu 2`` åbnes, derved vises nu første element fra ''menu 2`` som er ''menu item 2.1`` som har en funktion brugeren kan anvende.
 %kan volumen sættes.
 %Elementet linker også til næste element så brugeren kan skifte til det, her er der tale om ''Echo`` elementet som i stedet for at have en funktion linker til en ny menu nemlig ''Echo menu`` som så linker til sin egen liste af menu punkter.
 %En "drehimpulsgeber" kan anvendes til at producere 3 forskellige typer af input, drej mod uret herefter kaldet "vr", drej med uret "hr" og click.
@@ -225,16 +250,18 @@ Drehimpulsgeberen kan anvendes til at producere 4 forskellige typer af input, dr
 	\label{fig:uistatemachine} 
 \end{wrapfigure}
 
-Når et input  modtages af programmet lægges det i en input kø til systemet er klar til at modtage input. Er der tale om et ''Dl`` fremvises foregående element i menuen, på samme måde anvendes et ''Dr`` input til at gå til næste element i menuen, et click anvendes til at vælge det nuværende element og et langt tryk til at gå tilbage fra undermenuer.
+Når et input  modtages af programmet, lægges det i en input kø til systemet er klar til at modtage input. Er der tale om et ''Dl`` fremvises foregående element i menuen, på samme måde anvendes et ''Dr`` input til at gå til næste element i menuen. Et click anvendes til at vælge det nuværende element og et langt tryk til at gå tilbage fra undermenuer.
 
-På figur \ref{fig:uistatemachine} ses den state machine der styre UI.
+I figur \ref{fig:uistatemachine} ses den state machine der styre UI.
 UI'en der skrives til displayet afhænger af hvilken state der er aktiv.
 
-I staten MENU vises det overordnede menu system, styret af drehimpulsgeberen. 
-Er STATUS staten aktiv vises en skærm hvor CPU loaden kan læses.
-FUNCTION staten aktiveres hvis der vælges en funktion i menusystemet, i denne state bliver en funktion kaldt fra et af effektmodulerne, denne funktion skriver selv input, og  UI til displayet.
-Når denne funktion ikke længere skal bruges, hvis brugeren for eksempel går tilbage, vil state machinen skifte tilbage til MENU.
-SW2$\_$FUNC fungere på samme måde. \newline
+I staten \texttt{MENU} vises det overordnede menu system, styret af drehimpulsgeberen. 
+Er \texttt{STATUS} staten aktiv vises en skærm hvor CPU loaden kan læses.
+\texttt{FUNCTION} staten aktiveres, hvis der vælges en funktion i menusystemet. 
+I denne state, bliver en funktion kaldt fra et af effektmodulerne. 
+Denne funktion skriver selv input, og  UI til displayet.
+Når denne funktion ikke længere skal bruges, hvis brugeren for eksempel går tilbage, vil state machinen skifte tilbage til \texttt{MENU}.
+\texttt{SW2$\_$FUNC} fungere på samme måde. \newline
 Tryk på de to switches og den integrerede switch i drehimpulsgeberen håndteres af tre identiske state machines, et diagram over statemachinen ses på figur \ref{fig:SW_statemachine}.
 
 Rotation af drehimpulsgeberen generere impulser på to forskellige pins henholsvis A og B.

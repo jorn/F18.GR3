@@ -3,7 +3,7 @@
 \section{Test af samlet system}
 \label{sec:test_samlet}
 Testens formål er at udføre en vector network analyse af det samlede system for at finde systemets amplitude-karakteristik og gruppeløbetid. 
-Det samlede system består af modtageren af indgangssignalet, anti-aliasing filtrene for den ene kanal, Tiva-kittet med EMP board og microcontroller, DAC, rekonstruktionsfilteret for den ene kanal og udgangskredsløbet. 
+Det samlede system består af modtageren af indgangssignalet, anti-aliasing filtrene for den ene kanal, Tiva-kittet med EMP board og mikrocontroller, DAC, rekonstruktionsfilteret for den ene kanal og udgangskredsløbet. 
 
 \subsection{Udstyr}
 \begin{itemize}
@@ -37,7 +37,8 @@ CH2 kobles til udgangen af det samlede system for den tilsvarende kanal.
 Analysen kan nu udføres. 
 
 \subsection{Resultat af test}
-Datasættet for resultatet af testen kan ses i den vedhæftede fil \textit{'Målinger/Samlet\textunderscore system.csv'}. På figur \ref{fig:tf_tg_samletsystem} kan amplitude-karakteristikken og gruppeløbetiden for det samlede system ses.
+Datasættet for resultatet af testen kan ses i den vedhæftede fil \textit{'Målinger/Samlet\textunderscore system.csv'}. 
+På figur \ref{fig:tf_tg_samletsystem} kan amplitude-karakteristikken og gruppeløbetiden for det samlede system ses.
 \begin{figure}[h]
 	\caption{I det øverste plot er amplitude-karakteristikken for det samlede system, og i det nederste plot er gruppeløbetiden.}
 	\includegraphics[width=1\linewidth]{matlab/tf_tg_samletsystem.png}
@@ -53,7 +54,7 @@ Der skal benyttes det samme udstyr, som til testen af det samlede system i afsni
 
 \subsection{Fremgangsmåde og forsøgsopstilling}
 Frem til og med kalibreringen af Bode 100 følger testen samme fremgangsmåde som ved testen af det samlede system i afsnit \ref{sec:test_samlet}. \newline
-Opsæt biquads-filtrene i kaskade som vist i bilag \ref{bilag:diagram} i kassen 'Generisk sjette ordens filter'. 
+Opsæt biquad filtrene i kaskade som vist i bilag \ref{bilag:diagram} under 'Generisk sjette ordens filter'. 
 Bode 100's udgang med skillekondensator og CH1 kobles til indgangen på det første biquad filter. 
 CH2 kobles til udgangen af det sidste biquad filter. \newline
 Analysen kan nu udføres. 
