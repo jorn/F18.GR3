@@ -162,12 +162,12 @@ Grunden til at outputtet fra hver modul bliver sat til input, er at det ønskes 
 For at tilføje et effektmodul oprettes tilføjes der et nyt element til $\mathtt{mcb\_pool}$, \textit{function pointerent} sættes til at \textit{pointe} til effektroutinen og den booleanske variabel sættes til $\mathtt{TRUE}$.
 
 \section{Generering af PWM-signal til DAC}
-Timeren benyttes desuden til at generere et PWM-signal, hvis duty cycle er styret af timeren og resultatet af A/D konverteringen af indgangssignalet. 
-\begin{wrapfigure}[15]{r}{0.5\textwidth}
+\begin{wrapfigure}[11]{r}{0.5\textwidth}
 	\centering
 	\includegraphics[width=0.5\textwidth]{billeder/timer3PWM.png}
 	\caption{\label{fig:PWMfromtimer}Generering af PWM-signal ud fra timer. }
 \end{wrapfigure}
+Timeren benyttes desuden til at generere et PWM-signal, hvis duty cycle er styret af timeren og resultatet af A/D konverteringen af indgangssignalet. 
 Figur \ref{fig:PWMfromtimer} viser hvordan PWM-signalets duty cycle bliver bestemt af den værdi, som bliver gemt på Timer A's match register. 
 Den værdi kommer fra den periodiske sampling af lydsignalet gennem ADC'en, hvor resultatet af hver sampling netop gemmes i match registeret. 
 Således genskabes signalet som et digitalt PWM signal. 
