@@ -1,6 +1,6 @@
-\chapter{Test af reverb og echo impulsrespons}\label{sec:test_af_effekt}
-Da echo og reverb begge er tidsinvariante effekter, betyder det at de kan karakteriseres af deres impulsrespons.\newline
-Testens formål er at finde impulsresponset for echo- og reverbeffekten.
+\chapter{Test af reverb og ekko impulsrespons}\label{sec:test_af_effekt}
+Da ekko og reverb begge er tidsinvariante effekter, betyder det at de kan karakteriseres af deres impulsrespons.\newline
+Testens formål er at finde impulsresponset for ekko- og reverbeffekten.
 %Systemet består af modtager af indgangssignal, anti-aliasing filtre, TIVA-kit med EMP board, DAC, rekonstruktionsfilter og udgangskredsløbet.
 Systemet består af et signalindgangs board, en række anti-aliasing- og inputfiltre, et TIVA-kit med EMP board, et board med en DAC, rekonstruktionsfiltre og et udgangskredsløbet.
 \section{Forsøgsopstilling og fremgangsmetode}
@@ -9,7 +9,7 @@ Systemet består af et signalindgangs board, en række anti-aliasing- og inputfi
 	\item Oscilloskop sat til single sweep med en trigger sat til $200\si{mV}$
 	\item Load modstand koblet på udgangen på $10\si{k\Omega}$
 	\item Reverb delay sat til $10\si{ms}$ og input- og feedbackgain sat til $-0.50$
-	\item Echo delay sat til $44\si{ms}$ samples og gain sat til $0.5$
+	\item Ekko delay sat til $44\si{ms}$ samples og gain sat til $0.5$
 \end{itemize}
 %Funktionsgeneratoren kobles på signalindgangen af systemet, og oscilloskopets prober placeres hhv. på indgangen til mikrocontrolleren og på udgangen af rekonstruktionsfilteret.\newline
 Funktionsgeneratoren kobles på signalindgangen sammen med en af oscilloskopets prober, og den anden placeres på udgangskredsløbet.\newline
@@ -27,11 +27,11 @@ Inputtet er den første impuls angivet som den gule graf og outputtet er vist ve
 	\begin{minipage}{0.50\textwidth}
 		\centering
 		\includegraphics[width=0.9\textwidth, height=5 cm]{billeder/echo.png}
-		\caption{Impulsrespons for echoeffekten.}
+		\caption{Impulsrespons for ekkoeffekten.}
 		\label{fig:imp_echo}
 	\end{minipage}
 \end{figure}
-På figurene kan det aflæses at delay tiderne stemmer meget præcist overens med de fra programmets side forventede delay tider. På figuren for echo (\ref{fig:imp_echo}) ses også at gentagelsen af impulsen er faldet til ca $400\si{mV}$ hvor det oprindelige output er lige under $800\si{mV}$, hvilket stemmer nogenlunde overens med det forventede gain på $0.5$.\newline 
+På figurene kan det aflæses at delay tiderne stemmer meget præcist overens med de fra programmets side forventede delay tider. På figuren for ekko (\ref{fig:imp_echo}) ses også at gentagelsen af impulsen er faldet til ca $400\si{mV}$ hvor det oprindelige output er lige under $800\si{mV}$, hvilket stemmer nogenlunde overens med det forventede gain på $0.5$.\newline 
 På reverb figuren (\ref{fig:imp_reverb}) ses det at den første gentagelse af impulsen er af samme størrelse som det oprindelige output. Dette skyldes at feedforward har en gain på $0.5$ og feedback har samme gain så de tilsammen udgør en fuld kopi af det oprindelige signal. 
 Under normal brug vil disse gains være betydeligt lavere, hvilket vil give en noget hurtigere aftagende respons, men for at få et tydeligere test resultat blev disse ret høje gain værdier valgt.
 %\husk{Sonny}{kan godt huske noget om at vi også testede på indgange til µControlleren, men var der ikke den samme støj på den almindelige indgang og vi ser den næsten heller ikke i matlab plottende}

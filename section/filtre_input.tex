@@ -1,4 +1,4 @@
-\section{Input stage med pre-amp og DC-offset}
+\section{Indgangstrin med pre-amp og DC-offset}
 \label{sec:inputstage}
 Systemet skal kunne modtage et signal fra en lydkilde, som afspiller lyd i det menneskeligt hørbare område. 
 Før signalet kan videreføres til anti-aliasing filtrene, skal der være en mulighed for eventuelt at forstærke signalet med en operationsforstærker. 
@@ -20,7 +20,7 @@ Det ønskes at indgangssignalet har mulighed for at svinge både så højt og la
 Ved et offset på $1,65\si{V}$ kan signalet ideelt have en maksimal amplitude på $1,65\si{V}$. 
 %Herfra skal den valgte operationsforstærkers output swing i forhold til dens forsyningsspænding trækkes fra. (vender tilbage til det her når op-amp skal vælges)
 Ved at opbygge en spændingsdeler, kan offsettet skabes. 
-Kredsløbet kan ses i bilag \ref{bilag:diagram} under 'Input stages for venstre og højre kanal'.
+Kredsløbet kan ses i bilag \ref{bilag:diagram} under 'indgangstrin for venstre og højre kanal'.
 
 \subsubsection{Valg af operationsforstærker}
 Operationsforstærkeren som skal forstærke signalet vælges ud fra en række krav. 
@@ -73,7 +73,7 @@ Stereo blev således opnået ved at anvende to eksemplarer af kredsløbet, en fo
 f_c = \frac{1}{2\pi R C} = \frac{1}{2 \pi \frac{1}{\frac{1}{47k \Omega}+\frac{1}{47k \Omega}}  470\text{nF}} = 14,1\text{Hz}
 \end{equation}
 
-\section{Output stage}
+\section{Udgangstrin}
 
 %Da de rekonstruerede signal stadigvæk er offset skal DC-værdien fjernes igen inden signalet føres ud af systemet.
 Da det rekonstruerede signal stadig har et offset skal DC-værdien fjernes igen inden signalet føres ud af systemet.
