@@ -90,7 +90,7 @@ ARM Cortex-M4 tilbyder otte interrupt prioriteter.
 Når det indgående lydsignal skal samples gennem ADC'en, skal samplingen foregå periodisk på nøjagtigt det samme tidspunkt i hver periode.
 Det faste tidspunkt for sampling giver minimal jitter med en minimal forsinkelse i samplingen af signalet. 
 %\husk{Jes}{Dansk ord for jitter? Det er et teknisk engelsk ord, så det kan vel gå.. } 
-For at sikre, at microcontrolleren sætter alle andre opgaver på pause, og den begynder at sample på det korrekte tidspunkt, implementeres samplingen i en ISR.
+For at sikre, at mikrocontrolleren sætter alle andre opgaver på pause, og den begynder at sample på det korrekte tidspunkt, implementeres samplingen i en ISR.
 
 \subsection{Implementering af interrupt-styring med timer}
 \label{subsec:impl_int}
@@ -106,7 +106,7 @@ I periodic timer mode vil timeren dekrementere fra tælleregisteret, som automat
 Når værdien når nul, kaldes den ISR som sikrer at lydsignalet bliver samplet. \newline
 
 \section{Sampling af lydsignal igennem ADC}\label{sec:ADC}
-Microcontrolleren har to identiske ADC moduler, som opererer uafhængigt af hinanden. 
+Mikrocontrolleren har to identiske ADC moduler, som opererer uafhængigt af hinanden. 
 De kan derfor sample på samme tidspunkt. 
 ADC'erne er opbygget med Successive Approximation Register arkitektur, som leverer en opløsning på $12$-bit, hvilket giver $4096$ mulige steps i det digitale resultat. 
 ADC'ens interne forsyningsspænding og ground er på henholdsvis $3,3\si{V}$ og $0\si{V}$, hvilket samtidig er den maksimale og minimale spændingsreference, som ADC'en kan læse. 
