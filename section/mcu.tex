@@ -79,7 +79,6 @@ Interrupts prioriteres højere end alle tasks, uanset prioriteten af den pågæl
 Interrupts har også prioriteter i mellem sig, såfremt flere skulle blive kaldt. 
 Modsat tasks, vil en interrupt dog altid afsluttes, før den næste kan begynde. 
 ARM Cortex-M4 tilbyder otte interrupt prioriteter. 
-\husk{Jes}{Forstået rigtigt?} 
 \begin{figure}[h]
 	\caption{Det tidslige forløb for to tasks og en interrupt service rutine. }
 	\centering
@@ -115,7 +114,6 @@ Stepsizen er $\Delta$ er udregnet i formel \ref{eq:ADC_res}.
 \label{eq:ADC_res}
 	\Delta = \frac{X_{maks}-X_{min}}{steps} = \frac{3\text{V}-0\text{V}}{4096} = 0,73\text{mV}
 \end{equation}
-\husk{Jes}{Stepsize udregning kan måske udelades, hvis vi får pladsmangel.}
 ADC'en er drevet af en 16MHz clock, og det tager 250ns at tage én sample. 
 
 \subsection{Opsætning af ADC}
@@ -140,7 +138,6 @@ Det betyder også at forsinkelsen fra en konvertering bliver konstant. Forsinkel
 Værdien af den modtagede sample fra AD konverteringen vil have et offset pga. DC forskydningen ved input stage, som tidligere beskrevet i afsnit \ref{sec:inputstage}.
 Offsettet fjernes igen ved at trække $\frac{4096}{2} = 2048$ fra resultatet af AD konverteringen. 
 Resultatet gemmes som en værdi af data typen float. 
-\husk{Jes}{Hvis der er plads, kunne det være rart med en graf her.}
 
 \subsection{Sample handler og processortid}
 Da sample handleren kører periodisk, og i form af en ISR har højeste prioritet til processortid, skal alle andre processoropgaver foregå i al den mellemliggende tid. 
@@ -154,7 +151,7 @@ Function pointeren benyttes til at kalde lydeffektmodulerne, og den booleanske v
 For at tilføje en lydeffekt laves der en ny instans af $\mathtt{mcb\_t}$, og dens \textit{function pointer} sættes til at \textit{pointe} til lydeffekt rutinen.\newline
 \begin{figure}[!ht]
 	\centering
-	\includegraphics[width=\textwidth]{billeder/Flowchart_for_effektmoduler.png}
+	\includegraphics[width=0.8\textwidth]{billeder/Flowchart_for_effektmoduler.png}
 	\caption{Flowchart for iteration gennem effektmoduler}
 	\label{fig:effektmoduler}
 \end{figure}
