@@ -1,18 +1,18 @@
 \section{Opsummering}
 
 Det viste sig hurtigt at der er stor forskel på den ideelle verden og hvad der giver mening at implementere.
-Det viste sig at valget af en realistisk filter orden på både antialiasing og rekonstruktions filterne medførte at selv en diskret implementering af filterne som enkelte Sallen-Key bi-quad print var mulig at opnå.
+Det viste sig at valget af en realistisk filter orden på både anti-aliasing- og rekonstruktionsfiltrene medførte at selv en diskret implementering af filtrene som enkelte Sallen-Key bi-quad print var mulig at opnå.
 \\
-Der kan være (og er) mange meninger om hvilken filter topologi der er den bedste til lyd og hvor stor aliasing kan høres.
-Da produktet er et uddannelses projekt, er disse valg således gruppens rene subjektive holdning og ikke andet.
-Således giver et 6. ordens Chebyshev type I filter en tilstrækkelig dæmpning og en resulterende aliasing på  $5,4\si\percent$ ved filteres pasbåndfrekvens. 
+Der kan være (og er) mange meninger om, hvilken filter topologi der er den bedste til lyd og hvor stor aliasing kan høres.
+Da produktet er et uddannelsesprojekt, er disse valg således gruppens rene subjektive holdning og ikke andet.
+Således giver et 6. ordens Chebyshev type I filter en tilstrækkelig dæmpning og en resulterende aliasing på  $5,4\si\percent$ ved filterets pasbåndfrekvens. 
 
 %Implementeringen af enkelte filter prototype print viste sig at virke, selv om støj viste sig at være et problem.
 Implementeringen af enkelte filter prototype print fungerede, men støj viste sig at være et problem.
 Ligeledes var den resulterende Q-værdi i filterdesignet inden for et acceptabelt niveau og gav ikke nogen udfordring i forhold til den valgte Sallen-Key design metode. 
 %For at opnå en meget tæt værdi på filternes kondensatorer, blev det valgt at bruge et netværk med op til fire komponenter.
 For at opnå den mest muligt nøjagtige værdi for filtrenes kondensatorer, blev det valgt at bruge et netværk med op til fire komponenter.
-En sådan løsning er nok ikke nødvendigt, men der har desværre ikke været tid til at efterprøve, hvorvidt et reduceret antal komponenter med en tilnærmet værdi kunne anvendes i stedet. %for, ville virke lige så tilfredsstillende.
+En sådan løsning er nok ikke nødvendig, men det har desværre ikke været muligt inden for projektets tidsramme at efterprøve, hvorvidt et reduceret antal komponenter med en tilnærmet værdi kunne anvendes i stedet. %for, ville virke lige så tilfredsstillende.
 
 Derudover blev der produceret et indgangsled til at give indgangssignalet et niveau, som både filtrene og mikrocontrolleren kunne arbejde med, samt et udgangsled til at genskabe signalet igen.
 Denne signal tilpasning virkede efter hensigten.

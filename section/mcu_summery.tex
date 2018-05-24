@@ -18,20 +18,20 @@ Med en matchende 12bit DAC opnås en afbalanceret signalbehandling der passer fi
 Sammen med input og output trinnets signal tilpasning viste den valgte løsning sig at fungere efter hensigten.
 \\
 \\
-De enkelte effektmoduler holdes i en datastruktur indeholdende en \textit{function pointer} og en booleansk variabel.
-For hver gang der bliver samplet bliver der itereret over en array af effektmodul data strukturen, og de indeholdende routiner bliver kaldet i samplehandleren som set på figur (\ref{fig:effektmoduler}).\newline
-Det eneste der skal gøres for at tilføje et nyt modul er at tilføje et element til arrayen af effektmoduler, sætte \textit{function pointeren} til at pege på effektroutinen og sætte den boolske variable til $\mathtt{TRUE}$.
+De enkelte effektmoduler holdes i en datastruktur indeholdende en \textit{function pointer} og en boolsk variabel.
+For hver gang der bliver samplet bliver der itereret over et array af effektmodul data strukturen, og de indeholdende routiner bliver kaldet i samplehandleren som set på figur (\ref{fig:effektmoduler}).\newline
+Det eneste der skal gøres for at tilføje et nyt modul er at tilføje et element til arrayet af effektmoduler, sætte \textit{function pointeren} til at pege på effektroutinen og sætte den boolske variable til $\mathtt{TRUE}$.
 Outputtet af hver effekt bruges som input til den næste således at der opnås en kaskadekobling af effekterne.
 Denne implementering viste sig at kunne løse systemet modulære arkitektur 
 \\
-Et menu system er udviklet til enheden, bestående af en datastruktur i form af en datastruktur baseret på linked list princippet og en UI task der skriver menuen til displayet.
-Et modulært menu system er nødvendigt for at efterleve et modulæritet i effektmodulerne, dette er dog blevet nedprioriteret grundet projektets tidsrammer.
+Et menu system er udviklet til enheden, bestående af en datastruktur baseret på linked list princippet og en UI task der skriver menuen til displayet.
+Et modulært menu system er nødvendigt for at efterleve kravet om modulæritet i effektmodulerne, dette er dog blevet nedprioriteret grundet projektets tidsrammer.
 Hvis systemet skal videreudvikles, ville en større fleksibilitet på dette område være en af forbedringsområderne.
 \\
 \\
-Det har tidligt i projektet været et udgangspunkt at benytte så meget af EMP-printes funktionalitet, for derved at sætte fokus på dent egenlige implementering. 
-Derved skal input fra brugeren igennem to switches på TIVA-boardet, samt en drehimpulsgeber på EMP-boardet.
-Der bliver pullet på switchesne og events bliver genereret fra både ISR og tasks igennem et FreeRTOS styres data kø.
+Det har tidligt i projektet været et udgangspunkt at benytte så meget af EMP-printes funktionalitet, for derved at sætte fokus på den egenlige implementering. 
+Derved skal input fra brugeren igennem to switches på TIVA-boardet, samt en digiswitch på EMP-boardet.
+Der bliver pullet på switchene og events bliver genereret fra både ISR og tasks igennem en FreeRTOS styret data kø.
 \\
 For at kunne håndtere den langsomme kommunikation der er imellem mikrokontrolleren og LCD displayet, blev der implementeret en LCD driver task og modul. 
 LCD-driveren virker ved at write funktioner smider deres resultater over i en buffer.

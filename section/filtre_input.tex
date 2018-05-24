@@ -1,23 +1,23 @@
 \section{Input stage med pre-amp og DC-offset}
 \label{sec:inputstage}
 Systemet skal kunne modtage et signal fra en lydkilde, som afspiller lyd i det menneskeligt hørbare område. 
-Før signalet kan videreføres til anti aliasing filtrene, skal der være en mulighed for eventuelt at forstærke signalet med en operationsforstærker. 
+Før signalet kan videreføres til anti-aliasing filtrene, skal der være en mulighed for eventuelt at forstærke signalet med en operationsforstærker. 
 På den måde kan en fuld opløsning opnås ved den senere AD konvertering. 
 \newline
-Et almindeligt analogt lydsignal har generelt frekvenser mellem 20Hz og 20kHz, som svarer til det menneskeligt hørbare område. 
+Et almindeligt analogt lydsignal har generelt frekvenser mellem $20\si{Hz}$ og $20\si{\kilo Hz}$, som svarer til det menneskeligt hørbare område. 
 Signalets spænding varierer for forskellige kilder. 
-Der findes ingen officiel standard, men en del forbruger-elektronik har typisk en maksimal amplitude på 0,447V.\cite{wikiLine} 
+Der findes ingen officiel standard, men en del forbruger-elektronik har typisk en maksimal amplitude på $0,447\si{V}$.\cite{wikiLine} 
 \newline
-Da signalet skal læses af en "analog to digital converter" som kun kan aflæse spændingsværdier mellem 0V og 3,3V, var det praktisk at anvende en operationsforstærker med 3,3V single-supply.
-Dette betyder imidlertid at indggangsignalet der svinger omkring 0V skal påføres et offset således at forstærkeren ikke præsenteres for negative værdier.  
+Da signalet skal læses af en \textit{analog to digital converter} som kun kan aflæse spændingsværdier mellem $0\si{V}$ og $3,3\si{V}$, var det praktisk at anvende en operationsforstærker med $3,3\si{V}$ single-supply.
+Dette betyder imidlertid at indgangssignalet der svinger omkring $0\si{V}$ skal påføres et offset således at forstærkeren ikke præsenteres for negative værdier.  
 %Til forstærkningen benyttes en aktiv operationsforstærker med 3,3V single-supply. 
 %Men indgangssignalet fra lydkilden vil svinge omkring 0V. 
 %Derfor skal signalet have et offset, da signalet ellers vil blive klippet hver gang det går under 0V, da operationsforstærkeren ved single-supply ikke har mulighed for at have negative udgangssignaler. 
-Det ønskes at indgangssignalet har mulighed for at svinge både så højt og lavt som muligt, så offsettet designes til at være symmetrisk, med respekt til  forsyningsspændingen. 
+Det ønskes at indgangssignalet har mulighed for at svinge både så højt og lavt som muligt, så offsettet designes til at være symmetrisk med respekt til  forsyningsspændingen. 
 \begin{equation}
 	{V_{offset}} = \frac{V_{supply}}{2} = \frac{3,3\text{V}}{2} = 1,65\text{V}
 \end{equation}
-Ved et offset på 1,65V kan signalet ideelt have en maksimal amplitude på 1,65V. 
+Ved et offset på $1,65\si{V}$ kan signalet ideelt have en maksimal amplitude på $1,65\si{V}$. 
 %Herfra skal den valgte operationsforstærkers output swing i forhold til dens forsyningsspænding trækkes fra. (vender tilbage til det her når op-amp skal vælges)
 Ved at opbygge en spændingsdeler, kan offsettet skabes. 
 Kredsløbet kan ses i bilag \ref{bilag:diagram} under 'Input stages for venstre og højre kanal'.
@@ -26,8 +26,8 @@ Kredsløbet kan ses i bilag \ref{bilag:diagram} under 'Input stages for venstre 
 Operationsforstærkeren som skal forstærke signalet vælges ud fra en række krav. 
 
 \begin{itemize}
-	\item Forstærkeren skal kunne forsynes med  single-supply 3,3V
-	\item Båndbredden skal være minimum 44,1 kHz.
+	\item Forstærkeren skal kunne forsynes med  single-supply $3,3\si{V}$
+	\item Båndbredden skal være minimum $44,1\si{\kilo Hz}$.
 	\item Rail to rail voltage swing skal være så stort som muligt. 
 	\item Slew rate skal være hurtig nok til at signalet ikke forvrænges. 
 	\item Komponenten skal være tilgængelig som SMD komponent. 
@@ -77,14 +77,14 @@ f_c = \frac{1}{2\pi R C} = \frac{1}{2 \pi \frac{1}{\frac{1}{47k \Omega}+\frac{1}
 
 %Da de rekonstruerede signal stadigvæk er offset skal DC-værdien fjernes igen inden signalet føres ud af systemet.
 Da det rekonstruerede signal stadig har et offset skal DC-værdien fjernes igen inden signalet føres ud af systemet.
-Dette gøres ved at anvende en kondensator inden udgangen, dette danner et højpas led med belastningen på udgagen med en knækfrekvens der kan beregnes med ligning \ref{eq:fchp1}.
+Dette gøres ved at anvende en kondensator inden udgangen. Dette danner et højpas led med belastningen på udgangen med en knækfrekvens der kan beregnes med ligning \ref{eq:fchp1}.
 
 \begin{equation}
 	f_c = \frac{1}{2\pi RC}
 \label{eq:fchp1}
 \end{equation}
 
-Ved lidt søgning kan der findes frem til at indgangs impedansen på lyd forstærkere og lignende typisk ligger på $10\si{\kilo\ohm}$ og opefter.
+Ved lidt søgning kan der findes frem til at indgangs impedansen på lydforstærkere og lignende typisk ligger på $10\si{\kilo\ohm}$ og opefter.
 
 Knækfrekvensen skal gerne være på maksimum $20\si{\hertz}$.
 
@@ -96,7 +96,7 @@ Herefter kan ligning \ref{eq:fchp1} omskrives til ligning \ref{eq:fchp2}, for at
 \end{equation}
 
 Det findes så at kondensatoren skal være ca. 0,8\si\micro\farad.
-For nemhedens skyld valgtes en værdi på 1\si\micro\farad, da det er en let tilgængeligt standard værdi.
+For nemhedens skyld blev en værdi på 1\si\micro\farad valgt, da det er en let tilgængelig standardværdi.
 Med denne kondensator vil belastningen kunne være ned til cirka 8\si\kilo\ohm, før at knækfrekvensen vil overstige 20\si\hertz, hvilket overholder kravspecifikationen.
 
 
