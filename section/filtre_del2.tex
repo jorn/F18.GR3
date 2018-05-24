@@ -1,5 +1,5 @@
 \section{Design og implementering}\label{sec:filter_design}
-For at kunne implementere anti-alias lav pas filtrene i praksis blev det valgt at designe et 
+For at kunne implementere anti-alias lavpas filtrene i praksis blev det valgt at designe et 
 prototype print hertil. Da printet blev designet i starten af projektets forløb hvor filteret 
 endnu ikke var færdig dimensioneret, blev det valgt at designe et generisk Sallen-Key biquad 
 der kan anvendes til alle de fire, i litteraturen opgivet, designmetoder. Kredsløbet kan ses i 
@@ -10,15 +10,15 @@ figur \ref{fig:skbiquadsch}.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=.7\linewidth]{billeder/skbiquadsch}
-	\caption{Lav pas biquad prototype kredsløb}
+	\caption{Lavpas biquad prototype kredsløb}
 	\label{fig:skbiquadsch}
 \end{figure}
 
 Som det kan ses på figuren så er begge kondensatorer erstattet med en parallelforbindelse af 
-to serie forbundne kondensatorer. Dette valg gør at det langt nemmere at opnå en specific 
-kapacitans, ved at anvende op til fire kondensatorer fra rækken af værdier der er tilgængelig.
+to serieforbundne kondensatorer. Dette valg gør det langt nemmere at opnå en specifik 
+kapacitans ved at anvende op til fire kondensatorer fra rækken af værdier der er tilgængelige.
 
-Disse kondensatorer blev beregnet ved at lave et matlab script som finder alle mulige kombinationer, for de kondensatorer som var tilgængelig på SDU under projektets udførelse.
+Disse kondensatorer blev beregnet ved at lave et Matlab script som finder alle mulige kombinationer, for de kondensatorer som var tilgængeligt på SDU under projektets udførelse.
 
 Som det kan ses i tabel \ref{tab:kapvskap} bliver den faktiske kapacitans rigtig tæt på den
 beregnede, dog er der her ikke taget højde for usikkerheden i komponentværdierne.
@@ -55,13 +55,14 @@ samtidigt kan der laves flere forskellige ordener af filtret uden at skulle ænd
 
 Det færdige PCB design kan ses på figur \ref{fig:skbiquadpcb}. Her kortsluttes RB, og RA forbliver ikke forbundet, og så påsættes der selvfølgelig de beregnede komponenter for at opnå det specificerede filter bi-quad. 
 
-is man sammenligner resultaterne fra testen i bilag 
+Hvis man sammenligner resultaterne fra testen i bilag 
 \ref{sec:test_aafilter} med den beregnede filter karakteristik vist i figur 
 \ref{fig:filter_cheb1_denorm}, kan det ses at filteret i pasbåndet har en konstant dæmpning
-på ca. $3\si\decibel$. Denne dæmpning er senere fundet til at være pga. en for stor indgangs spænding under forsøget, hvilket har ført til at operationsforstærkerne i filteret er gået i mætning, der har dog ikke været tid til at lave nye målinger.
+på ca. $3\si\decibel$. Denne dæmpning er senere fundet til at være pga. en for stor indgangs spænding under forsøget, hvilket har ført til at operationsforstærkerne i filteret er gået i mætning. 
+Der har dog ikke været tid til at lave nye målinger.
 Dette kan der dog ses bort fra da karakteristikken ellers er korrekt bortset fra en forskydning på $3\si\decibel$. 
 Det leder hermed til at implementeringen af filteret overholder designet,
-da både knækfrekvensen og hældningen i mellem pas og stop bånd stemmer overens.
+da både knækfrekvensen og hældningen i mellem pas- og stopbånd stemmer overens.
 
 
 \begin{figure}[H]
@@ -74,14 +75,15 @@ da både knækfrekvensen og hældningen i mellem pas og stop bånd stemmer overe
 \section{Rekonstruktions filter}
 
 Når signalet skal genskabes efter behandling i mikroprocessoren gøres dette ved hjælp af en DAC (Digital to Analog Converter). 
-Måden denne virker på er ved at anvende et så kaldt sample-and-hold kredsløb,
-dette betyder at værdien der skal genskabes bliver sat og holdt i en
-tidsperiode ($T=\frac{1}{f_s}$), dette skaber en række firkant pulser som
+Måden denne virker på er ved at anvende et så kaldt sample-and-hold kredsløb.
+Det betyder at værdien der skal genskabes bliver sat og holdt i en
+tidsperiode ($T=\frac{1}{f_s}$). Dette skaber en række firkant pulser som
 illustreret til venstre i figur \ref{fig:samplholdrecon}.
 
-Her skabes dog så en masse højfrekvente komponenter som er uønskede, disse dele af signalet kan så filtreres fra, og derved "udglatte" signalet, ved at anvende et rekonstruktions lav-pas filter.
+Her skabes dog så en masse højfrekvente komponenter som er uønskede.
+Disse dele af signalet kan så filtreres fra, og derved ''udglatte'' signalet, ved at anvende et rekonstruktions lavpas filter.
 
-I praksis anvendes oftes det samme filter signal som anti-aliasing filteret,
+I praksis anvendes oftest det samme filter signal som anti-aliasing filteret,
 så længe at sampling frekvensen er konstant og bit opløsningen på DAC og ADC
 er ens. Dette er muligt da det rekonstruerede signal er i det samme frekvens
 spektrum som det der samples.
