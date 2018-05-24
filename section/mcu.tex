@@ -161,7 +161,7 @@ Således genskabes signalet som et digitalt PWM signal.
 
 \section{Modulær opbygning af effekter}
 Effektmodulerne holdes hver især i en \textit{module control block}, $\mathtt{mcb\_t}$,  som er en data struktur bestående af en \textit{function pointer} og en boolsk variabel.
-Functionspointeren benyttes til at kalde lydeffektmodulerne, og den booleanske variabel benyttes til at aktivere/deaktivere lydeffekterne.\newline
+Function pointeren benyttes til at kalde lydeffektmodulerne, og den boolske variabel benyttes til at aktivere/deaktivere lydeffekterne.\newline
 For at tilføje en lydeffekt laves der en ny instans af $\mathtt{mcb\_t}$, og dens \textit{function pointer} sættes til at \textit{pointe} til lydeffekt rutinen.\newline
 \begin{figure}[!ht]
 	\centering
@@ -173,7 +173,7 @@ For at tilføje en lydeffekt laves der en ny instans af $\mathtt{mcb\_t}$, og de
 På figur (\ref{fig:effektmoduler}) illustreres, hvordan de enkelte moduler bliver itereret over, hvis de er aktive.
 Hvori $\mathtt{MCB\_POOL\_SIZE}$ er antallet af moduler, $\mathtt{mcb\_pool}$ er et array af $\mathtt{mcb\_t}$ strukturer, $\mathtt{mcb\_pool.module}$ er en \textit{function pointeren}, $mathtt{mcb\_pool.active}$ er den \textit{boolske} variabel og $\mathtt{fp\_sample\_in}$ og $\mathtt{fp\_sample\_out}$ er hhv. input- og outputsamples.
 Grunden til, at outputtet fra hvert modul bliver sat som input til den næste, er et ønskes om at opnå en serielkobling af effekterne.
-For at tilføje et effektmodul, tilføjes et nyt element til $\mathtt{mcb\_pool}$, \textit{function pointerent} sættes til at \textit{pointe} til effektroutinen og den boolske variabel sættes til $\mathtt{TRUE}$.
+For at tilføje et effektmodul, tilføjes et nyt element til $\mathtt{mcb\_pool}$, \textit{function pointeren} sættes til at \textit{pointe} til effektroutinen og den boolske variabel sættes til $\mathtt{TRUE}$.
 
 \section{Genskabelse af signal via DAC igennem SPI}
 Genskabelsen af udgangssignalet fra mikorcontrolleren gøres igennem en ekstern 12bit DAC \texttt{MCP4922E/P}\footnote{Microchip MCP4922E/P 12-Bit Dual Voltage Output Digital-to-Analog Converter with SPI Interface \cite{mcp4922} }.
@@ -196,7 +196,7 @@ I figur \ref{fig:dac12bit_writecmd} ses den nødvendige kommando-bitsekvens med 
 	\label{fig:dac12bit_writecmd} 
 \end{figure} 
 
-I overensstemmelse med databladene for DAC'en og mikrokontrolleren, anvendes \emph{SPI Freescale Fame} formatet\footnote{Se afsnit 15.3.4 \cite[s. 954]{tm4c123gh6pm}} i \textbf{Mode 0,0}. 
+I overensstemmelse med databladene for DAC'en og mikrocontrolleren, anvendes \emph{SPI Freescale Frame} formatet\footnote{Se afsnit 15.3.4 \cite[s. 954]{tm4c123gh6pm}} i \textbf{Mode 0,0}. 
 
 
 
@@ -220,7 +220,7 @@ Når $\mathtt{state}$ når $16$ skrives der videre på næste linje.
 \label{sec:HID}
 %For at kunne anvende enheden skal enheden kunne udveksle nødvendige informationer med brugeren, input skal altså kunne modtages, her valgte gruppen at anvende en "drehimpulsgeber", og respons skal oplyses, her valgte gruppen et grafisk repræsenteret menu system.
 For at kunne anvende enheden skal enheden kunne udveksle nødvendige informationer med brugeren og input skal kunne modtages.
-Her valgte gruppen at anvende en "drehimpulsgeber" eller digiswitch, samt to switches.
+Her valgte gruppen at anvende en ``drehimpulsgeber'' eller digiswitch, samt to switches.
 Brugeren skal ligeledes kunne få information retur, her valgte gruppen et grafisk repræsenteret menu system.
 %En menu består en række valgmuligheder repræsenteret af elementer brugeren kan bladre igennem og vælge imellem.
 \\
