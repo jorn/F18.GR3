@@ -7,17 +7,17 @@ Det er desuden primært skrevet i programmeringssproget C, som også benyttes i 
 FreeRTOS benytter preemptive schedulering til at administrere CPU-tiden mellem tasks.
 Derudover tilbyder FreeRTOS en masse brugbare faciliteter såsom tasks, semaforer, event groups, stack overflow detection mm.\cite[Features Overview]{FreeRTOSfundamentals}.
 
-\section{Preemptive skedulering}
-FreeRTOS benytter en prioritetsbaseret preemptive skeduleringsalgoritme.
-Når et operativ system opererer med en preemptive skeduleringsalgoritme kan kørende tasks \textit{preemptes}, hvilket betyder tasken bliver stoppet og skiftet ud med en anden task af højere prioritet.\newline
+\section{Preemptive schedulering}
+FreeRTOS benytter en prioritetsbaseret preemptive scheduleringsalgoritme.
+Når et operativ system opererer med en preemptive scheduleringsalgoritme kan kørende tasks \textit{preemptes}, hvilket betyder tasken bliver stoppet og skiftet ud med en anden task af højere prioritet.\newline
 Det kan f.eks. være at en proces der har ventet på en I/O device får tilgang til denne.
 Scheduleren vil så skifte den nuværende, kørende proces ud og skifte den hidtil ventende proces ind fra \textit{ready queuen} og den gives CPU-tid.
 Dette gør scheduleren via et context switch.
 Når et context switch sker, gemmes ''konteksten`` af den nuværende task i en process control block (PCB), og ydermere sker der et \textit{state restore}, hvor informationen i PCBen af den task, der skal skiftes til hentes.
-Det som bliver gemt i PCBen er værdierne i CPU registrene (Program counter, etc.) og anden vigtig operativ systemsinformation.\newline
-Prioritetsbaseret skeduleringsalgoritmer tildeler alle tasks en prioritet som er baseret på taskens vigtighed.\newline
-FreeRTOS er et real-time operativ system og et primært formål ved real-time operativ systemer er at give et respons på begivenheder indenfor en vis deadline.
-FreeRTOS skeduleringsalgoritme sørger så for at den task med højest prioritet bliver givet processortid ligeså snart den bliver placeret i \textit{ready queuen}.
+Det som bliver gemt i PCBen er værdierne i CPU registrene (Program counter, etc.) og anden vigtig operativsystems information.\newline
+Prioritetsbaseret scheduleringsalgoritmer tildeler alle tasks en prioritet som er baseret på taskens vigtighed.\newline
+FreeRTOS er et real-time operativ system og et primært formål ved real-time operativ systemer er at give et respons på begivenheder indenfor en hvis deadline.
+FreeRTOS scheduleringsalgoritme sørger så for at den task med højeste prioritet bliver givet processortid ligeså snart den bliver placeret i \textit{ready queuen}.
 
 \section{Løsningsimplementering og task model}
 \begin{figure}[h]
@@ -58,26 +58,26 @@ Alt input fra HID\footnote{HID - Human Input Devices} enhederne på emp-printes 
 \label{fig:hid_msg_t}
 \end{figure}
 
-Datastrukturen \texttt{Menu} indeholder den dynamiske pointer struktur til menusystemet der bliver beskrevet i afsnit \ref{sec:HID} på side \pageref{sec:HID}, og datastrukturerne \texttt{System konfiguration} og \texttt{Modules} indeholder information til styring af systemet som helhed, herunder mono/stereo mode og hvilke enheder der er anvendes som audio ind/ud.
+Datastrukturen \texttt{Menu} indeholder den dynamiske pointer struktur til menusystemet der bliver beskrevet i afsnit \ref{sec:HID} på side \pageref{sec:HID}, og datastrukturerne \texttt{System konfiguration} og \texttt{Modules} indeholder information til styring af systemet som helhed, herunder mono/stereo mode og hvilke enheder der anvendes som audio ind/ud.
 
-LCD displayet bliver holdt opdateret af en \texttt{LCD} task, der løbende overfører tegn fra \texttt{LCD bufferen}, dette system er nærmere beskrevet i afsnit \ref{sec:LCD_driver}.
+LCD displayet bliver holdt opdateret af en \texttt{LCD} task, der løbende overfører tegn fra \texttt{LCD bufferen}. Dette system er nærmere beskrevet i afsnit \ref{sec:LCD_driver}.
 
 Den grundliggende timing og lydbehandling styres igennem \texttt{Sample Handler} ISR\footnote{ISR - Interrupt Service Routine}.
-Denne ISR sørger for at hente lyddata fra ADC'en, finder frem til hvilke moduler der skal medtages i databehandlingen og hvordan og til hvilke buffere, \texttt{Buffer} eller \texttt{Rev. Buffer} data skal gemmes i.
+Denne ISR sørger for at hente lyddata fra ADC'en og finder frem til hvilke moduler der skal medtages i databehandlingen samt rækkefølgen disse tilføres signalet. %og hvordan og til hvilke buffere, \texttt{Buffer} eller \texttt{Rev. Buffer} data skal gemmes i.
 Der vil i de efterfølgende afsnit komme en mere uddybende gennemgang for hver af systemets tasks og implementeringer. 
 
 
-\section{Interrupt eksekvering og task skedulering}
+\section{Interrupt eksekvering og task schedulering}
 \label{subsec:int_task}
 Figur \ref{fig:int_task} viser hvordan tasks og interrupts håndteres i FreeRTOS. 
 Til tiden t1 kører en lavt prioriteret task. 
 Ved t2 bliver en interrupt service rutine, fremover kaldet en ISR, kaldt. 
-ISRen prioriteres højest, og den lavt prioriteret task pauses indtil ISR'en er færdig.
-ISR'eren er færdig til tiden t3, hvor den lavt prioriteret task kan genoptages.
+ISRen prioriteres højst, og den lavt prioriterede task pauses indtil ISR'en er færdig.
+ISR'eren er færdig til tiden t3, hvor den lavt prioriterede task kan genoptages.
 Ved t4 sker et context switch til en højere prioriteret task.
-Skeduleringen mellem tasks er styret af FreeRTOS scheduler med respekt til den prioritet, som hver task er givet. 
+Scheduleringen mellem tasks er styret af FreeRTOS scheduler ud fra den prioritet, som hver task er givet. 
 Interrupts prioriteres højere end alle tasks, uanset prioriteten af den pågældende task. 
-Interrupts har også prioriteter i mellem sig, såfremt flere skulle blive kaldt. 
+Interrupts har også prioriteter i mellem sig, såfremt flere skulle blive kaldt samtidig. 
 Modsat tasks, vil en interrupt dog altid afsluttes, før den næste kan begynde. 
 ARM Cortex-M4 tilbyder otte interrupt prioriteter. 
 \begin{figure}[h]
@@ -110,7 +110,7 @@ Mikrocontrolleren har to identiske ADC moduler, som opererer uafhængigt af hina
 De kan derfor sample på samme tidspunkt. 
 ADC'erne er opbygget med Successive Approximation Register arkitektur, som leverer en opløsning på $12$-bit, hvilket giver $4096$ mulige steps i det digitale resultat. 
 ADC'ens interne forsyningsspænding og ground er på henholdsvis $3,3\si{V}$ og $0\si{V}$, hvilket samtidig er den maksimale og minimale spændingsreference, som ADC'en kan læse. 
-Stepsizen er $\Delta$ er udregnet i formel \ref{eq:ADC_res}.
+Stepsizen $\Delta$ er udregnet i formel \ref{eq:ADC_res}.
 \begin{equation}
 \label{eq:ADC_res}
 	\Delta = \frac{X_{maks}-X_{min}}{steps} = \frac{3\text{V}-0\text{V}}{4096} = 0,73\text{mV}
@@ -129,7 +129,7 @@ Yderligere samples ville ikke være brugbare, fordi de ville være målt på et 
 \subsection{ISR sample handler og ADC}
 Som nævnt i afsnit \ref{subsec:int_task}, vil det timerstyrede interrupt kalde sample handler rutinen.
 I rutinen startes samplingen som det allersidste. 
-Det betyder at data fra samplingen bliver gemt i sequence 3 registeret indtil næste gang interruptet kaldes. 
+Det betyder at data fra samplingen bliver gemt i sequence 3 registret indtil næste gang interruptet kaldes. 
 Næste gang interruptet kaldes, gemmes data i en variabel, og en ny AD konvertering bliver herefter igen udført. 
 Fordelen er at hver gang ISR'en bliver kaldt, vil samplen ligge klar.
 Der skal ikke ventes på en konvertering. 
@@ -142,13 +142,13 @@ Det betyder også at forsinkelsen fra en konvertering bliver konstant. Forsinkel
 	\caption{\label{fig:PWMfromtimer}Generering af PWM-signal ud fra timer. }
 \end{wrapfigure}
 Værdien af den modtagede sample fra AD konverteringen vil have et offset pga. DC forskydningen ved input stage, som tidligere beskrevet i afsnit \ref{sec:inputstage}.
-Offsettet fjernes igen ved at trække $\frac{4096}{2} = 2048$ fra resultatet af AD konverteringen. 
+Offsettet fjernes nu digitalt ved at trække $\frac{4096}{2} = 2048$ fra resultatet af AD konverteringen. 
 Resultatet gemmes som en værdi af data typen \texttt{float}. 
 
 \subsection{Sample handler og processortid}
-Da sample handleren kører periodisk i form af en ISR, har den højest prioritet til processortid, derfor skal alle andre processoropgaver foregå i den mellemliggende tid.
+Da sample handleren kører periodisk i form af en ISR, har den højeste prioritet til processortid, og derfor skal alle andre processoropgaver foregå i den mellemliggende tid.
 %Da sample handleren kører periodisk, og i form af en ISR har højeste prioritet til processortid, skal alle andre processoropgaver foregå i al den mellemliggende tid. 
-Det betyder at sample handleren og AD konverteringen skal være tidseffektiv, således andre tasks kan nå at køre færdig, inden sample handleren kaldes igen. 
+Det betyder at sample handleren og AD konverteringen skal være tidseffektiv, således at andre tasks kan nå at køre færdig, inden sample handleren kaldes igen. 
 Ved hjælp af timer 3, udregnes rutinens procentuelle andel af processortiden, hvilket kan skrives ud til brugeren ved brug af LCD displayet. 
 Den benyttede tid vil desuden være afhængig af antallet af modulære effekter, som også skal processeres i sample handleren. 
 
