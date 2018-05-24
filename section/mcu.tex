@@ -10,7 +10,7 @@ Derudover tilbyder FreeRTOS en masse brugbare faciliteter såsom tasks, semafore
 \section{Preemptive schedulering}
 FreeRTOS benytter en prioritetsbaseret preemptive scheduleringsalgoritme.
 Når et operativ system opererer med en preemptive scheduleringsalgoritme kan kørende tasks \textit{preemptes}, hvilket betyder tasken bliver stoppet og skiftet ud med en anden task af højere prioritet.\newline
-Det kan f.eks. være at en proces der har ventet på en I/O device får tilgang til denne.
+Det kan f.eks. være at en proces der har ventet på et I/O device får tilgang til denne.
 Scheduleren vil så skifte den nuværende, kørende proces ud og skifte den hidtil ventende proces ind fra \textit{ready queuen} og den gives CPU-tid.
 Dette gør scheduleren via et context switch.
 Når et context switch sker, gemmes ''konteksten`` af den nuværende task i en process control block (PCB), og ydermere sker der et \textit{state restore}, hvor informationen i PCBen af den task, der skal skiftes til hentes.
@@ -28,7 +28,8 @@ FreeRTOS scheduleringsalgoritme sørger så for at den task med højeste priorit
 \end{figure}
 Figur \ref{fig:taskmodel} viser en oversigt over de tasks, der kører i løsningen.
 Som udgangspunkt ligger \texttt{UI} tasken som den centrale del der styrer konfigurationen og menusystemet.
-Alt input fra HID\footnote{HID - Human Input Devices} enhederne på emp-printes - tastatur, switches og digiswitch, bliver sendt ind i en kø med en fast defineret datastruktur som set i figur \ref{fig:hid_msg_t}, og som \texttt{UI} tasken således er forbruger af.
+Alt input fra HID\footnote{HID - Human Input Devices} enhederne på emp-printets - tastatur, switches og digiswitch, bliver sendt ind i en kø med en fast defineret datastruktur som set i figur \ref{fig:hid_msg_t}, og som \texttt{UI} tasken således er forbruger af.
+
 \lstset{language=C,
 	frame=sigle,
 	basicstyle=\ttfamily\tiny,
@@ -44,6 +45,7 @@ Alt input fra HID\footnote{HID - Human Input Devices} enhederne på emp-printes 
 	commentstyle=\color{OliveGreen}\ttfamily,
 	morecomment=[l][\color{magenta}]{\#}
 }
+
 \begin{figure}[h!]
 \begin{tabular}{l}
 	\begin{lstlisting}
@@ -97,7 +99,7 @@ For at sikre, at mikrocontrolleren sætter alle andre opgaver på pause, og den 
 ISR'en indstilles med den højest mulige interrupt prioritet. 
 Timingen af ISR'en er styret af Timer 3. 
 Timeren er implementeret som en 16-bit timer i periodic timer mode, edge-count mode og inverted PWM mode.
-Ved start hentes timerens start value ind i et tælleregister. 
+Ved start hentes timerens start værdi ind i et tælleregister. 
 Sample-frekvensen og CPU frekvensen styrer værdien. 
 \begin{equation}
 	\text{Timer start value register} = \frac{\text{CPU'ens frekvens}}{\text{Sample-frekvens}} = \frac{80\text{MHz}}{44,1\text{kHz}} \simeq 1814
