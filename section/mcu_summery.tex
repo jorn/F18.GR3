@@ -19,10 +19,10 @@ Sammen med input og output trinnets signal tilpasning viste den valgte løsning 
 \\
 \\
 De enkelte effektmoduler holdes i en datastruktur indeholdende en \textit{function pointer} og en boolesk variabel.
-For hver gang der bliver samplet bliver der itereret over et array af effektmodul data strukturen, og de indeholdende routiner bliver kaldet i samplehandleren som set på figur (\ref{fig:effektmoduler}).\newline
+For hver gang der bliver samplet bliver der itereret over et array af effektmodul data strukturen, og de indeholdende routiner bliver kaldet i samplehandleren som set på figur \ref{fig:effektmoduler}.\newline
 Det eneste der skal gøres for at tilføje et nyt modul er at tilføje et element til arrayet af effektmoduler, sætte \textit{function pointeren} til at pege på effektroutinen og sætte den boolske variable til $\mathtt{TRUE}$.
 Outputtet af hver effekt bruges som input til den næste således at der opnås en kaskadekobling af effekterne.
-Denne implementering viste sig at kunne løse systemet modulære arkitektur 
+Denne implementering viste sig at kunne løse systemets modulære arkitektur 
 \\
 Et menu system er udviklet til enheden, bestående af en datastruktur baseret på linked list princippet og en UI task der skriver menuen til displayet.
 Et modulært menu system er nødvendigt for at efterleve kravet om modulæritet i effektmodulerne, dette er dog blevet nedprioriteret grundet projektets tidsrammer.

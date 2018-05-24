@@ -247,7 +247,7 @@ I dette tilfælde seriekobles 3 filtre.
 Her er det valgt at anvende Sallen-Key lavpas biquads,
 da disse kan realiseres ved hjælp af flere forskellige designmetoder, præsenteret 
 i læreborgen 'Analog filters, second edition'\cite{KendallSu}.
-En generisk Sallen-Key lavpas biquad ser ud som i figur\ref{fig:sklpbq}.
+En generisk Sallen-Key lavpas biquad ser ud som i figur \ref{fig:sklpbq}.
 
 \begin{figure}[H]
 	\centering
@@ -257,7 +257,7 @@ En generisk Sallen-Key lavpas biquad ser ud som i figur\ref{fig:sklpbq}.
 \end{figure}
 
 Det blev valgt at anvende design metode 4 fra litteraturen, minimum sensitivitet.
-Denne designmetode gør filteret mindre sensitiv over for variationer i komponenter ved bl.a.
+Denne designmetode gør filteret mindre sensitivt over for variationer i komponenter ved bl.a.
 at anvende enhedsforstærkning for derfor at undvære $R_a$ og $R_b$.
 Det vælges at $R_1 = R_2$ der fastsættes til $1\si{\ohm}$. Herefter findes $C_1$ og $C_2$ ved hjælp af ligning \ref{eq:dm4c1} og \ref{eq:dm4c2}.
 
@@ -290,11 +290,11 @@ Med de beregnede $Q$ og $\omega_o$ i ligning \ref{eq:q_and_w_norm}, kan $C_{n1}$
 Resultatet ses i tabel \ref{tab:sallen_key} kolonne 1 og 2.
 \\
 \\
-Under arbejdet med filterdesign opstod der en fortolkningsfejl mellem det anvendte designmetode og de beregnede 2. ordens systemer fra Matlab.
+Under arbejdet med filterdesign opstod der en fortolkningsfejl mellem den anvendte designmetode og de beregnede 2. ordens systemer fra Matlab.
 Dette resulterede i en amplitude karakteristik på det valgte 6. ordens filter som ikke stemte overens med forventningerne.
 Således blev et andet sæt normaliserede kondensator værdier anvendt til fremstillingen af løsningens bi-quad filter print.
 De anvendte værdier ses i tabel \ref{tab:sallen_key} kolonne 3 og 4 og er taget fra \cite[Table B-2: Capacitor Values for 0.1-dB Chebyshev lowpass Sallen-Key filters, n=6]{sk_data_web}
-
+\todo[EC]{er det meningen at denne reference skal se sådan her ud?}
 \begin{table}[h!]
 	\centering
 	\caption{Normerede kondensator værdier for Chebyshev LPF Type I Sallen-Key, $0,1\si{\decibel}$ ripple.}
