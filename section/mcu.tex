@@ -160,8 +160,8 @@ Den værdi kommer fra den periodiske sampling af lydsignalet gennem ADC'en, hvor
 Således genskabes signalet som et digitalt PWM signal. 
 
 \section{Modulær opbygning af effekter}
-Effektmodulerne holdes hver især i en \textit{module control block}, $\mathtt{mcb\_t}$,  som er en data struktur bestående af en \textit{function pointer} og en boolsk variabel.
-Function pointeren benyttes til at kalde lydeffektmodulerne, og den boolske variabel benyttes til at aktivere/deaktivere lydeffekterne.\newline
+Effektmodulerne holdes hver især i en \textit{module control block}, $\mathtt{mcb\_t}$,  som er en data struktur bestående af en \textit{function pointer} og en boolesk variabel.
+Function pointeren benyttes til at kalde lydeffektmodulerne, og den booleske variabel benyttes til at aktivere/deaktivere lydeffekterne.\newline
 For at tilføje en lydeffekt laves der en ny instans af $\mathtt{mcb\_t}$, og dens \textit{function pointer} sættes til at \textit{pointe} til lydeffekt rutinen.\newline
 \begin{figure}[!ht]
 	\centering
@@ -171,17 +171,17 @@ For at tilføje en lydeffekt laves der en ny instans af $\mathtt{mcb\_t}$, og de
 \end{figure}
 
 På figur (\ref{fig:effektmoduler}) illustreres, hvordan de enkelte moduler bliver itereret over, hvis de er aktive.
-Hvori $\mathtt{MCB\_POOL\_SIZE}$ er antallet af moduler, $\mathtt{mcb\_pool}$ er et array af $\mathtt{mcb\_t}$ strukturer, $\mathtt{mcb\_pool.module}$ er en \textit{function pointeren}, $mathtt{mcb\_pool.active}$ er den \textit{boolske} variabel og $\mathtt{fp\_sample\_in}$ og $\mathtt{fp\_sample\_out}$ er hhv. input- og outputsamples.
+Hvori $\mathtt{MCB\_POOL\_SIZE}$ er antallet af moduler, $\mathtt{mcb\_pool}$ er et array af $\mathtt{mcb\_t}$ strukturer, $\mathtt{mcb\_pool.module}$ er en \textit{function pointeren}, $mathtt{mcb\_pool.active}$ er den booleske variabel og $\mathtt{fp\_sample\_in}$ og $\mathtt{fp\_sample\_out}$ er hhv. input- og outputsamples.
 Grunden til, at outputtet fra hvert modul bliver sat som input til den næste, er et ønskes om at opnå en serielkobling af effekterne.
-For at tilføje et effektmodul, tilføjes et nyt element til $\mathtt{mcb\_pool}$, \textit{function pointeren} sættes til at \textit{pointe} til effektroutinen og den boolske variabel sættes til $\mathtt{TRUE}$.
+For at tilføje et effektmodul, tilføjes et nyt element til $\mathtt{mcb\_pool}$, \textit{function pointeren} sættes til at \textit{pointe} til effektroutinen og den booleske variabel sættes til $\mathtt{TRUE}$.
 
 \section{Genskabelse af signal via DAC igennem SPI}
-Genskabelsen af udgangssignalet fra mikorcontrolleren gøres igennem en ekstern 12bit DAC \texttt{MCP4922E/P}\footnote{Microchip MCP4922E/P 12-Bit Dual Voltage Output Digital-to-Analog Converter with SPI Interface \cite{mcp4922} }.
+Genskabelsen af udgangssignalet fra mikrocontrolleren gøres igennem en ekstern 12bit DAC \texttt{MCP4922E/P}\footnote{Microchip MCP4922E/P 12-Bit Dual Voltage Output Digital-to-Analog Converter with SPI Interface \cite{mcp4922} }.
 Den valgte DAC har en maksimal indsvingningstid på $t_{settling} = \num{4.5}\si{\micro\second}$, hvilket passer fint til samplingsperioden på $T_s = 23\si{\micro\second}$. 
 \\
 Spændingsdifferencen for LSb\footnote{LSb - Least Significant Bit} er $ V_{LSb} = V_{ref} / 4096 \approx \num{0,8}\si{\milli\volt} $, ved den anvendte referencespænding på $V_{ref} = 3,3\si{\volt}$. 
 \\
-Ifølge databladet er datakommunikation op til $20\si{\mega\hertz}$ mulig, men SPI port konfigurationen på MCU'en sættes til $10\si{\mega\hertz}$ og forbindes direkte til mikrokontrolleren via en SPI bus - De valgte pins er beskrevet i bilag \ref{bilag:pinmap}. 
+Ifølge databladet er datakommunikation op til $20\si{\mega\hertz}$ mulig, men SPI port konfigurationen på MCU'en sættes til $10\si{\mega\hertz}$ og forbindes direkte til mikrocontrolleren via en SPI bus - De valgte pins er beskrevet i bilag \ref{bilag:pinmap}. 
 En SPI clockfrekvens på $F_{SCK} = 10\si{\mega\hertz}$, giver en datatransmissionstid $t_{cmd}$ af SPI kommandoen for begge lydkanaler på minimum på  
 \begin{align} 
 t_{cmd} = \frac{N_{kanal} \cdot 16bit}{F_{SCK}} = \frac{2 \cdot 16}{10\si{\mega\hertz}} = 3\si{\micro\second} 
@@ -250,22 +250,24 @@ Drehimpulsgeberen kan anvendes til at producere 4 forskellige typer af input, dr
 	\label{fig:uistatemachine} 
 \end{wrapfigure}
 
-Når et input  modtages af programmet, lægges det i en input kø til systemet er klar til at modtage input. Er der tale om et ''Dl`` fremvises foregående element i menuen, på samme måde anvendes et ''Dr`` input til at gå til næste element i menuen. Et click anvendes til at vælge det nuværende element og et langt tryk til at gå tilbage fra undermenuer.
+Når et input  modtages af programmet, lægges det i en input kø til systemet er klar til at modtage input.
+Er der tale om et ''Dl`` fremvises foregående element i menuen, på samme måde anvendes et ''Dr`` input til at gå til næste element i menuen. 
+Et click anvendes til at vælge det nuværende element og et langt tryk til at gå tilbage fra undermenuer.
 
-I figur \ref{fig:uistatemachine} ses den state machine der styre UI.
-UI'en der skrives til displayet afhænger af hvilken state der er aktiv.
+I figur \ref{fig:uistatemachine} ses den state machine der styrer UI.
+UI'en der skrives til displayet afhænger af, hvilken state der er aktiv.
 
-I staten \texttt{MENU} vises det overordnede menu system, styret af drehimpulsgeberen. 
+I staten \texttt{MENU} vises det overordnede menu system styret af drehimpulsgeberen. 
 Er \texttt{STATUS} staten aktiv vises en skærm hvor CPU loaden kan læses.
 \texttt{FUNCTION} staten aktiveres, hvis der vælges en funktion i menusystemet. 
-I denne state, bliver en funktion kaldt fra et af effektmodulerne. 
-Denne funktion skriver selv input, og  UI til displayet.
+I denne state bliver en funktion kaldt fra et af effektmodulerne. 
+Denne funktion skriver selv input, og UI til displayet.
 Når denne funktion ikke længere skal bruges, hvis brugeren for eksempel går tilbage, vil state machinen skifte tilbage til \texttt{MENU}.
-\texttt{SW2$\_$FUNC} fungere på samme måde. \newline
+\texttt{SW2$\_$FUNC} fungerer på samme måde. \newline
 Tryk på de to switches og den integrerede switch i drehimpulsgeberen håndteres af tre identiske state machines, et diagram over statemachinen ses på figur \ref{fig:SW_statemachine}.
 
-Rotation af drehimpulsgeberen generere impulser på to forskellige pins henholsvis A og B.
-Afhængig af rotationsretningen skifter de ene før den anden. 
+Rotation af drehimpulsgeberen genererer impulser på to forskellige pins henholsvis A og B.
+Afhængig af rotationsretningen skifter den ene før den anden. 
 Et interrupt er sat til at trigger på både stigende og faldende flanker af pin A.
 Interrupthandleren Følger algoritmen der ses på figur \ref{fig:digiFlow}.\newline
 \begin{figure}[!ht]
