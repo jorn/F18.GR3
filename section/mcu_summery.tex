@@ -10,10 +10,16 @@
 
 
 \subsection{Intterrupt eksekvering og task skedulering}
-
+Det indgående lydsignal samples periodisk på samme tidspunkt i hver periode. 
+Det gøres ved hjælp af en ISR med højeste prioritet, som også er prioriteret over tasks. 
+Timingen af ISR er kontrolleret af Timer 3.
+Timeren er implementeret således, at der opnås en samplefrekvens på 44,1kHz. 
+Alle andre processor opgaver skal derfor foregå i tiden mellem hver gang ISR sample handler rutinen kører. 
 
 \subsection{Sampling af lydsignal igennem ADC}
-
+Til sampling af signalet benyttes to 12-bit ADC moduler. 
+Samplingen startes ved et processor event, som foregår i ISR sample handler rutinen. 
+Det samplede data indeholder et offset fra input stage, som efter samplingen fjernes. 
 
 \subsection{Modulær opbygning af effekter}
 
