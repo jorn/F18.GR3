@@ -8,9 +8,11 @@ Et almindeligt analogt lydsignal har generelt frekvenser mellem 20Hz og 20kHz, s
 Signalets spænding varierer for forskellige kilder. 
 Der findes ingen officiel standard, men en del forbruger-elektronik har typisk en maksimal amplitude på 0,447V.\cite{wikiLine} 
 \newline
-Til forstærkningen benyttes en aktiv operationsforstærker med 3,3V single-supply. 
-Men indgangssignalet fra lydkilden vil svinge omkring 0V. 
-Derfor skal signalet have et offset, da signalet ellers vil blive klippet hver gang det går under 0V, da operationsforstærkeren ved single-supply ikke har mulighed for at have negative udgangssignaler. 
+Da signalet skal læses af en "analog to digital converter" som kun kan aflæse spændingsværdier mellem 0V og 3,3V, var det praktisk at anvende en operationsforstærker med 3,3V single-supply.
+Dette betyder imidlertid at indggangsignalet der svinger omkring 0V skal påføres et offset således at forstærkeren ikke præsenteres for negative værdier.  
+%Til forstærkningen benyttes en aktiv operationsforstærker med 3,3V single-supply. 
+%Men indgangssignalet fra lydkilden vil svinge omkring 0V. 
+%Derfor skal signalet have et offset, da signalet ellers vil blive klippet hver gang det går under 0V, da operationsforstærkeren ved single-supply ikke har mulighed for at have negative udgangssignaler. 
 Det ønskes at indgangssignalet har mulighed for at svinge både så højt og lavt som muligt, så offsettet designes til at være symmetrisk, med respekt til  forsyningsspændingen. 
 \begin{equation}
 	{V_{offset}} = \frac{V_{supply}}{2} = \frac{3,3\text{V}}{2} = 1,65\text{V}
@@ -18,9 +20,9 @@ Det ønskes at indgangssignalet har mulighed for at svinge både så højt og la
 Ved et offset på 1,65V kan signalet ideelt have en maksimal amplitude på 1,65V. 
 %Herfra skal den valgte operationsforstærkers output swing i forhold til dens forsyningsspænding trækkes fra. (vender tilbage til det her når op-amp skal vælges)
 Ved at opbygge en spændingsdeler, kan offsettet skabes. 
-Kredsløbet kan ses i bilag \ref{bilag:diagram} i kassen 'Input stages for venstre og højre kanal'.
+Kredsløbet kan ses i bilag \ref{bilag:diagram} under 'Input stages for venstre og højre kanal'.
 
-\subsubsection{Valg af operationsforstærker til forstærkning af indgangssignalet}
+\subsubsection{Valg af operationsforstærker}
 Operationsforstærkeren som skal forstærke signalet vælges ud fra en række krav. 
 
 \begin{itemize}
@@ -44,12 +46,11 @@ Havde der været mere tid, kunne det have været bestilt hjem.
 
 \subsubsection{Beregning af forstærkning}
 For at forstærke signalet, opsættes operationsforstærkeren som en ikke-inverterende forstærker. 
-Da indgangssignalets maksimale amplitude vil variere alt efter input, skal forstærkningens styrke kunne justeres. 
+Da indgangssignalets maksimale amplitude vil variere alt efter hvilken kilde det leveres af, skal forstærkningen kunne justeres. 
 Derfor sættes en variabel modstand i serie med feedback-modstanden. 
-Det ses i bilag \ref{bilag:diagram}. 
-Den variable modstand kan gå fra at være tæt på kortsluttet og op til 100k$\Omega$.
+Den valgte variable modstand kan gå fra tilnærmelsesvist at tilsvare en kortslutning og op til 100k$\Omega$.
 For at undgå en kortslutning fra operationsforstærkerens output og til den inverterende indgang, er den variable modstand sat i serie med en feedback-modstand på 5k$\Omega$. 
-$R_2$ er valgt til 47k$\Omega$, så modstanden matcher modstanden fra højpasfilteret. 
+$R_2$ er valgt til 47k$\Omega$, så $R_2$ matcher modstanden fra højpasfilteret. 
 I formel \ref{eq:Aminfors} og \ref{eq:Aminfors} ses den mulige maksimum- og minimumsforstærkning.
 
 \begin{equation}
@@ -62,18 +63,20 @@ A_{min.} = 1 + \frac{R_{feedback}}{R_2} = 1 + \frac{5\text{k} \Omega}{47\text{k}
 \end{equation}
 
 \subsubsection{Højpas filter-design}
-Mellem inputtet og operationsforstærkeren sidder en kapacitor, som blokerer for al DC fra indgangssignalet. 
-Som det ses i bilag \ref{bilag:diagram}, vil kapacitoren og modstandene fra offsettet udgøre et højpas filter. 
+Mellem inputtet og operationsforstærkeren sidder en kondensator, som blokerer DC fra indgangssignalet. 
+Som det ses i bilag \ref{bilag:diagram}, vil kondensatoren og modstandene fra offsettet udgøre et højpas filter. 
 Filterets knækfrekvens sættes så lavt, at alle frekvenser i det hørbare område ikke påvirkes. 
 Ved AC-analyse kortsluttet forsyningen. Derfor sidder modstandene $R1$ og $R2$ parallelt.
-Det endelige kredsløb er kopieret, således der er to udgange for at opnå stereo. 
+%Det endelige kredsløb er kopieret, således der er to udgange for at opnå stereo. 
+Stereo blev således opnået ved at anvende to eksemplarer af kredsløbet, en for henholdsvis højre og venstre lydkanal.
 \begin{equation}
 f_c = \frac{1}{2\pi R C} = \frac{1}{2 \pi \frac{1}{\frac{1}{47k \Omega}+\frac{1}{47k \Omega}}  470\text{nF}} = 14,1\text{Hz}
 \end{equation}
 
 \section{Output stage}
 
-Da de rekonstruerede signal stadigvæk er offset skal DC-værdien fjernes igen inden signalet føres ud af systemet.
+%Da de rekonstruerede signal stadigvæk er offset skal DC-værdien fjernes igen inden signalet føres ud af systemet.
+Da det rekonstruerede signal stadig har et offset skal DC-værdien fjernes igen inden signalet føres ud af systemet.
 Dette gøres ved at anvende en kondensator inden udgangen, dette danner et højpas led med belastningen på udgagen med en knækfrekvens der kan beregnes med ligning \ref{eq:fchp1}.
 
 \begin{equation}
@@ -94,7 +97,7 @@ Herefter kan ligning \ref{eq:fchp1} omskrives til ligning \ref{eq:fchp2}, for at
 
 Det findes så at kondensatoren skal være ca. 0,8\si\micro\farad.
 For nemhedens skyld valgtes en værdi på 1\si\micro\farad, da det er en let tilgængeligt standard værdi.
-Med denne kondensator vil belastningen kunne være ned til cirka 8\si\kilo\ohm, før at knækfrekvensen vil overstige 20\si\hertz, Hvilket overholder kravspecifikationen for denne.
+Med denne kondensator vil belastningen kunne være ned til cirka 8\si\kilo\ohm, før at knækfrekvensen vil overstige 20\si\hertz, hvilket overholder kravspecifikationen.
 
 
 
