@@ -163,7 +163,7 @@ På figur (\ref{fig:effektmoduler}) illustreres det, hvordan de enkelte moduler 
 Hvori $\mathtt{MCB\_POOL\_SIZE}$ er antal af moduler, $\mathtt{mcb\_pool}$ er en array af $\mathtt{mcb\_t}$ strukturer, $\mathtt{mcb\_pool.module}$ er \textit{function pointeren}, $mathtt{mcb\_pool.active}$ er den \textit{booleanske} variabel og $\mathtt{fp\_sample\_in}$ og $\mathtt{fp\_sample\_out}$ er hhv. input- og outputsamples.
 Grunden til at outputtet fra hver modul bliver sat til input, er at det ønskes at opnå en seriel kobling af effekterne.
 
-\subsection{Generering af PWM-signal til DAC}
+\section{Generering af PWM-signal til DAC}
 Timeren benyttes desuden til at generere et PWM-signal, hvis duty cycle er styret af timeren og resultatet af A/D konverteringen af indgangssignalet. 
 \begin{wrapfigure}[15]{r}{0.5\textwidth}
 	\centering
