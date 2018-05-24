@@ -261,15 +261,6 @@ Interrupthandleren Følger algoritmen der ses på figur \ref{fig:digiFlow}.\newl
 	\end{minipage}
 \end{figure}
 \pagebreak
-\section{Opsummering}
-FreeRTOS' scheduleringsalgoritme er en prioritetsbaseret preemptive scheduler.
-Dette vil sige at hver task bliver givet en prioritet, og hvis en task med en højere prioritet kommer i ready queuen bliver den nuværende task \textit{preemptet}.
 
 
-De enkelte effektmoduler holdes i en datastruktur indeholdende en \textit{function pointer} og en booleansk variabel.
-For hver gang der bliver samplet bliver der itereret over en array af effektmodul data strukturen, og de indeholdende routiner bliver kaldet i samplehandleren som set på figur (\ref{fig:effektmoduler}).\newline
-Det eneste der skal gøres for at tilføje et nyt modul er at tilføje et element til arrayen af effektmoduler, sætte \textit{function pointeren} til at pege på effektroutinen og sætte den booleanske variable til true.
-Outputtet af hver effekt bruges som input til den næste således at der opnås en kaskadekobling.\newline
 
-LCD-driveren virker ved at write funktioner smider deres resultater over i en buffer.
-Når LCD-tasken kører bliver der itereret gennem bufferen, og indholdet af bufferen bliver skrevet ud på LCDen som vist via. figur (\ref{fig:LCD_state_machine}).
