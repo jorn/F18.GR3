@@ -162,6 +162,7 @@ For at tilføje en lydeffekt laves der en ny instans af $\mathtt{mcb\_t}$, og de
 På figur (\ref{fig:effektmoduler}) illustreres det, hvordan de enkelte moduler bliver itereret over, hvis de er aktive.
 Hvori $\mathtt{MCB\_POOL\_SIZE}$ er antal af moduler, $\mathtt{mcb\_pool}$ er en array af $\mathtt{mcb\_t}$ strukturer, $\mathtt{mcb\_pool.module}$ er \textit{function pointeren}, $mathtt{mcb\_pool.active}$ er den \textit{booleanske} variabel og $\mathtt{fp\_sample\_in}$ og $\mathtt{fp\_sample\_out}$ er hhv. input- og outputsamples.
 Grunden til at outputtet fra hver modul bliver sat til input, er at det ønskes at opnå en seriel kobling af effekterne.
+For at tilføje et effektmodul oprettes tilføjes der et nyt element til $\mathtt{mcb\_pool}$, \textit{function pointerent} sættes til at \textit{pointe} til effektroutinen og den booleanske variabel sættes til $\mathtt{TRUE}$.
 
 \section{Generering af PWM-signal til DAC}
 Timeren benyttes desuden til at generere et PWM-signal, hvis duty cycle er styret af timeren og resultatet af A/D konverteringen af indgangssignalet. 
@@ -231,12 +232,23 @@ Når et input  modtages af programmet lægges det i en input kø til systemet er
 
 På figur \ref{fig:uistatemachine} ses den state machine der styre UI.
 UI'en der skrives til displayet afhænger af hvilken state der er aktiv.
-\begin{wrapfigure}[14]{r}{0.4\textwidth}
-	\centering 
-	\includegraphics[width=0.4\textwidth]{billeder/buttons_statemachine.png} 
+\begin{figure}[!ht]
+	\centering
+	\begin{minipage}[b]{0.50\textwidth}
+		\centering 
+	\includegraphics[width=0.8\textwidth]{billeder/buttons_statemachine.png}
+	\newline 
 	\caption{State machine diagram for switches. } 
-	\label{fig:SW_statemachine} 
-\end{wrapfigure}
+	\label{fig:SW_statemachine}
+	\end{minipage}\hfill
+	\begin{minipage}[b]{0.50\textwidth}
+		\centering 
+		\includegraphics[width=0.8\textwidth]{billeder/digi_interrupt_flow.png} 
+		\caption{Flowchart af interrupthandleren til drehimpulsgeberen. } 
+		\label{fig:digiFlow} 
+	\end{minipage}
+\end{figure}
+\newline
 I staten MENU vises det overordnede menu system, styret af drehimpulsgeberen. 
 Er STATUS staten aktiv vises en skærm hvor CPU loaden kan læses.
 FUNCTION staten aktiveres hvis der vælges en funktion i menusystemet, i denne state bliver en funktion kaldt fra et af effektmodulerne, denne funktion skriver selv input, og  UI til displayet.
@@ -244,14 +256,20 @@ Når denne funktion ikke længere skal bruges, hvis brugeren for eksempel går t
 SW2$\_$FUNC fungere på samme måde. \newline
 Tryk på de to switches og den integrerede switch i drehimpulsgeberen håndteres af tre identiske state machines, et diagram over statemachinen ses på figur \ref{fig:SW_statemachine}.
 
-\begin{wrapfigure}[12]{r}{0.4\textwidth} 
-	\centering 
-	\includegraphics[width=0.4\textwidth]{billeder/digi_interrupt_flow.png} 
-	\caption{Flowchart af interrupthandleren til drehimpulsgeberen. } 
-	\label{fig:digiFlow} 
-\end{wrapfigure}
 Rotation af drehimpulsgeberen generere impulser på to forskellige pins henholsvis A og B.
 Afhængig af rotationsretningen skifter de ene før den anden. 
 Et interrupt er sat til at trigger på både stigende og faldende flanker af pin A.
-Interrupthandleren Følger algoritmen der ses på figur \ref{fig:digiFlow}.
+Interrupthandleren Følger algoritmen der ses på figur \ref{fig:digiFlow}.\newline
+\pagebreak
+\section{Opsummering}
+FreeRTOS' scheduleringsalgoritme er en prioritetsbaseret preemptive scheduler.
+Dette vil sige at hver task bliver givet en prioritet, og hvis en task med en højere prioritet kommer i ready queuen bliver den nuværende task \textit{preemptet}.
 
+
+De enkelte effektmoduler holdes i en datastruktur indeholdende en \textit{function pointer} og en booleansk variabel.
+For hver gang der bliver samplet bliver der itereret over en array af effektmodul data strukturen, og de indeholdende routiner bliver kaldet i samplehandleren som set på figur (\ref{fig:effektmoduler}).\newline
+Det eneste der skal gøres for at tilføje et nyt modul er at tilføje et element til arrayen af effektmoduler, sætte \textit{function pointeren} til at pege på effektroutinen og sætte den booleanske variable til true.
+Outputtet af hver effekt bruges som input til den næste således at der opnås en kaskadekobling.\newline
+
+LCD-driveren virker ved at write funktioner smider deres resultater over i en buffer.
+Når LCD-tasken kører bliver der itereret gennem bufferen, og indholdet af bufferen bliver skrevet ud på LCDen som vist via. figur (\ref{fig:LCD_state_machine}).
