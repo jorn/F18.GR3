@@ -39,6 +39,7 @@
 			$A_{maks}$ & Skalar & Maksimal forstærkning \\
 			$A_{min}$ & Skalar & Minimal forstærkning\\
 			$\Delta$ & $\left[\si{V}\right]$ & ADC stepsize\\
+			$t_{settling}$ & $\left[\si{\mu S}\right]$ & Maksimal indsvingningstid af DAC\\
 			
 		
 		\end{tabular}
@@ -57,7 +58,11 @@
 			\textbf{Symbol}      &
 			\textbf{Enhed} & \textbf{Beskrivelse} \\
 			\midrule
-				$b$ & Skalar & Filterkoefficienter \\
+			$V_{LSb}$ & $\left[\si{V}\right]$ & Spændingsdifference for LSB\\
+			$V_{ref}$ & $\left[\si{V}\right]$ & Referencespænding på DAC\\
+			$F_{SCK}$ & $\left[\si{MHz}\right]$ & SPI clockfrekvens\\
+			$t_{cmd}$ & $\left[\si{\mu s}\right]$ & Datatransmissionstid for SPI\\	
+			$b$ & Skalar & Filterkoefficienter \\
 			$z$ & Komplekst tal & z-transformationsvariabel, $z = \mathrm{e}^{sT_s}$\\
 			$h(n)$ & $\left[\si{V}\right]$ & Impulsrespons af filter \\
 			$H(k)$ & $\left[\si{V}\right]$ & Diskrete Fourier transformationskoefficienter\\

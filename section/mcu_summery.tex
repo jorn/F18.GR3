@@ -1,10 +1,10 @@
 \section{Opsummering}
 
-FreeRTOS benyttes som indlejret styresystem og stiller preemptive skedulering til rådighed der administrere CPU-tiden for tasks. 
+FreeRTOS benyttes som indlejret styresystem og stiller preemptive schedulering til rådighed der administrerer CPU-tiden for tasks. 
 Scheduleringsalgoritmen er en prioritetsbaseret preemptive scheduler.
 Dette vil sige at hver task bliver givet en prioritet, og hvis en task med en højere prioritet kommer i ready queuen bliver den nuværende task \textit{preemptet}.
 Typisk benyttes der en prioritetsbaseret scheduleringsalgoritme på real-time systemer, fordi der skal gives et respons på en begivenhed inden for en vis deadline.
-Denne form for schedulering passede godt til løsnings administration af brugergrænseflade og andre task med lavere prioritet end selve behandlingen af lydsignalet. 
+Denne form for schedulering passede godt til løsningsadministration af brugergrænseflade og andre task med lavere prioritet end selve behandlingen af lydsignalet. 
 Implementering af disse systemer kunne således gøres på en simpel måde som det fremgår af taskdiagrammet.
 \\
 \\
@@ -18,7 +18,7 @@ Med en matchende 12bit DAC opnås en afbalanceret signalbehandling der passer fi
 Sammen med input og output trinnets signal tilpasning viste den valgte løsning sig at fungere efter hensigten.
 \\
 \\
-De enkelte effektmoduler holdes i en datastruktur indeholdende en \textit{function pointer} og en boolsk variabel.
+De enkelte effektmoduler holdes i en datastruktur indeholdende en \textit{function pointer} og en boolesk variabel.
 For hver gang der bliver samplet bliver der itereret over et array af effektmodul data strukturen, og de indeholdende routiner bliver kaldet i samplehandleren som set på figur (\ref{fig:effektmoduler}).\newline
 Det eneste der skal gøres for at tilføje et nyt modul er at tilføje et element til arrayet af effektmoduler, sætte \textit{function pointeren} til at pege på effektroutinen og sætte den boolske variable til $\mathtt{TRUE}$.
 Outputtet af hver effekt bruges som input til den næste således at der opnås en kaskadekobling af effekterne.
@@ -29,11 +29,11 @@ Et modulært menu system er nødvendigt for at efterleve kravet om modulæritet 
 Hvis systemet skal videreudvikles, ville en større fleksibilitet på dette område være en af forbedringsområderne.
 \\
 \\
-Det har tidligt i projektet været et udgangspunkt at benytte så meget af EMP-printes funktionalitet, for derved at sætte fokus på den egenlige implementering. 
+Det har tidligt i projektet været et udgangspunkt at benytte så meget af EMP-printes funktionalitet, for derved at sætte fokus på den egentlige implementering. 
 Derved skal input fra brugeren igennem to switches på TIVA-boardet, samt en digiswitch på EMP-boardet.
 Der bliver pullet på switchene og events bliver genereret fra både ISR og tasks igennem en FreeRTOS styret data kø.
 \\
-For at kunne håndtere den langsomme kommunikation der er imellem mikrokontrolleren og LCD displayet, blev der implementeret en LCD driver task og modul. 
+For at kunne håndtere den langsomme kommunikation der er imellem mikrocontrolleren og LCD displayet, blev der implementeret en LCD driver task og modul. 
 LCD-driveren virker ved at write funktioner smider deres resultater over i en buffer.
 LCD-tasken er implementeret som en \textit{statemachine} (\ref{fig:LCD_state_machine}).
 Når LCD-tasken kører bliver der itereret gennem LCD-bufferen og indholdet af bufferen skrives ud.
