@@ -31,9 +31,8 @@ For hver gang der bliver samplet bliver der itereret over en array af effektmodu
 Det eneste der skal gøres for at tilføje et nyt modul er at tilføje et element til arrayen af effektmoduler, sætte \textit{function pointeren} til at pege på effektroutinen og sætte den booleanske variable til $\mathtt{TRUE}$.
 Outputtet af hver effekt bruges som input til den næste således at der opnås en kaskadekobling af effekterne.
 
-
 \subsection{Generering af PWM-signal til DAC}
-
+Resultatet af AD konverteringen indlæses i Timer A's match register, som herefter styrer duty cyclen af det genererede PWM signal. 
 
 \subsection{Genskabelse af signal via DAC igennem SPI}
 
