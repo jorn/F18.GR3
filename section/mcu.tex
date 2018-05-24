@@ -135,19 +135,32 @@ Der skal ikke ventes på en konvertering.
 Det betyder også at forsinkelsen fra en konvertering bliver konstant. Forsinkelsen vil være givet ved $\frac{1}{f_s}$. 
 
 \subsection{Offset af samplet data}
+\begin{wrapfigure}[18]{r}{0.5\textwidth}
+	\centering
+	\includegraphics[width=0.5\textwidth]{billeder/timer3PWM.png}
+	\caption{\label{fig:PWMfromtimer}Generering af PWM-signal ud fra timer. }
+\end{wrapfigure}
 Værdien af den modtagede sample fra AD konverteringen vil have et offset pga. DC forskydningen ved input stage, som tidligere beskrevet i afsnit \ref{sec:inputstage}.
 Offsettet fjernes igen ved at trække $\frac{4096}{2} = 2048$ fra resultatet af AD konverteringen. 
 Resultatet gemmes som en værdi af data typen float. 
 
 \subsection{Sample handler og processortid}
+
 Da sample handleren kører periodisk, og i form af en ISR har højeste prioritet til processortid, skal alle andre processoropgaver foregå i al den mellemliggende tid. 
 Det betyder at sample handleren og AD konverteringen skal være tidseffektiv, således andre tasks kan nå at køre færdig, inden sample handleren kaldes igen. 
 Ved hjælp af timer 3, udregnes rutinens procentuelle andel af processortiden, hvilket kan skrives ud til brugeren ved brug af LCD displayet. 
 Den benyttede tid vil desuden være afhængig af antallet af modulære effekter, som også skal processeres i sample handleren. 
 
+\section{Generering af PWM-signal}
+
+Timeren benyttes desuden til at generere et PWM-signal, hvis duty cycle er styret af timeren og resultatet af A/D konverteringen af indgangssignalet. 
+Figur \ref{fig:PWMfromtimer} viser hvordan PWM-signalets duty cycle bliver bestemt af den værdi, som bliver gemt på Timer A's match register. 
+Den værdi kommer fra den periodiske sampling af lydsignalet gennem ADC'en, hvor resultatet af hver sampling netop gemmes i match registeret. 
+Således genskabes signalet som et digitalt PWM signal. 
+
 \section{Modulær opbygning af effekter}
-Effektmodulerne holdes hver især i en \textit{module control block}, $\mathtt{mcb\_t}$,  som er en data struktur bestående af en \textit{function pointer} og en booleansk variabel.
-Function pointeren benyttes til at kalde lydeffektmodulerne, og den booleanske variabel benyttes til at aktivere/deaktivere lydeffekterne.\newline
+Effektmodulerne holdes hver især i en \textit{module control block}, $\mathtt{mcb\_t}$,  som er en data struktur bestående af en \textit{function pointer} og en boolsk variabel.
+Functionspointeren benyttes til at kalde lydeffektmodulerne, og den booleanske variabel benyttes til at aktivere/deaktivere lydeffekterne.\newline
 For at tilføje en lydeffekt laves der en ny instans af $\mathtt{mcb\_t}$, og dens \textit{function pointer} sættes til at \textit{pointe} til lydeffekt rutinen.\newline
 \begin{figure}[!ht]
 	\centering
@@ -156,26 +169,13 @@ For at tilføje en lydeffekt laves der en ny instans af $\mathtt{mcb\_t}$, og de
 	\label{fig:effektmoduler}
 \end{figure}
 
-På figur (\ref{fig:effektmoduler}) illustreres det, hvordan de enkelte moduler bliver itereret over, hvis de er aktive.
-Hvori $\mathtt{MCB\_POOL\_SIZE}$ er antal af moduler, $\mathtt{mcb\_pool}$ er en array af $\mathtt{mcb\_t}$ strukturer, $\mathtt{mcb\_pool.module}$ er \textit{function pointeren}, $mathtt{mcb\_pool.active}$ er den \textit{booleanske} variabel og $\mathtt{fp\_sample\_in}$ og $\mathtt{fp\_sample\_out}$ er hhv. input- og outputsamples.
-Grunden til at outputtet fra hver modul bliver sat til input, er at det ønskes at opnå en seriel kobling af effekterne.
-For at tilføje et effektmodul oprettes tilføjes der et nyt element til $\mathtt{mcb\_pool}$, \textit{function pointerent} sættes til at \textit{pointe} til effektroutinen og den booleanske variabel sættes til $\mathtt{TRUE}$.
-
-\section{Generering af PWM-signal til DAC}
-\begin{wrapfigure}[11]{r}{0.5\textwidth}
-	\centering
-	\includegraphics[width=0.5\textwidth]{billeder/timer3PWM.png}
-	\caption{\label{fig:PWMfromtimer}Generering af PWM-signal ud fra timer. }
-\end{wrapfigure}
-Timeren benyttes desuden til at generere et PWM-signal, hvis duty cycle er styret af timeren og resultatet af A/D konverteringen af indgangssignalet. 
-Figur \ref{fig:PWMfromtimer} viser hvordan PWM-signalets duty cycle bliver bestemt af den værdi, som bliver gemt på Timer A's match register. 
-Den værdi kommer fra den periodiske sampling af lydsignalet gennem ADC'en, hvor resultatet af hver sampling netop gemmes i match registeret. 
-Således genskabes signalet som et digitalt PWM signal. 
+På figur (\ref{fig:effektmoduler}) illustreres, hvordan de enkelte moduler bliver itereret over, hvis de er aktive.
+Hvori $\mathtt{MCB\_POOL\_SIZE}$ er antallet af moduler, $\mathtt{mcb\_pool}$ er et array af $\mathtt{mcb\_t}$ strukturer, $\mathtt{mcb\_pool.module}$ er en \textit{function pointeren}, $mathtt{mcb\_pool.active}$ er den \textit{boolske} variabel og $\mathtt{fp\_sample\_in}$ og $\mathtt{fp\_sample\_out}$ er hhv. input- og outputsamples.
+Grunden til, at outputtet fra hvert modul bliver sat som input til den næste, er et ønskes om at opnå en serielkobling af effekterne.
+For at tilføje et effektmodul, tilføjes et nyt element til $\mathtt{mcb\_pool}$, \textit{function pointerent} sættes til at \textit{pointe} til effektroutinen og den boolske variabel sættes til $\mathtt{TRUE}$.
 
 \section{Genskabelse af signal via DAC igennem SPI}
-Genskabelsen af udgangssignalet fra mikorcontrolleren gøren igennem en ekstern 12bit DAC \texttt{MCP4922E/P}\footnote{Microchip MCP4922E/P 12-Bit Dual Voltage Output Digital-to-Analog Converter with SPI Interface \cite{mcp4922} }.
-
-
+Genskabelsen af udgangssignalet fra mikorcontrolleren gøres igennem en ekstern 12bit DAC \texttt{MCP4922E/P}\footnote{Microchip MCP4922E/P 12-Bit Dual Voltage Output Digital-to-Analog Converter with SPI Interface \cite{mcp4922} }.
 
 \section{LCD Driver}
 \label{sec:LCD_driver}
