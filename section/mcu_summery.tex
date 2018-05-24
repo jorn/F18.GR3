@@ -1,52 +1,40 @@
 \section{Opsummering}
 
-\subsection{FreeRTOS}
-FreeRTOS benyttes som indlejret styresystem. FreeRTOS bruger preemptive skedulering til at administrere CPU-tiden for tasks. 
-
-\subsection{Preemptive schedulering}
-FreeRTOS' scheduleringsalgoritme er en prioritetsbaseret preemptive scheduler.
+FreeRTOS benyttes som indlejret styresystem og stiller preemptive skedulering til rådighed der administrere CPU-tiden for tasks. 
+Scheduleringsalgoritmen er en prioritetsbaseret preemptive scheduler.
 Dette vil sige at hver task bliver givet en prioritet, og hvis en task med en højere prioritet kommer i ready queuen bliver den nuværende task \textit{preemptet}.
 Typisk benyttes der en prioritetsbaseret scheduleringsalgoritme på real-time systemer, fordi der skal gives et respons på en begivenhed inden for en vis deadline.
-
-
-
-\subsection{Løsningsimplementering og task model}
-
-
-\subsection{Intterrupt eksekvering og task skedulering}
-Det indgående lydsignal samples periodisk på samme tidspunkt i hver periode. 
-Det gøres ved hjælp af en ISR med højeste prioritet, som også er prioriteret over tasks. 
-Timingen af ISR er kontrolleret af Timer 3.
+Denne form for schedulering passede godt til løsnings administration af brugergrænseflade og andre task med lavere prioritet end selve behandlingen af lydsignalet. 
+Implementering af disse systemer kunne således gøres på en simpel måde som det fremgår af taskdiagrammet.
+\\
+\\
+Det indgående lydsignal samples periodisk på samme tidspunkt i hver periode og giver derved en jitter-fri lydgengivelse, der
+styres ved hjælp af en ISR med højeste prioritet, som også er prioriteret over tasks i FreeRTOS og styret timingen af Timer 3.
 Timeren er implementeret således, at der opnås en samplefrekvens på 44,1kHz. 
-Alle andre processor opgaver skal derfor foregå i tiden mellem hver gang ISR sample handler rutinen kører. 
-
-\subsection{Sampling af lydsignal igennem ADC}
-Til sampling af signalet benyttes to 12-bit ADC moduler. 
-Samplingen startes ved et processor event, som foregår i ISR sample handler rutinen. 
-Det samplede data indeholder et offset fra input stage, som efter samplingen fjernes. 
-
-\subsection{Modulær opbygning af effekter}
+Alle andre processor foregår derfor i tiden mellem hver gang ISR sample handler rutinen kører. 
+\\
+Til sampling af signalet benyttes to 12-bit ADC moduler dette giver en synkroniseret samplings event som håndteres af sample handler ISR.
+Med en matchende 12bit DAC opnås en afbalanceret signalbehandling der passer fint sammen med de symetriske filtre på ind- og udgang.
+Sammen med input og output trinnets signal tilpasning viste den valgte løsning sig at fungere efter hensigten.
+\\
+\\
 De enkelte effektmoduler holdes i en datastruktur indeholdende en \textit{function pointer} og en booleansk variabel.
 For hver gang der bliver samplet bliver der itereret over en array af effektmodul data strukturen, og de indeholdende routiner bliver kaldet i samplehandleren som set på figur (\ref{fig:effektmoduler}).\newline
-Det eneste der skal gøres for at tilføje et nyt modul er at tilføje et element til arrayen af effektmoduler, sætte \textit{function pointeren} til at pege på effektroutinen og sætte den booleanske variable til $\mathtt{TRUE}$.
+Det eneste der skal gøres for at tilføje et nyt modul er at tilføje et element til arrayen af effektmoduler, sætte \textit{function pointeren} til at pege på effektroutinen og sætte den boolske variable til $\mathtt{TRUE}$.
 Outputtet af hver effekt bruges som input til den næste således at der opnås en kaskadekobling af effekterne.
-
-\subsection{Generering af PWM-signal til DAC}
-Resultatet af AD konverteringen indlæses i Timer A's match register, som herefter styrer duty cyclen af det genererede PWM signal. 
-
-\subsection{Genskabelse af signal via DAC igennem SPI}
-
-
-\subsection{LCD Driver}
+Denne implementering viste sig at kunne løse systemet modulære arkitektur 
+\\
+Et menu system er udviklet til enheden, bestående af en datastruktur i form af en datastruktur baseret på linked list princippet og en UI task der skriver menuen til displayet.
+Et modulært menu system er nødvendigt for at efterleve et modulæritet i effektmodulerne, dette er dog blevet nedprioriteret grundet projektets tidsrammer.
+Hvis systemet skal videreudvikles, ville en større fleksibilitet på dette område være en af forbedringsområderne.
+\\
+\\
+Det har tidligt i projektet været et udgangspunkt at benytte så meget af EMP-printes funktionalitet, for derved at sætte fokus på dent egenlige implementering. 
+Derved skal input fra brugeren igennem to switches på TIVA-boardet, samt en drehimpulsgeber på EMP-boardet.
+Der bliver pullet på switchesne og events bliver genereret fra både ISR og tasks igennem et FreeRTOS styres data kø.
+\\
+For at kunne håndtere den langsomme kommunikation der er imellem mikrokontrolleren og LCD displayet, blev der implementeret en LCD driver task og modul. 
 LCD-driveren virker ved at write funktioner smider deres resultater over i en buffer.
 LCD-tasken er implementeret som en \textit{statemachine} (\ref{fig:LCD_state_machine}).
 Når LCD-tasken kører bliver der itereret gennem LCD-bufferen og indholdet af bufferen skrives ud.
-
-
-\subsection{Håndtering af brugergrænseflade og human input interface}
-%Et modulært menu system er nødvendigt for at effektmoduler kan tilføres helt uafhængigt af systemet, det lykkedes dog ikke at producere et sådant system men det skyldtes dog blot tidsmangel og kunne nemt implementeres i det nuværende menu system i form af en software patch, derfor blev dette ned prioriteret så deadline kunne overholdes. 
-
-Et menu system er udviklet til enheden, bestående af en datastruktur i form af en linked list og en state machine der skriver menuen til displayet.
-Et modulært menu system er nødvendigt for at effektmoduler kan tilføres helt uafhængigt af systemet, dette er dog blevet nedpriorieteret grundet tidspres, og er derfor ikke gjort.
-Input fra brugeren sker gennem to switches på TIVA-boardet, samt en drehimpulsgeber på EMP-boardet.
-Der bliver pullet på switchesne og events bliver genereret af en statemachine og sendt ud til andre tasks, hvor rotation på drehimpulsgeberen trigger et interrupt der afgøre retningen af rotation.
+Dette giver en god afbalancering imellem bruger oplevelse og ressource allokering. 
