@@ -3,7 +3,7 @@
 %\note{Generel intro til audio signaler}
 
 \section{Analoge filtres rolle ved digital signalbehandling}\label{sec:filter_intro}
-For at kunne udføre digital signalbehandling af et analogt signal, bliver man nødt til at overføre signalet fra den analoge verden til den digitale og tilbage igen - dette sker ved sampling og rekonstruktion.
+For at kunne udføre digital signalbehandling af et analogt signal, bliver signalet overført fra den analoge verden til den digitale og tilbage igen - dette sker ved sampling og rekonstruktion.
 Denne signalbehandling følger nogle faste deltrin, som kan ses i et generelt signal-blok diagram i figur \ref{fig:dsp_model}. 
 \begin{figure}[h!]
 	\centering
@@ -73,7 +73,7 @@ Således kan det ses at den maksimale frekvens $B$ i det ønskede samplede signa
 	f_{max} \leq f_s/2 \label{eq:shannons}
 \end{align}
 Ligning \ref{eq:shannons} er Shannons sampling theorem og intervallet mellem $-f_s/2$ og $f_s/2$ er Nyquist intervallet.
-Hvis den maksimale frekvens i signalet er større end $f_s/2$ og Shannons samplings theorem derved ikke er overholdt, opstår der aliasing i det samplede signal som ses som det skraverede område i figur \ref{fig:alias}(c).
+Hvis den maksimale frekvens i signalet er større end $f_s/2$ og Shannons samplings theorem derved ikke er overholdt, opstår der aliasing i det samplede signal der ses som det skraverede område i figur \ref{fig:alias}(c).
 \\
 I figur \ref{fig:dsp_model} fremstår det analoge filter på indgangen som en båndbredde begrænsning.
 Denne begrænsning er således en nødvendighed for at undgå aliasing. 
@@ -152,7 +152,7 @@ I figur \ref{fig:filter_cheb1_denorm} øverst ses den denormaliserede filterkara
 \end{figure}
 
 For at kunne bestemme dæmpningen af de demormaliserede filter, findes udtrykket for $|H(f)|$.
-Med udgangspunkt i ligning \ref{eq:H_cheb1}, bestemmes $\epsilon$, som er bestemt ved ud fra ripplefaktoren i et Chebyshev filter\footnote{Figur 1.11.1 og ligning 1.11.3 i kilde \cite{anfilter}}
+Med udgangspunkt i ligning \ref{eq:H_cheb1}, bestemmes $\epsilon$, som er bestemt ud fra ripplefaktoren i et Chebyshev filter\footnote{Figur 1.11.1 og ligning 1.11.3 i kilde \cite{anfilter}}
 \begin{align}
 	K_p = 20 \log \frac{1}{\sqrt{1+\epsilon^2}} \Leftrightarrow \epsilon = \sqrt{10^{K_p/10}-1}
 \end{align}
@@ -247,7 +247,7 @@ I dette tilfælde seriekobles 3 filtre.
 Her er det valgt at anvende Sallen-Key lavpas biquads,
 da disse kan realiseres ved hjælp af flere forskellige designmetoder, præsenteret 
 i læreborgen 'Analog filters, second edition'\cite{KendallSu}.
-En generisk Sallen-Key lavpas biquad ser ud som i figur(\ref{fig:sklpbq}).
+En generisk Sallen-Key lavpas biquad ser ud som i figur\ref{fig:sklpbq}.
 
 \begin{figure}[H]
 	\centering
