@@ -91,7 +91,7 @@ Grunden til frequency sampling valgtes som designmetode er, fordi algoritmen er 
 Frequency sampling metoden virker ved at man lader $h(n)$ for $n = 0, 1, \cdots, N - 1$ approksimere filterets impulsrespons, hvor $N$ er antal koefficienter, hvilket for FIR filtre er deres koefficienter, og $H(k)$ for $k = 0, 1, \cdots, N - 1$ er de diskrete Fourier transformationskoefficienter.
 \begin{figure}[!ht]
 	\includegraphics[width=\textwidth]{billeder/frequencysampling.png}
-	\caption{Frekvenssampling af amplitudekarakteristik\cite{Tan2013}}
+	\caption{Frekvenssampling af amplitudekarakteristik, Kilde:\cite{Tan2013}}
 	\label{fig:frequencysampling}
 \end{figure}
 $H(k)$ findes ved at sample den ønskede amplitudekarakteristik i frekvensdomænet ved lige adskilte frekvenser som vist i figur (\ref{fig:frequencysampling}).\newline
@@ -100,12 +100,12 @@ FIR koefficienterne findes så ved
 b_n = h(n) = \frac{1}{2M + 1} \left\{H_0 + 2\displaystyle\sum_{k = 1}^{M}\, H_k\cos\left(\frac{2\pi k (n - M)}{2M + 1} \right) \right\} \quad \mathrm{for} \quad n = 0, 1, \cdots, M
 \end{equation}
 hvor $M = \frac{N - 1}{2}$
-Resten af koefficienterne findes ved $h(n) = h(2M - n) \quad \mathrm{for} \quad n = M + 1, \cdots, 2M$ ved brug af symmetri, når filteret antages at have lineær fase.
+Resten af koefficienterne findes ved $h(n) = h(2M - n) \quad \mathrm{for} \quad n = M + 1, \cdots, 2M$ ved brug af symmetri, når filteret antages at have lineær fase\cite[p. 263]{Tan2013}.
 
 
 \subsection{Implementering af FIR filter}
 Det digitale filter blev valgt at blive implementeret som et FIR filter, fordi FIR filtre giver mulighed for at have lineær negativ fase hvilket medfører konstant gruppeløbetid.\newline
-Negativ lineær fase medfører konstant gruppeløbetid da gruppeløbetid er givet ved
+Negativ lineær fase medfører konstant gruppeløbetid da gruppeløbetid er givet ved\cite{wikiGroupdelay}
 \[
 \tau = -\frac{\mathrm{d}\varphi}{\mathrm{d}\omega}
 \]
