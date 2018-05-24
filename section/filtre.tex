@@ -73,7 +73,7 @@ Således kan det ses at den maksimale frekvens $B$ i det ønskede samplede signa
 	f_{max} \leq f_s/2 \label{eq:shannons}
 \end{align}
 Ligning \ref{eq:shannons} er Shannons sampling theorem og intervallet mellem $-f_s/2$ og $f_s/2$ er Nyquist intervallet.
-Hvis den maksimale frekvens i signalet er større end $f_s/2$ og Sahannons samplings theorem derved ikke er overholdt, opstår der aliasing i det samplede signal som ses som det skraverede område i figur \ref{fig:alias}(c).
+Hvis den maksimale frekvens i signalet er større end $f_s/2$ og Shannons samplings theorem derved ikke er overholdt, opstår der aliasing i det samplede signal som ses som det skraverede område i figur \ref{fig:alias}(c).
 \\
 I figur \ref{fig:dsp_model} fremstår det analoge filter på indgangen som en båndbredde begrænsning.
 Denne begrænsning er således en nødvendighed for at undgå aliasing. 
@@ -81,7 +81,7 @@ Denne begrænsning er således en nødvendighed for at undgå aliasing.
 Som udgangspunkt blev opløsningen af den Analog-til-Digital Converter (ADC) brugt til at vurdere hvor meget dæmpning et analogt filter skulle have for at kunne sikre en komplet og tabsfri gengivelse af signalet.
 
 Ud fra de fremsatte krav til projektet, benyttes der en \emph{ARM Cortex-M4F} baseret microcontroller fra Texas Instruments \cite{spmu296} der er udstyret med en 12bit ADC på de analoge indgange.
-For at bestemme opløsning på ADC'en, kan den unipolære\footnote{Unipolær kvantificering skyldes ADC'ens spændingsområde på $0 \longmapsto \num{3.3}\si{\volt}$.} kvanteficering $\Delta_{ADC}$ bestemmes samt Signal to Noise Ratio $SNR_Q$.
+For at bestemme opløsning på ADC'en, kan den unipolære\footnote{Unipolær kvantificering skyldes ADC'ens spændingsområde på $0 \longmapsto \num{3.3}\si{\volt}$.} kvantificering $\Delta_{ADC}$ bestemmes samt Signal to Noise Ratio $SNR_Q$.
    
 \begin{align}
 	\Delta_{ADC} &= \frac{V_{max}}{2^N} = \frac{\num{3.3}\si{\volt}}{2^{12}} \approx \num{80.6}\si{\milli\volt}\\
@@ -111,14 +111,14 @@ C_n(\omega_n) &=
 \end{matrix} \label{eq:chev_cn_funk}
 \end{align}
 
-I ligning (\ref{eq:chev_cn_funk}) fremgår den indre funktion $C_n(\omega_n)$ som bruges i Chebychev I og II i ligening (\ref{eq:H_cheb1}) og (\ref{eq:H_cheb2}).
+I ligning (\ref{eq:chev_cn_funk}) fremgår den indre funktion $C_n(\omega_n)$ som bruges i Chebychev I og II i ligning (\ref{eq:H_cheb1}) og (\ref{eq:H_cheb2}).
 
-Figur \ref{fig:filter_typer} viser en samlet fremstilling af amplitude karakteristikken $H(j\omega_n)$ og gruppeløbstiden $D(\omega_n)$ for de fire filtertyper.
+Figur \ref{fig:filter_typer} viser en samlet fremstilling af amplitude karakteristikken $H(j\omega_n)$ og gruppeløbetiden $D(\omega_n)$ for de fire filtertyper.
 
 \begin{figure}[h!]
 	\centering
 	\includegraphics[width=1\textwidth]{matlab/filter_compare.png}
-	\caption{Normeret 6.ordens filter karakteristik (øverst) og guppeløbstid (nederst) for filtertyperne Butterworth, Chebychev Type I ($0,1 \si{\decibel}$ rippel) \& Type II ($-40 \si{\decibel}$ stopbånds rippel) og Bessel.}
+	\caption{Normeret 6.ordens filter karakteristik (øverst) og guppeløbetid (nederst) for filtertyperne Butterworth, Chebychev Type I ($0,1 \si{\decibel}$ ripple) \& Type II ($-40 \si{\decibel}$ stopbånds ripple) og Bessel.}
 	\label{fig:filter_typer}
 \end{figure}
 
@@ -137,12 +137,12 @@ Dette fænomen er dog ret subjektivt og der findes mange meninger om hvilke tær
 Ud fra en lettere gennemgang inden for området, antages en acceptabel relativ tidsforsinkelse på $D_{rel}(\omega) < -10 \si{\milli\second}$ til projektet.   
 
 \subsection{Valg af filter topologi}
-Hvis man som udgangspunkt kun fokusere på filtrenes gruppeløbstid, ville man skulle vælge et Bessel filter. 
-Bessel filteret, det er designet som et filter med maksimal fald fase, har dog langt fra den ønskede dæmpning i overgangsbåndet.
+Hvis man som udgangspunkt kun fokuserer på filtrenes gruppeløbetid, ville man skulle vælge et Bessel filter. 
+Bessel filteret er designet som et filter med maksimal flad fase, men har dog langt fra den ønskede dæmpning i overgangsbåndet.
 Det vælges at anvende et Chebychev type I filter, der viser sig at have den bedste dæmpning i overgangsbåndet.
-Det høje udsving på gruppeløbetiden for denne filtertype, som det fremgår nederst i figur \ref{fig:filter_typer}, vil på det denomaliserede filter ligger indenfor, de i projektet, acceptable værdier. 
+Det høje udsving på gruppeløbetiden for denne filtertype, som det fremgår nederst i figur \ref{fig:filter_typer}, vil på det denormaliserede filter ligger indenfor, de i projektet, acceptable værdier. 
 \\
-I figur \ref{fig:filter_cheb1_denorm} øverst ses den denormaliserede filterkarakteristik for det valgte filter med en pasbåndsrippel på $0,1 \si{\decibel}$ og en knækfrekvens på $f_c = 18 \si{\kilo\hertz}$ og nederst ses filterets nominerede gruppeløbstid. 
+I figur \ref{fig:filter_cheb1_denorm} øverst ses den denormaliserede filterkarakteristik for det valgte filter med en pasbåndsripple på $0,1 \si{\decibel}$ og en knækfrekvens på $f_c = 18 \si{\kilo\hertz}$ og nederst ses filterets normerede gruppeløbetid. 
 
 \begin{figure}[h!]
 	\centering
@@ -152,17 +152,17 @@ I figur \ref{fig:filter_cheb1_denorm} øverst ses den denormaliserede filterkara
 \end{figure}
 
 For at kunne bestemme dæmpningen af de demormaliserede filter, findes udtrykket for $|H(f)|$.
-Med udgangspunkt i ligning \ref{eq:H_cheb1}, bestemmes $\epsilon$, som er bestemt ved ud fra rippelfaktoren i et Chebyshev filter\footnote{Figur 1.11.1 og ligning 1.11.3 i kilde \cite{anfilter}}
+Med udgangspunkt i ligning \ref{eq:H_cheb1}, bestemmes $\epsilon$, som er bestemt ved ud fra ripplefaktoren i et Chebyshev filter\footnote{Figur 1.11.1 og ligning 1.11.3 i kilde \cite{anfilter}}
 \begin{align}
 	K_p = 20 \log \frac{1}{\sqrt{1+\epsilon^2}} \Leftrightarrow \epsilon = \sqrt{10^{K_p/10}-1}
 \end{align}
-Med en maksimal rippel på $K_p = 0,1 \si{\decibel}$ fås en $\epsilon$ på 
+Med en maksimal ripple på $K_p = 0,1 \si{\decibel}$ fås en $\epsilon$ på 
 \begin{align}
 	\epsilon = \sqrt{10^{0,1/10}-1} = \num{0.1526}
 \end{align}
 
 Da det ønskes at beregne $|H(f)|$ i området $f > f_c$ anvendes $C_n$ fra ligning \ref{eq:chev_cn_funk} hvor $w_n > 1$
-Dæmpningen ved nyquistfrekvensen på $f_s/2 = \num{22.05}\si{\kilo\hertz}$ kan nu bestemmes som
+Dæmpningen ved Nyquistfrekvensen på $f_s/2 = \num{22.05}\si{\kilo\hertz}$ kan nu bestemmes som
 
 \begin{align}
 |H(f)|_{\si{\decibel}} &= 20 \log \frac{1}{\sqrt{1+ \epsilon^2  \left[\cosh(n \arccosh k )\right]^2 }} \quad, \quad k = \frac{f}{f_c} \\
@@ -197,10 +197,10 @@ Her er det således muligt at se, at der ved fx $f_c=\num{18}\si{\kilo\hertz}$ e
 %\note{Beregninger og argumentation for SNR}
 
 \section{Specifikation og dimensionering}\label{sec:filter_spec}
-Specifikationen og dimensioneringen af filteret blev udført ved hjælp af matlab, det samlede script kan ses i bilag \ref{bilag:aafilterspec}.
+Specifikationen og dimensioneringen af filteret blev udført ved hjælp af Matlab. Det samlede script kan ses i bilag \ref{bilag:aafilterspec}.
 
 Ved at anvende Matlab funktionen \texttt{[z,p,k] = cheb1ap(n,Rp)}, fremstilles en normaliseret Chebyshev type I filter prototype. 
-Parameteren \texttt{n} angiver filterets orden og \texttt{Rp} den ønskede passbåndsrippel i $\si{\decibel}$. 
+Parameteren \texttt{n} angiver filterets orden og \texttt{Rp} den ønskede pasbåndsripple i $\si{\decibel}$. 
 Prototypen er normaliseret igennem punktet
 \begin{align}
  |H(\omega)|_{\omega=\omega_0=1}=10^{-Rp/20}
@@ -224,7 +224,7 @@ Ud fra standard overføringsfunktionen for et 2. orden lavpas filter, ligning \r
 H_{LP}(s) = \frac{G\omega_0^2}{s^2 + \left(\frac{\omega_0}{Q}\right)s + \omega_0^2}
 \end{equation}
 
-De fundne $Q$ og $\omega_o$ værdier for det nominerede filter er således
+De fundne $Q$ og $\omega_o$ værdier for det normerede filter er således
 \begin{align}
 	Q_1 &= \num{0.5995} \quad , \quad \omega_1= \num{0.5132} \nonumber \\
 	Q_2 &= \num{1.3316} \quad , \quad \omega_2= \num{0.8345} \nonumber \\
@@ -233,18 +233,18 @@ De fundne $Q$ og $\omega_o$ værdier for det nominerede filter er således
 
 \subsection{Sallen-Key}
 
-De analoge filtre bliver implementeret som aktive filtre, dette er valgt da det så ikke er nødvendigt at skulle anvende spoler, da disse ofte fylder meget.
+De analoge filtre bliver implementeret som aktive filtre. Dette er valgt da det så ikke er nødvendigt at skulle anvende spoler, da disse ofte fylder meget.
 Samtidigt er de nemme at implementere da systemet i forvejen har strømforsyning til mikroprocessoren, som kan anvendes til filtrenes operationsforstærker.
 
-Aktive filtre opbygges generelt af 2. ordens bi-quad filtre som cascadekobles til den ønskede orden,
-i dette tilfælde seriekobles 3 filtre. 
+Aktive filtre opbygges generelt af 2. ordens bi-quad filtre som kaskadekobles til den ønskede orden.
+I dette tilfælde seriekobles 3 filtre. 
 
 %\note{Sallen Kay - metode 4 i afs matr.}
 %\note{hvor tæt ligger de beregnede komponent værdier i hold til de anvendte tabelværdier ?}
 %\note{Argumenteret valg er OpAmp -> den bedste der var som SMD}
 %\note{Kort begrundelse for enkelt R i metoden og brug af op til 4 stk. C som proto type -> hvordan ville det se ud hvis kun brugte den nærmeste C i serien og hvor stor indflydelse vil det have. Måske Sensitivitesmetoden eller H(jw) -> var det er klogt valg og måske lidt overdrevet.}
 
-Her er det valgt at anvende Sallen-Key lav pas biquads,
+Her er det valgt at anvende Sallen-Key lavpas biquads,
 da disse kan realiseres ved hjælp af flere forskellige designmetoder, præsenteret 
 i læreborgen 'Analog filters, second edition'\cite{KendallSu}.
 En generisk Sallen-Key lavpas biquad ser ud som i figur(\ref{fig:sklpbq}).
@@ -252,14 +252,14 @@ En generisk Sallen-Key lavpas biquad ser ud som i figur(\ref{fig:sklpbq}).
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=.6\textwidth]{billeder/sklpbq}
-	\caption{Sallen-Key lowpass biquad \cite{KendallSu}}
+	\caption{Sallen-Key lavpas biquad \cite{KendallSu}}
 	\label{fig:sklpbq}
 \end{figure}
 
 Det blev valgt at anvende design metode 4 fra litteraturen, minimum sensitivitet.
 Denne designmetode gør filteret mindre sensitiv over for variationer i komponenter ved bl.a.
-at anvende enheds forstærkning for derfor at undvære $R_a$ og $R_b$.
-Det vælges at $R_1 = R_2$ og fastsættes til $1\si{\ohm}$, herefter findes $C_1$ og $C_2$ ved hjælp af ligning \ref{eq:dm4c1} og \ref{eq:dm4c2}.
+at anvende enhedsforstærkning for derfor at undvære $R_a$ og $R_b$.
+Det vælges at $R_1 = R_2$ og de fastsættes til $1\si{\ohm}$. Herefter findes $C_1$ og $C_2$ ved hjælp af ligning \ref{eq:dm4c1} og \ref{eq:dm4c2}.
 
 \vspace{15pt}
 
@@ -278,7 +278,7 @@ Det vælges at $R_1 = R_2$ og fastsættes til $1\si{\ohm}$, herefter findes $C_1
 
 \vspace{15pt}
 
-Denne designmetode giver en stor stor spredning i kondensator værdierne, som er afhængig af filterets Q-værdi, som ses i ligning
+Denne designmetode giver en stor spredning i kondensator værdierne, som er afhængig af filterets Q-værdi, som ses i ligning
 \ref{eq:kondspred}.
 
 \begin{equation}
@@ -287,17 +287,18 @@ Denne designmetode giver en stor stor spredning i kondensator værdierne, som er
 \end{equation}
 
 Med de beregnede $Q$ og $\omega_o$ i ligning \ref{eq:q_and_w_norm}, kan $C_{n1}$ og $C_{n2}$ bestemmes.
-Resultate ses i tabel \ref{tab:sallen_key} kolonne 1 og 2.
+Resultatet ses i tabel \ref{tab:sallen_key} kolonne 1 og 2.
 \\
 \\
 Under arbejdet med filterdesign opstod der en fortolkningsfejl mellem det anvendte designmetode og de beregnede 2. ordens systemer fra Matlab.
 Dette resulterede i en amplitude karakteristik på det valgte 6. ordens filter som ikke stemte overens med forventningerne.
 Således blev et andet sæt normaliserede kondensator værdier anvendt til fremstillingen af løsningens bi-quad filter print.
+\husk{Jes}{Reference til tabel xx mangler!! Tabel \ref{tab:sallen_key}?}
 De anvendte værdier ses i tabel xx kolonne 3 og 4 og er taget fra \cite[Table B-2: Capacitor Values for 0.1-dB Chebyshev lowpass Sallen-Key filters, n=6]{sk_data_web}
 
 \begin{table}[h!]
 	\centering
-	\caption{Norminerede kondensator værdier for Chebyshev LPF Type I Sallen-Key, $0,1\si{\decibel}$ rippel.}
+	\caption{Normerede kondensator værdier for Chebyshev LPF Type I Sallen-Key, $0,1\si{\decibel}$ ripple.}
 	\label{tab:sallen_key}
 	\begin{threeparttable}
 		\begin{tabular}{l c c c c}
@@ -322,7 +323,7 @@ De anvendte værdier ses i tabel xx kolonne 3 og 4 og er taget fra \cite[Table B
 	\end{threeparttable}
 \end{table}
 
-Denominering og impedans tilpasning af komponenterne gøres ud fra følgende
+Denormering og impedans tilpasning af komponenterne gøres ud fra følgende
 \begin{align}
 	R &= R_n \cdot Z_n \\
 	C &= \frac{C_n}{\Omega_n} \quad , \quad \Omega_n = 2\pi f_p 
