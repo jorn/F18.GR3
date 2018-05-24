@@ -4,6 +4,10 @@
 
 
 \subsection{Preemptive schedulering}
+FreeRTOS' scheduleringsalgoritme er en prioritetsbaseret preemptive scheduler.
+Dette vil sige at hver task bliver givet en prioritet, og hvis en task med en højere prioritet kommer i ready queuen bliver den nuværende task \textit{preemptet}.
+Typisk benyttes der en prioritetsbaseret scheduleringsalgoritme på real-time systemer, fordi der skal gives et respons på en begivenhed inden for en vis deadline.
+
 
 
 \subsection{Løsningsimplementering og task model}
@@ -22,6 +26,10 @@ Samplingen startes ved et processor event, som foregår i ISR sample handler rut
 Det samplede data indeholder et offset fra input stage, som efter samplingen fjernes. 
 
 \subsection{Modulær opbygning af effekter}
+De enkelte effektmoduler holdes i en datastruktur indeholdende en \textit{function pointer} og en booleansk variabel.
+For hver gang der bliver samplet bliver der itereret over en array af effektmodul data strukturen, og de indeholdende routiner bliver kaldet i samplehandleren som set på figur (\ref{fig:effektmoduler}).\newline
+Det eneste der skal gøres for at tilføje et nyt modul er at tilføje et element til arrayen af effektmoduler, sætte \textit{function pointeren} til at pege på effektroutinen og sætte den booleanske variable til $\mathtt{TRUE}$.
+Outputtet af hver effekt bruges som input til den næste således at der opnås en kaskadekobling af effekterne.
 
 
 \section{Generering af PWM-signal til DAC}
@@ -31,6 +39,9 @@ Det samplede data indeholder et offset fra input stage, som efter samplingen fje
 
 
 \subsection{LCD Driver}
+LCD-driveren virker ved at write funktioner smider deres resultater over i en buffer.
+LCD-tasken er implementeret som en \textit{statemachine} (\ref{fig:LCD_state_machine}).
+Når LCD-tasken kører bliver der itereret gennem LCD-bufferen og indholdet af bufferen skrives ud.
 
 
 \subsection{Håndtering af brugergrænseflade og human input interface}
