@@ -20,20 +20,20 @@ Dette gøres ved at gemme en dæmpet kopi af outputsignalet i en buffer og efter
 	\label{fig:echo_simulink}
 \end{figure}
 
-Bufferen der blev valgt at implementere dette er af en cyklisk natur, hvor der til hver samplingstid udlæses en værdi fra den af pointeren indikerede plads, pladsen nulstilles så og pointeren forøges, så der til næste sample udlæses fra den næste plads i bufferen.
+Bufferen der blev valgt til at implementere dette er af en cyklisk natur, hvor der til hver samplingstid udlæses en værdi fra den af pointeren indikerede plads. Pladsen nulstilles så og pointeren forøges, så der til næste sample udlæses fra den næste plads i bufferen.
 Herved opnås en buffer hvor der kan indsættes værdier der skal tilføres outputtet med en given forsinkelse angivet i antal samplingstider senere.
 
 \section{Reverb effektmodul}\label{sec:reverb}
 Reverb, eller rumklang, er resultatet af lydbølger som bliver reflekteret tilbage af %samtlige overflader med forskellige vinkler.\newline
 %Rumklang er resultatet af lydbølger som bliver reflekteret af samtlige overflader i et rum, derved bygges der en masse reflektioner op hvis amplitude falder mod $0$ som de bliver absorberet af overfladerne i rummet.\newline
-overfladerne i et givent lokale, dette påvirker lyden ud fra tre kriterier.\newline 
-\textbf{Et:} Overfladerne kan bestå af forskellige materialer, som afgør hvor stor en del af lydbølgen der reflekteres.\newline 
-\textbf{To:} Afstanden mellem en given overflade, lydkilden og modtageren kan variere, dette giver refleksioner med forskellig forsinkelse samt forskellige amplituder da lydbølgen aftager i styrke jo længere den bevæger sig.\newline 
-\textbf{Tre:} Overfladerne kan have forskellige vinkler, som kan lede til, at lydbølger reflekteres mellem en række overflader før de når modtageren, dette resultere i en kaskade af de effekter de andre to kriterier har.\newline
-Der er to primære metoder for implementeringen af en digital reverb effekt - convolution reverb og den algoritmisk reverb.
+overfladerne i et givent lokale. Dette påvirker lyden ud fra tre kriterier.\newline 
+\textbf{1:} Overfladerne kan bestå af forskellige materialer, som afgør hvor stor en del af lydbølgen der reflekteres.\newline 
+\textbf{2:} Afstanden mellem en given overflade, lydkilden og modtageren kan variere. Dette giver refleksioner med forskellig forsinkelse samt forskellige amplituder da lydbølgen aftager i styrke jo længere den bevæger sig.\newline 
+\textbf{3:} Overfladerne kan have forskellige vinkler, som kan lede til, at lydbølger reflekteres mellem en række overflader før de når modtageren. Dette resulterer i en kaskade af de effekter, som de to andre kriterier har.\newline
+Der er to primære metoder for implementeringen af en digital reverb effekt - convolution reverb og den algoritmiske reverb.
 
 \subsection{Convolution reverb}
-Reverberation er en tidsinvariant effekt, hvilket betyder at det ikke har nogen betydning, hvornår en tone bliver spillet, det vil ultimativt resultere i præcis den samme effekt. \newline
+Reverberation er en tidsinvariant effekt, hvilket betyder at det ikke har nogen betydning, hvornår en tone bliver spillet. Det vil ultimativt resultere i præcis den samme effekt. \newline
 Tidsinvariante systemer kan karakteriseres ved deres impulsrespons.
 En convolution reverb effekt virker ved at lave en matematisk foldning af det ønskede %rummets 
 impulsrespons og det lydsignal der skal tilføres en rumklang.\newline 
@@ -77,7 +77,7 @@ Her bliver en sample feeded forward til outputtet så lyden bliver spillet med d
 Derudover gemmes den i en reduceret og inverteret udgave. %smides samplet ind i en delay buffer.
 %Rumklangen skabes så af samples fra delay bufferen, som fungerer som opbygningen af ekkoer og feedback loopet som agerer som absorptionen for at skabe aftagende ekkoer.
 
-Rumklangen der skal tilføres til tiden fastsat af en delay tid kan så fremstilles af de gemte samples samt en brøkdel af outputtet.
+Rumklangen der skal tilføres til tiden fastsat af en delay tid, kan så fremstilles af de gemte samples samt en brøkdel af outputtet.
 \husk{Overståen linje er meget meget mærkelig}
 Resultatet gemmes og bliver tillagt outputtet til delay tiden og dermed opnås en række aftagende ekkoer.
 Ulempen ved denne metode er, at den skal seriekobles flere gange med forskellige delaytider for at opnå realistiske resultater.
@@ -100,9 +100,9 @@ H(z) = b_0 + b_1z^{-1} + \cdots + b_Kz^{-K}
 \end{equation}
 
 Hvori $b_i$ er filterets koefficienter.\cite[p.218]{Tan2013}\newline
-Filteret og dets koefficienter bliver ved run-time beregnet efter brugeres angivelse af cutoff frekvensen. Filteret designes og koefficienterne bliver beregnet via \textit{frequency sampling} metoden.
+Filteret og dets koefficienter bliver ved run-time beregnet efter brugerens angivelse af cutoff frekvensen. Filteret designes og koefficienterne bliver beregnet via \textit{frequency sampling} metoden.
 
-Grunden til \textit{frequency sampling} valges som designmetode er, at algoritmen er baseret på invers diskret frekvens/tid fourier transformation (IDFT), hvilket kan beregnes effektivt via FFT.\newline
+Grunden til \textit{frequency sampling} blev valgt som designmetode, er at algoritmen er baseret på invers diskret frekvens/tid fourier transformation (IDFT), hvilket kan beregnes effektivt via FFT.\newline
 \subsection{Frequency Sampling}
 \textit{Frequency sampling} metoden virker ved at man lader $h(n)$ for $n = 0, 1, \cdots, N - 1$ approksimere filterets impulsrespons, hvor $N$ er antallet koefficienter, hvilket for FIR filtre er deres koefficienter, og $H(k)$ for $k = 0, 1, \cdots, N - 1$ er de diskrete Fourier transformationskoefficienter.
 \begin{figure}[!ht]
@@ -121,41 +121,39 @@ Resten af koefficienterne findes med $h(n) = h(2M - n) \quad \mathrm{for} \quad 
 
 
 \subsection{Implementering af FIR filter}
-Det blev valgt at implementeret det digitale filter som et FIR filter, fordi FIR filtre giver mulighed for at have lineær negativ fase.\newline
-Negativ lineær fase medfører konstant gruppeløbetid da gruppeløbetid er givet ved\cite{wikiGroupdelay}:
+Det blev valgt at implementere det digitale filter som et FIR filter, fordi FIR filtre giver mulighed for at have lineær negativ fase.\newline
+Negativ lineær fase medfører konstant gruppeløbetid, da gruppeløbetiden er givet ved\cite{wikiGroupdelay}:
 \[
 \tau = -\frac{\mathrm{d}\varphi}{\mathrm{d}\omega}
 \]
 Konstant gruppeløbetid er en fordel at have i audio applikationer da en varierende gruppeløbetid kan komme til at lyde forkert.\newline
-Modulet virker ved at det tager en cutoff frekvens som brugerinput og dernæst beregner normerede cutoff frekvens ved:
+Modulet virker ved at det tager en cutoff frekvens som brugerinput og dernæst beregner den normerede cutoff frekvens ved:
 \[ \Omega_c = 2\pi\frac{f_c}{f_s} \]
 Hvor $f_c$ er cutoff frekvensen og $f_s$ er samplingsfrekvensen.
 Dernæst beregnes en array af amplitudekarakteristikken $H_k$ for de normerede frekvenser fra $0$ til $\pi$ ved 
 \[ \Omega_k = \frac{2\pi k}{(2M + 1)} \quad \mathrm{for} \quad k = 0, 1, \cdots, M \]
 Når $H_k$ haves beregnes $M$ filterkoefficienter via. ligning (\ref{eq:fir_koefficienter}) og resten findes ved symmetri.\newline
-Filteret virker ved, at en buffer fyldes med $x$ samples og dernæst bliver der foretaget en foldning for hver sampel i bufferen med hver filterkoefficient.
+Filteret virker ved at en buffer fyldes med $x$ samples, og dernæst bliver der foretaget en foldning for hver sample i bufferen med hver filterkoefficient.
 
 %\section{Delkonklusion}
 \section{Opsummering}
-En betydelig begrænsning i implementering af effektmodulerne er den korte tid mellem, at en samples modtages og sendes ud igen.
-Dette betyder, at meget store og eller komplicerede beregninger simpelthen ikke kan udføres hurtigt nok til at undgå forsinkelser der kan opfattes af det menneskelige øre.
+En betydelig begrænsning i implementeringen af effektmodulerne er den korte tid mellem at en sample modtages og sendes ud igen.
+Dette betyder at meget store og eller komplicerede beregninger simpelthen ikke kan udføres hurtigt nok til at undgå forsinkelser der kan opfattes af det menneskelige øre.
 
-Det er derfor vigtigt at optimere og begrænse alle beregninger så de bruger den mindste tid mulig. 
+Det er derfor vigtigt at optimere og begrænse alle beregninger, så de bruger mindst tid mulig. 
 
 Ekkoeffekten blev implementeret algoritmisk via en delay buffer hvor der gemmes en dæmpet del af inputtet.
 
-Ved brug af samme delay buffer blev reverbeffekten implementeret algoritmisk som et all-pass filter, dette er udført ved at anvende samme metode som ekkoeffekten samt et feedback loop, hvor en dæmpet udgave af outputtet også bliver tilføjet delay bufferen.
+Ved brug af samme delay buffer blev reverbeffekten implementeret algoritmisk som et all-pass filter. Dette er udført ved at anvende samme metode som ekkoeffekten samt et feedback loop, hvor en dæmpet udgave af outputtet også bliver tilføjet delay bufferen.
 
 %Ved både Echo- og Reverbeffektmodulerne er dette tilfældet, da der ved hvert sample kun skal laves et ganske lille antal simple beregninger.
 %I Echoeffektmodulet er bliver et sample blot ganget med en gain/decay \note{hvad kalder vi det?} og derefter adderet til en værdig i en buffer.
 %Reverbeffekten opnås ved en lignende metode, det er næmlig valgt at benytte en algoritmisk reverb frem for convolution reverb, altså ved foldning.
-Dette er valgt, selvom der i teorien ville kunne opnås en bedre og mere realistisk, reverbeffekt ved convolution reverb.
+Dette er valgt, selvom der i teorien ville kunne opnås en bedre og mere realistisk reverbeffekt ved convolution reverb.
 Valget er truffet, da det ville betyde at der skulle foretages flere beregninger imellem input og output samples.
 Hvilket ville betyde, at der ville være en risiko for ikke at nå beregningerne, uden en stor mængde planlægning af beregningerne.
 Denne metode har også behov for en større mængde hukommelse end den algoritmiske reverb effekt.
-Dette er også en af grundende til, at dette valg blev truffet. 
-
-Da det endte med en pladsmangel på mikrokontrolleren, når der skal ligge flere forskellige moduler på.
+Dette er også en af grundende til at dette valg blev truffet, da det endte med pladsmangel på mikrokontrolleren, når der skal ligge flere forskellige moduler på.
 
 %Echoeffekten blev implementeret algoritmisk via en delay buffer og et feedback loop således at inputtet bliver ført tilbage med en dæmpning på.\newline
 %Reverbeffekten blev implementeret som et all-pass filter, hvorved samples bliver ført ind i et dæmpningsled samt en delaybuffer samt at blive outputtet med det samme.
