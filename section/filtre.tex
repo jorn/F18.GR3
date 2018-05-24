@@ -122,22 +122,22 @@ Figur \ref{fig:filter_typer} viser en samlet fremstilling af amplitude karakteri
 	\label{fig:filter_typer}
 \end{figure}
 
-Det ønskede filter skal have en rimelig flad karakteristisk i pasbåndet og en stejl overgang til stopbåndet.
-Således kan lydsignalets amplitude holdes konstant i hele det ønskede frekvensområde da uønsket dæmpning/forstærkning af lydsignalet kan medfører hørbare ændringer af lydbilledet, på samme måde som en equalizer påvirker et lydsignal. 
+Det ønskede filter skal have en rimelig flad karakteristik i pasbåndet og en stejl overgang til stopbåndet.
+Således kan lydsignalets amplitude holdes konstant i hele det ønskede frekvensområde, da uønsket dæmpning/forstærkning af lydsignalet kan medføre hørbare ændringer af lydbilledet, på samme måde som en equalizer påvirker et lydsignal. 
 
 Ligeledes ønskes en rimelig konstant gruppeløbetid. 
-Gruppeløbetiden, der er defineret i ligning (\ref{eq:groupdelay_def})\cite{anfilter}, er et udtryk for hvor stor tidsforsinkelsen på signal som funktion af frekvensen er.
+Gruppeløbetiden, der er defineret i ligning (\ref{eq:groupdelay_def})\cite{anfilter}, er et udtryk for hvor stor tidsforsinkelsen på signalet som funktion af frekvensen er.
 
 \begin{align}
 	D(\omega) \stackrel{def}{=} - \dfrac{d(arg(N(\omega)))}{d\omega}\label{eq:groupdelay_def}
 \end{align}
 
 Hvis signal forsinkelsen bliver for stor i et givet frekvensområde, vil der fremstå en hørbar ændring af lydbilledet.
-Dette fenomen er dog ret subjektivt og der findes mange meninger om hvilke tærskelværdier der kan accepteres.
-Ud fra en lettere gennemgang inden for området, er antages en acceptabel relativ tidsforsinkelse på $D_{rel}(\omega) < -10 \si{\milli\second}$ til projektet.   
+Dette fænomen er dog ret subjektivt og der findes mange meninger om hvilke tærskelværdier der kan accepteres.
+Ud fra en lettere gennemgang inden for området, antages en acceptabel relativ tidsforsinkelse på $D_{rel}(\omega) < -10 \si{\milli\second}$ til projektet.   
 
 \subsection{Valg af filter topologi}
-Hvis man som udgangspunkt kun fokusere på filtrenes gruppeløbstid, ville man skulle vælge et Bessel filter.
+Hvis man som udgangspunkt kun fokusere på filtrenes gruppeløbstid, ville man skulle vælge et Bessel filter. 
 Bessel filteret, det er designet som et filter med maksimal fald fase, har dog langt fra den ønskede dæmpning i overgangsbåndet.
 Det vælges at anvende et Chebychev type I filter, der viser sig at have den bedste dæmpning i overgangsbåndet.
 Det høje udsving på gruppeløbetiden for denne filtertype, som det fremgår nederst i figur \ref{fig:filter_typer}, vil på det denomaliserede filter ligger indenfor, de i projektet, acceptable værdier. 
